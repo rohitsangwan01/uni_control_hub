@@ -2,8 +2,6 @@ PODS:
   - ble_peripheral (0.0.1):
     - Flutter
     - FlutterMacOS
-  - flutter_window_close (0.0.1):
-    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - network_info_plus (0.0.1):
     - FlutterMacOS
@@ -25,7 +23,6 @@ PODS:
 
 DEPENDENCIES:
   - ble_peripheral (from `Flutter/ephemeral/.symlinks/plugins/ble_peripheral/darwin`)
-  - flutter_window_close (from `Flutter/ephemeral/.symlinks/plugins/flutter_window_close/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - network_info_plus (from `Flutter/ephemeral/.symlinks/plugins/network_info_plus/macos`)
   - package_info_plus (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos`)
@@ -39,8 +36,6 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   ble_peripheral:
     :path: Flutter/ephemeral/.symlinks/plugins/ble_peripheral/darwin
-  flutter_window_close:
-    :path: Flutter/ephemeral/.symlinks/plugins/flutter_window_close/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   network_info_plus:
@@ -62,7 +57,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   ble_peripheral: e80b0809599f5406e5d321c12a6dbc07ecdab8bd
-  flutter_window_close: ee4a6b81ca6fafe93b7cba48b0a18976e3f48e39
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   network_info_plus: aeb9c4ed699cae128bc94b9d0f04f2389a414cbb
   package_info_plus: fa739dd842b393193c5ca93c26798dff6e3d0e0c
