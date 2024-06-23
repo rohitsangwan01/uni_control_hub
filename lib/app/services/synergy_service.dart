@@ -62,7 +62,7 @@ class SynergyService {
     closeServerIfRunning();
     logInfo("Trying to Start");
 
-    String? serverPath = FileManager.synergyServerPath;
+    String? serverPath = await FileManager.synergyServerPath;
     if (serverPath == null) throw Exception("Synergy Server not found");
 
     // First Ask permission on MacOS to execute this file

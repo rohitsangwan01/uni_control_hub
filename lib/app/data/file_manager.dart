@@ -29,12 +29,12 @@ class FileManager {
     return configFile.path;
   }
 
-  static String? get synergyServerPath {
+  static Future<String?> get synergyServerPath async {
     return switch (Abi.current()) {
-      Abi.macosArm64 => "${_platformBasePath}synergy_arm64",
-      Abi.macosX64 => "${_platformBasePath}synergy_x64",
-      Abi.windowsX64 => "${_platformBasePath}synergy_x64.dll",
-      Abi.linuxX64 => "${_platformBasePath}synergy_x64",
+      Abi.macosArm64 => _getMacSynergy("synergy_arm64"),
+      Abi.macosX64 => _getMacSynergy("synergy_x64"),
+      Abi.windowsX64 => "synergy_x64.dll",
+      Abi.linuxX64 => await _getLinuxSynergy("synergy_x64"),
       _ => null,
     };
   }
@@ -49,26 +49,29 @@ class FileManager {
     };
   }
 
-  static String? get _platformBasePath {
-    switch (defaultTargetPlatform) {
-      // Resources path for Mac
-      case TargetPlatform.macOS:
-        var urlSeg =
-            List.from(File(Platform.resolvedExecutable).uri.pathSegments);
-        urlSeg = urlSeg.sublist(0, urlSeg.length - 2);
-        return "/${urlSeg.join('/')}/Resources/";
-      // Root path for Windows
-      case TargetPlatform.windows:
-        return "";
-      // Root path for linux
-      case TargetPlatform.linux:
-        return "${File(Platform.resolvedExecutable).parent.path}/lib/";
-      default:
-        return null;
-    }
+  static Future<String> get _cachePath async =>
+      (await getApplicationCacheDirectory()).path;
+
+  static Future<String> _getLinuxSynergy(String file) => _getOrSaveToCache(
+      "${File(Platform.resolvedExecutable).parent.path}/lib/$file");
+
+  static String _getMacSynergy(String file) {
+    var urlSeg = List.from(File(Platform.resolvedExecutable).uri.pathSegments);
+    urlSeg = urlSeg.sublist(0, urlSeg.length - 2);
+    return "/${urlSeg.join('/')}/Resources/$file";
   }
 
-  static Future<String> get _cachePath async {
-    return (await getApplicationCacheDirectory()).path;
+  static Future<String> _getOrSaveToCache(String from) async {
+    String fileName = from.split('/').last;
+    File file = File('${await _cachePath}/$fileName');
+    if (await file.exists()) return file.path;
+    final byteData = await File(from).readAsBytes();
+    await file.writeAsBytes(
+      byteData.buffer.asUint8List(
+        byteData.offsetInBytes,
+        byteData.lengthInBytes,
+      ),
+    );
+    return file.path;
   }
 }
