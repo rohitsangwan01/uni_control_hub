@@ -28,7 +28,7 @@ App will ask for Accessibility and Bluetooth permission on MacOS
 ## Screenshot
 
 <p align="start">
-  <img src="https://github.com/rohitsangwan01/uni_control_hub_app/assets/59526499/de386a99-6d09-45aa-b760-96204d882ce4" height=400 />
+  <img src="https://github.com/rohitsangwan01/uni_control_hub/assets/59526499/7b2b87c3-4501-490b-a205-0e3815c4b583" height=400 />
 </p>
 
 ## Demo
