@@ -1,7 +1,7 @@
 # UniControlHub
 
 <p align="center">
-  <img src="https://github.com/rohitsangwan01/uni_control_hub/assets/59526499/de4ceb30-9b59-4306-ad49-d4550811809b" height=150 />
+  <img src="https://github.com/rohitsangwan01/uni_control_hub/assets/59526499/6689d262-793a-44ec-bd5b-800d15ad2d25" height=150 />
 </p>
 
 UniControlHub: Seamlessly Bridge Your Devices
