@@ -1,0 +1,4 @@
+enum AndroidConnectionType {
+  aoa,
+  uhid,
+}

@@ -1,0 +1,30 @@
+{
+  "cSpell.words": [
+    "altsetting",
+    "Appcast",
+    "assistivetouch",
+    "backsapce",
+    "calloc",
+    "CLASSPATH",
+    "Cnst",
+    "Cntrl",
+    "dylib",
+    "ffigen",
+    "hotplug",
+    "intf",
+    "libcrypto",
+    "libusb",
+    "nullptr",
+    "oneplus",
+    "sublist",
+    "supabase",
+    "Uhid",
+    "upgrader",
+    "Xinerama",
+    "xtest"
+  ],
+  "search.exclude": {
+    "**/lib/generated/": true,
+    "**/uni_hub_android_server/": true
+  }
+}

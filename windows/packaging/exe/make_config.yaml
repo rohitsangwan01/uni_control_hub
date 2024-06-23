@@ -1,0 +1,8 @@
+app_id: 5B852915-10B1-4826-A479-AF079F21A65D
+publisher: UniControlHub
+publisher_url: https://github.com/rohitsangwan01
+display_name: UniControlHub
+create_desktop_icon: true
+setupIconFile: assets\icon\icon.ico
+locales:
+  - en

@@ -1,0 +1,8 @@
+output: dist/
+releases:
+  - name: dev
+    jobs:
+      - name: release-dev-ios
+        package:
+          platform: macos
+          target: dmg
