@@ -35,18 +35,38 @@ App will ask for Accessibility and Bluetooth permission on MacOS
 
 [![](http://markdown-videos-api.jorgenkh.no/youtube/KYsqdJkG2N0)](https://youtu.be/KYsqdJkG2N0)
 
-## Generate builds
+## Troubleshooting
 
-Install [flutter_distributor](https://pub.dev/packages/flutter_distributor) and run
+- If not working/crashing on Mac, try to install libusb `brew install libusb`
+- If Mac asks for Accessibility permission on fresh install even if its already given, try to remove the app from Accessibility and run again
+- To use UHID mode for Android, make sure `ADB` is installed ( not required for AOA mode )
+- For Desktop and IOS connection, make sure Bluetooth is on
+- After connecting Android device, click refresh button
 
-MacOS: `flutter_distributor package --platform macos --targets dmg`
+## Developer's Guide
 
-Windows: `flutter_distributor package --platform windows --targets exe`
+This section guides you through setting up and running UniControlHub for development purposes.
 
-Linux: `flutter_distributor package --platform linux --targets deb`
+#### Prerequisites:
 
-## Note
+- Install the latest version of [Flutter](https://flutter-ko.dev/get-started/install) for your operating system. You can find instructions on the official Flutter website.
+- Install [flutter_distributor](https://pub.dev/packages/flutter_distributor) to generate builds for different platforms.
 
-A special thanks to [synergy-core](https://github.com/symless/synergy-core) for the cross-platform keyboard and mouse sharing tool binaries, If your goal is to share a mouse and keyboard across multiple desktops, i highly recommend checking out [Synergy](https://symless.com/synergy).
+#### Running/Debugging the App:
 
-This is initial version, feel free to report bugs
+- Follow the [Flutter](https://flutter-ko.dev/get-started/install) setup guide for your platform. You can skip Android or iOS-specific steps if you're not developing for those platforms.
+- Once Flutter is set up, run `flutter pub get` to download dependencies, and run `flutter run` to start the app
+
+#### Generating Builds:
+
+- MacOS: `flutter_distributor package --platform macos --targets dmg`
+
+- Windows: `flutter_distributor package --platform windows --targets exe`
+
+- Linux: `flutter_distributor package --platform linux --targets deb`
+
+## Additional Notes:
+
+UniControlHub uses the [Synergy server](https://github.com/symless/synergy-core) for cross-platform keyboard and mouse sharing. You can find more information about [Synergy](https://symless.com/synergy) on their website.
+
+We welcome contributions to UniControlHub! If you find a bug or have a feature request, please open an issue on our GitHub repository.
