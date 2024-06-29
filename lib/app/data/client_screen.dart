@@ -1,16 +1,24 @@
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:synergy_client_dart/synergy_client_dart.dart';
 import 'package:uni_control_hub/app/data/report_handler.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
 import 'package:uni_control_hub/app/data/client.dart';
 import 'package:uni_control_hub/app/models/screen_link.dart';
 import 'package:uni_control_hub/app/data/dialog_handler.dart';
+import 'package:uni_control_hub/app/services/storage_service.dart';
 
 class ClientScreen extends ScreenInterface {
   final Client client;
   final InputReportHandler _inputReportHandler;
-  ClientScreen(this.client, this._inputReportHandler);
+  final Function(int x, int y)? onMouseMove;
+
+  ClientScreen(
+    this.client,
+    this._inputReportHandler, {
+    this.onMouseMove,
+  });
 
   List<int> lastSent = List.filled(4, 0);
   int relativeX = 0;
@@ -57,6 +65,7 @@ class ClientScreen extends ScreenInterface {
 
     relativeX = x;
     relativeY = y;
+    onMouseMove?.call(x, y);
   }
 
   @override
@@ -82,11 +91,8 @@ class ClientScreen extends ScreenInterface {
 
   @override
   RectObj getShape() {
-    // Send ultra wide screen resolution
-    return RectObj(
-      width: 8000,
-      height: 8000,
-    );
+    Size size = StorageService.to.clientDefaultSize;
+    return RectObj(width: size.width, height: size.height);
   }
 
   @override

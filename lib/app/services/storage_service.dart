@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_control_hub/app/models/android_connection_type.dart';
@@ -39,6 +40,15 @@ class StorageService {
   String? getClientAlias(String id) => _storage.getString('client_local_$id');
   void setClientAlias(String id, String alias) =>
       _storage.setString('client_local_$id', alias);
+
+  Size get clientDefaultSize {
+    List<String>? size = _storage.getStringList("clientDefaultSize");
+    if (size == null) return const Size(8000, 8000);
+    return Size(double.parse(size[0]), double.parse(size[1]));
+  }
+
+  set clientDefaultSize(Size size) => _storage.setStringList(
+      "clientDefaultSize", [size.width.toString(), size.height.toString()]);
 
   AndroidConnectionType get androidConnection {
     String? value = _storage.getString("androidConnection");

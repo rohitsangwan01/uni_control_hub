@@ -24,14 +24,12 @@ class Client {
 
   final ClientType type;
 
+  /// Signals
   Signal<bool> isConnected = Signal(false, autoDispose: true);
-
   Signal<String?> error = Signal<String?>(null, autoDispose: true);
-
-  Signal<ClientAlias> clientAlias = Signal(
-    SynergyService.to.clientAliases.first,
-    autoDispose: true,
-  );
+  Signal<(int x, int y)> mouseMovement = Signal((0, 0), autoDispose: true);
+  Signal<ClientAlias> clientAlias =
+      Signal(SynergyService.to.clientAliases.first, autoDispose: true);
 
   bool _lastConnectedValue = false;
 
@@ -44,7 +42,11 @@ class Client {
     required InputReportHandler inputReportHandler,
     this.onConnectionUpdate,
   }) {
-    screen = ClientScreen(this, inputReportHandler);
+    screen = ClientScreen(
+      this,
+      inputReportHandler,
+      onMouseMove: (x, y) => mouseMovement.value = (x, y),
+    );
 
     // Try to load alias from cache
     String? clientAliasCache = storageService.getClientAlias(id);
@@ -72,9 +74,7 @@ class Client {
     if (!isConnected.value) return;
     clientAlias.value = alias;
     storageService.setClientAlias(id, alias.name);
-    // Disconnect and reconnect to server, to change direction
-    disconnectSynergyServer(notifyConnectionState: false);
-    connectSynergySever();
+    reConnectClient();
   }
 
   void toggleConnection() {
@@ -87,7 +87,13 @@ class Client {
     }
   }
 
-  void connectSynergySever() async {
+  Future<void> reConnectClient() async {
+    // Disconnect and reconnect to server, to change direction
+    disconnectSynergyServer(notifyConnectionState: false);
+    await connectSynergySever();
+  }
+
+  Future<void> connectSynergySever() async {
     error.value = null;
     try {
       SynergyClient? synergyCl = await _getAddress();

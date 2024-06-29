@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:uni_control_hub/app/data/app_data.dart';
 import 'package:uni_control_hub/app/modules/debug/debug_view.dart';
 import 'package:uni_control_hub/app/modules/setting/settings_view.dart';
+import 'package:uni_control_hub/app/services/app_service.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -54,21 +54,14 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               showDialog(
                 context: context,
-                builder: (_) => FutureBuilder(
-                  future: PackageInfo.fromPlatform(),
-                  initialData: null,
-                  builder: (_, AsyncSnapshot<PackageInfo?> snapshot) {
-                    String version = snapshot.data?.version ?? "";
-                    return AboutDialog(
-                      applicationIcon: const Image(
-                        image: AssetImage(AppImages.iconCircle),
-                        height: 50,
-                      ),
-                      applicationName: "Uni Control Hub",
-                      applicationVersion: "v$version",
-                      applicationLegalese: "© 2024 Uni Control Hub",
-                    );
-                  },
+                builder: (_) => AboutDialog(
+                  applicationIcon: const Image(
+                    image: AssetImage(AppImages.iconCircle),
+                    height: 50,
+                  ),
+                  applicationName: "Uni Control Hub",
+                  applicationVersion: "v${AppService.to.appVersion}",
+                  applicationLegalese: "© 2024 Uni Control Hub",
                 ),
               );
             },

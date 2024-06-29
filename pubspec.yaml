@@ -22,6 +22,7 @@ dependencies:
   ble_peripheral: ^2.3.0
   markdown_widget: ^2.3.2+6
   path_provider: ^2.1.2
+  share_plus: ^9.0.0
 
 ## flutter pub run flutter_launcher_icons
 dev_dependencies:

@@ -2,17 +2,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// Common Service for the app
 class AppService {
   static AppService get to => GetIt.instance<AppService>();
 
+  String appVersion = 'Unknown';
   final navigatorKey = GlobalKey<NavigatorState>();
   BuildContext? get overlayContext =>
       navigatorKey.currentState?.overlay?.context;
 
   Future<void> init() async {
     addLicenses();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appVersion = packageInfo.version;
   }
 
   void addLicenses() {

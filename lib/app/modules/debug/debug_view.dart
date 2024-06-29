@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:uni_control_hub/app/data/dialog_handler.dart';
 
 import 'package:uni_control_hub/app/data/logger.dart';
+import 'package:uni_control_hub/app/services/app_service.dart';
 
 class DebugView extends StatefulWidget {
   const DebugView({super.key});
@@ -35,6 +39,9 @@ class _DebugViewState extends State<DebugView> {
     }
   }
 
+  String get logsData =>
+      "UniControlHub (v${AppService.to.appVersion}) Logs: \n\n${logs.join('\n')}";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +49,23 @@ class _DebugViewState extends State<DebugView> {
         title: const Text('Logs'),
         centerTitle: true,
         actions: [
+          IconButton(
+            onPressed: () {
+              Clipboard.setData(
+                ClipboardData(
+                  text: logsData,
+                ),
+              );
+              DialogHandler.showSuccess("Logs copied to clipboard");
+            },
+            icon: const Icon(Icons.copy_all),
+          ),
+          IconButton(
+            onPressed: () {
+              Share.share(logsData);
+            },
+            icon: const Icon(Icons.share),
+          ),
           IconButton(
             onPressed: () {
               clearLogs();
