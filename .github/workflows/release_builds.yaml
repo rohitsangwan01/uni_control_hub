@@ -17,14 +17,16 @@ jobs:
         run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-0 libgtk-3-dev libblkid1 liblzma5
       - name: Enable Linux
         run: flutter config --enable-linux-desktop
-      - name: Get Dependencies
-        run: flutter pub get
-      - name: Generate App Version
-        id: app_version
-        run: echo "value=$(yq '.version' pubspec.yaml)" >> $env:GITHUB_OUTPUT
       - name: Activate Packaging Tool
         run: dart pub global activate flutter_distributor
-      - name: Release App
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: flutter_distributor release --name publish --jobs linux
+      - name: Build App
+        run: flutter_distributor release --name bundle --jobs linux
+      - name: Publish Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ github.token }}"
+          automatic_release_tag: "latest-${{ matrix.output-name }}"
+          prerelease: false
+          title: "Release ${{ matrix.output-name }}"
+          files: |
+            dist/*/*
