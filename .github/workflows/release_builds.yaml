@@ -20,18 +20,6 @@ jobs:
       - name: Activate Packaging Tool
         run: dart pub global activate flutter_distributor
       - name: Build App
-        run: flutter_distributor release --name bundle --jobs linux
-      - name: Get App Version
-        id: app_version
-        uses: mikefarah/yq@master
-        with:
-          cmd: yq -r '.version' 'pubspec.yaml'
-      - name: Publish Release
-        uses: marvinpinto/action-automatic-releases@latest
-        with:
-          repo_token: "${{ github.token }}"
-          automatic_release_tag: "latest-${{ steps.app_version.outputs.result }}"
-          prerelease: false
-          title: "Release ${{ steps.app_version.outputs.result }}"
-          files: |
-            dist/*/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: flutter_distributor release --name publish --jobs linux
