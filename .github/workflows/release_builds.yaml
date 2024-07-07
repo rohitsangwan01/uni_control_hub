@@ -26,9 +26,12 @@ jobs:
         uses: mikefarah/yq@master
         with:
           cmd: yq -r '.version' 'pubspec.yaml'
-      - name: Github Release
-        uses: softprops/action-gh-release@v1
+      - name: Publish Release
+        uses: marvinpinto/action-automatic-releases@latest
         with:
-          tag_name: ${{ steps.app_version.outputs.result }}
+          repo_token: "${{ github.token }}"
+          automatic_release_tag: "latest-${{ steps.app_version.outputs.result }}"
+          prerelease: false
+          title: "Release ${{ steps.app_version.outputs.result }}"
           files: |
             dist/*/*
