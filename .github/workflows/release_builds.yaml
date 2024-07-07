@@ -1,8 +1,10 @@
+# Available Runners: https://github.com/actions/runner-images?tab=readme-ov-file#available-images
 name: Release App
 on:
   workflow_dispatch:
 
 jobs:
+  # Runs on Linux x64
   linux:
     runs-on: ubuntu-22.04
     steps:
@@ -12,14 +14,53 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
+      - name: Install dependencies
+        run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-0 libgtk-3-dev libblkid1 liblzma5
       - name: Enable Linux
         run: flutter config --enable-linux-desktop
-      - name: Get Dependencies
-        run: flutter pub get
-      - name: Generate App Version
-        id: app_version
-        run: echo "value=$(yq '.version' pubspec.yaml)" >> $env:GITHUB_OUTPUT
       - name: Activate Packaging Tool
         run: dart pub global activate flutter_distributor
       - name: Release App
-        run: flutter_distributor release --name dev --jobs linux
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: flutter_distributor release --name publish --jobs linux
+
+  # Runs on Windows x64
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Apply Flutter Environment
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Enable Windows
+        run: flutter config --enable-windows-desktop
+      - name: Activate Packaging Tool
+        run: dart pub global activate flutter_distributor
+      - name: Release App
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: flutter_distributor release --name publish --jobs windows
+
+  # Runs on Macos Arm64
+  macos:
+    runs-on: macos-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Install appdmg
+        run: npm install -g appdmg
+      - name: Apply Flutter Environment
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Enable MacOS
+        run: flutter config --enable-macos-desktop
+      - name: Activate Packaging Tool
+        run: dart pub global activate flutter_distributor
+      - name: Release App
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: flutter_distributor release --name publish --jobs macos
