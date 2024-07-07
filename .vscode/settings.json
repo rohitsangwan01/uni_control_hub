@@ -16,6 +16,7 @@
     "libcrypto",
     "libgtk",
     "libusb",
+    "mikefarah",
     "nullptr",
     "oneplus",
     "softprops",
