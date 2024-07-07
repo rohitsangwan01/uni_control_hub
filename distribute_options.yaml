@@ -1,8 +1,6 @@
-# export GITHUB_TOKEN="personal access token"
 # flutter_distributor release --name bundle
 output: dist/
 artifact_name: '{{name}}-{{version}}-{{platform}}.{{ext}}'
-package_format: ''
 releases:
   ## Only Build Locally
   - name: bundle
@@ -10,7 +8,6 @@ releases:
       - name: macos
         package:
           platform: macos
-          arch: arm64
           target: dmg
       - name: windows
         package:
