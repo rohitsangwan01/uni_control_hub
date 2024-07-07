@@ -25,4 +25,6 @@ jobs:
       - name: Activate Packaging Tool
         run: dart pub global activate flutter_distributor
       - name: Release App
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: flutter_distributor release --name publish --jobs linux
