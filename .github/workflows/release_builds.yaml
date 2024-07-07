@@ -12,6 +12,9 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
+          architecture: x64
+      - name: Install dependencies
+        run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-0 libgtk-3-dev libblkid1 liblzma5
       - name: Enable Linux
         run: flutter config --enable-linux-desktop
       - name: Get Dependencies
@@ -22,4 +25,4 @@ jobs:
       - name: Activate Packaging Tool
         run: dart pub global activate flutter_distributor
       - name: Release App
-        run: flutter_distributor release --name dev --jobs linux
+        run: flutter_distributor release --name publish --jobs linux

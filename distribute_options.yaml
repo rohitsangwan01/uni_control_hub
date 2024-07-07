@@ -1,8 +1,24 @@
 # export GITHUB_TOKEN="personal access token"
-# flutter_distributor release --name dev
+# flutter_distributor release --name bundle
 output: dist/
 releases:
-  - name: dev
+  ## Only Build Locally
+  - name: bundle
+    jobs:
+      - name: macos
+        package:
+          platform: macos
+          target: dmg
+      - name: windows
+        package:
+            platform: windows
+            target: exe
+      - name: linux
+        package:
+            platform: linux
+            target: deb
+  ## Build and publish to github
+  - name: publish
     jobs:
       - name: macos
         package:
