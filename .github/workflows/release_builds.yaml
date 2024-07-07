@@ -39,4 +39,24 @@ jobs:
       - name: Release App
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: flutter_distributor release --name publish --jobs linux
+        run: flutter_distributor release --name publish --jobs windows
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Install appdmg
+        run: npm install -g appdmg
+      - name: Apply Flutter Environment
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Enable MacOS
+        run: flutter config --enable-macos-desktop
+      - name: Activate Packaging Tool
+        run: dart pub global activate flutter_distributor
+      - name: Release App
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: flutter_distributor release --name publish --jobs macos
