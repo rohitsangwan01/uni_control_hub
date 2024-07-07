@@ -50,20 +50,11 @@ This section guides you through setting up and running UniControlHub for develop
 #### Prerequisites:
 
 - Install the latest version of [Flutter](https://flutter-ko.dev/get-started/install) for your operating system. You can find instructions on the official Flutter website.
-- Install [flutter_distributor](https://pub.dev/packages/flutter_distributor) to generate builds for different platforms.
+- Follow the [Flutter](https://flutter-ko.dev/get-started/install) setup guide for your platform. You can skip Android or iOS-specific steps if you're not developing for those platforms.
 
 #### Running/Debugging the App:
 
-- Follow the [Flutter](https://flutter-ko.dev/get-started/install) setup guide for your platform. You can skip Android or iOS-specific steps if you're not developing for those platforms.
 - Once Flutter is set up, run `flutter pub get` to download dependencies, and run `flutter run` to start the app
-
-#### Generating Builds:
-
-- MacOS: `flutter_distributor package --platform macos --targets dmg`
-
-- Windows: `flutter_distributor package --platform windows --targets exe`
-
-- Linux: `flutter_distributor package --platform linux --targets deb`
 
 ## Additional Notes:
 

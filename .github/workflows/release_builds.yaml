@@ -1,0 +1,25 @@
+name: Release App
+on:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Apply Flutter Environment
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Enable Linux
+        run: flutter config --enable-linux-desktop
+      - name: Get Dependencies
+        run: flutter pub get
+      - name: Generate App Version
+        id: app_version
+        run: echo "value=$(yq '.version' pubspec.yaml)" >> $env:GITHUB_OUTPUT
+      - name: Activate Packaging Tool
+        run: dart pub global activate flutter_distributor
+      - name: Release App
+        run: flutter_distributor release --name dev --jobs linux
