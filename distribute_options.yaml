@@ -1,8 +1,33 @@
+# export GITHUB_TOKEN="personal access token"
+# flutter_distributor release --name dev
 output: dist/
 releases:
   - name: dev
     jobs:
-      - name: release-dev-ios
+      - name: macos
         package:
           platform: macos
           target: dmg
+        publish:
+          target: github
+          args:
+            repo-owner: rohitsangwan01
+            repo-name: uni_control_hub
+      - name: windows
+        package:
+            platform: windows
+            target: exe
+        publish:
+          target: github
+          args:
+            repo-owner: rohitsangwan01
+            repo-name: uni_control_hub
+      - name: linux
+        package:
+            platform: linux
+            target: deb
+        publish:
+          target: github
+          args:
+            repo-owner: rohitsangwan01
+            repo-name: uni_control_hub

@@ -44,3 +44,4 @@ app.*.map.json
 dist/
 synergy.conf
 UniHubServer.jar
+.metadta
