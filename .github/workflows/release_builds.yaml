@@ -21,12 +21,14 @@ jobs:
         run: dart pub global activate flutter_distributor
       - name: Build App
         run: flutter_distributor release --name bundle --jobs linux
-      - name: Publish Release
-        uses: marvinpinto/action-automatic-releases@latest
+      - name: Get App Name
+        id: app_name
+        run: echo "value=${{ vars.APP_NAME }}-macos-v${{ steps.app_version.outputs.value }}.dmg" >> $GITHUB_OUTPUT
+      - name: Get App Location
+        id: app_location
+        run: echo "value=dist/${{ steps.app_version.outputs.value }}/${{ steps.app_name.outputs.value }}" >> $GITHUB_OUTPUT
+      - name: Github Release
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: "${{ github.token }}"
-          automatic_release_tag: "latest-${{ matrix.output-name }}"
-          prerelease: false
-          title: "Release ${{ matrix.output-name }}"
-          files: |
-            dist/*/*
+          tag_name: ${{ steps.app_version.outputs.value }}
+          files: ${{ steps.app_location.outputs.value }}
