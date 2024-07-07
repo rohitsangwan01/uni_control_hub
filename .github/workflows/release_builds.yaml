@@ -21,14 +21,12 @@ jobs:
         run: dart pub global activate flutter_distributor
       - name: Build App
         run: flutter_distributor release --name bundle --jobs linux
-      - name: Get App Name
-        id: app_name
-        run: echo "value=${{ vars.APP_NAME }}-macos-v${{ steps.app_version.outputs.value }}.dmg" >> $GITHUB_OUTPUT
-      - name: Get App Location
-        id: app_location
-        run: echo "value=dist/${{ steps.app_version.outputs.value }}/${{ steps.app_name.outputs.value }}" >> $GITHUB_OUTPUT
+      - name: Generate App Version
+        id: app_version
+        run: echo "value=$(yq '.version' pubspec.yaml)" >> $env:GITHUB_OUTPUT
       - name: Github Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.app_version.outputs.value }}
-          files: ${{ steps.app_location.outputs.value }}
+          files: |
+            dist/*/*
