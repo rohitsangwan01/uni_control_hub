@@ -42,6 +42,7 @@ App will ask for Accessibility and Bluetooth permission on MacOS
 - To use UHID mode for Android, make sure `ADB` is installed ( not required for AOA mode )
 - For Desktop and IOS connection, make sure Bluetooth is on
 - After connecting Android device, click refresh button
+- On Windows, if android device not getting detected, checkout libusb Windows [wiki](https://github.com/libusb/libusb/wiki/Windows#driver-installation) page for more info about drivers
 
 ## Developer's Guide
 
