@@ -43,6 +43,7 @@ App will ask for Accessibility and Bluetooth permission on MacOS
 - For Desktop and IOS connection, make sure Bluetooth is on
 - After connecting Android device, click refresh button
 - On Windows, if android device not getting detected, checkout libusb Windows [wiki](https://github.com/libusb/libusb/wiki/Windows#driver-installation) page for more info about drivers
+- On Windows, if you get `MSVCP120.dll` or `VCRUNTIME140.dll` not found error, try installing `Microsoft Visual C++ 2015-2022` for your [x86](https://aka.ms/vs/17/release/vc_redist.x86.exe)  or [x64](https://aka.ms/vs/17/release/vc_redist.x64.exe) OS
 
 ## Developer's Guide
 
