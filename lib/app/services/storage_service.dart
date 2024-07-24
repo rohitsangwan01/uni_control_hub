@@ -28,6 +28,10 @@ class StorageService {
   set enableBluetoothConnection(bool value) =>
       _storage.setBool('enableBluetoothConnection', value);
 
+  bool get invertMouseScroll => _storage.getBool('invertMouseScroll') ?? false;
+  set invertMouseScroll(bool value) =>
+      _storage.setBool('invertMouseScroll', value);
+
   bool get useInternalServer => _storage.getBool('useInternalServer') ?? true;
   set useInternalServer(bool value) =>
       _storage.setBool('useInternalServer', value);

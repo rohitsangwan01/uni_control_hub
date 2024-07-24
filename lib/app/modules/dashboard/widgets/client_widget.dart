@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:uni_control_hub/app/data/extensions.dart';
 import 'package:uni_control_hub/app/models/client_alias.dart';
-import 'package:uni_control_hub/app/data/client.dart';
+import 'package:uni_control_hub/app/client/client.dart';
 import 'package:uni_control_hub/app/modules/dashboard/widgets/client_mouse_widget.dart';
 import 'package:uni_control_hub/app/services/synergy_service.dart';
 

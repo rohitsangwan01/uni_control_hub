@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:uni_control_hub/app/data/report_handler.dart';
+import 'package:uni_control_hub/app/client/report_handler.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
 
 class UhidDevice {

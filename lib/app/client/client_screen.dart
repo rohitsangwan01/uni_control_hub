@@ -2,9 +2,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:synergy_client_dart/synergy_client_dart.dart';
-import 'package:uni_control_hub/app/data/report_handler.dart';
+import 'package:uni_control_hub/app/client/report_handler.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
-import 'package:uni_control_hub/app/data/client.dart';
+import 'package:uni_control_hub/app/client/client.dart';
 import 'package:uni_control_hub/app/models/screen_link.dart';
 import 'package:uni_control_hub/app/data/dialog_handler.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
@@ -62,7 +62,6 @@ class ClientScreen extends ScreenInterface {
     reportData[3] = y - relativeY; // Y movement
     reportData[4] = 0; // Wheel movement
     _addInputReport(reportData);
-
     relativeX = x;
     relativeY = y;
     onMouseMove?.call(x, y);
@@ -72,11 +71,16 @@ class ClientScreen extends ScreenInterface {
   void mouseWheel(int x, int y) {
     int wheel = x != 0 ? x : y;
     // convert wheel in +1 or -1
+    if (client.storageService.invertMouseScroll) {
+      wheel = -wheel;
+    }
+
     if (wheel > 0) {
       wheel = -1;
     } else if (wheel < 0) {
       wheel = 1;
     }
+
     var reportData = Uint8List(5);
     reportData[0] = 0x02; // Report ID
     reportData[1] = 0; // Button state

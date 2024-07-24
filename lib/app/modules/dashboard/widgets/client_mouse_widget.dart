@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:signals_flutter/signals_flutter.dart';
-import 'package:uni_control_hub/app/data/client.dart';
+import 'package:uni_control_hub/app/client/client.dart';
 import 'package:uni_control_hub/app/data/extensions.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
 
