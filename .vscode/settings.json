@@ -16,6 +16,7 @@
     "libblkid",
     "libcrypto",
     "libgtk",
+    "libstdc",
     "libusb",
     "marvinpinto",
     "mikefarah",
