@@ -24,6 +24,7 @@ class SynergyService {
   Signal<bool> userInternalServer = Signal(true);
   Signal<bool> autoStartServer = Signal(false);
   Signal<bool> isServerRunning = Signal(false);
+  Signal<bool> invertMouseScroll = Signal(false);
 
   List<ClientAlias> clientAliases = <ClientAlias>[
     ClientAlias.left(),
@@ -36,6 +37,7 @@ class SynergyService {
     closeServerIfRunning();
     userInternalServer.value = storageService.useInternalServer;
     autoStartServer.value = storageService.autoStartServer;
+    invertMouseScroll.value = storageService.invertMouseScroll;
   }
 
   Future<void> toggleServer(BuildContext context) async {

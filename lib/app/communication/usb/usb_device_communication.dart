@@ -5,10 +5,10 @@ import 'dart:io';
 import 'package:uni_control_hub/app/data/file_manager.dart';
 import 'package:uni_control_hub/app/services/adb_service.dart';
 import 'package:uni_control_hub/app/services/communication_service.dart';
-import 'package:uni_control_hub/app/data/report_handler.dart';
+import 'package:uni_control_hub/app/client/report_handler.dart';
 import 'package:uni_control_hub/app/communication/usb/usb_hid_device.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
-import 'package:uni_control_hub/app/data/client.dart';
+import 'package:uni_control_hub/app/client/client.dart';
 import 'package:uni_control_hub/app/models/usb_device.dart';
 import 'package:uni_control_hub/generated/generated_bindings.dart';
 

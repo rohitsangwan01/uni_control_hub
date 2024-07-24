@@ -7,7 +7,7 @@ import 'package:ble_peripheral/ble_peripheral.dart';
 import 'package:uni_control_hub/app/communication/ble/ble_peripheral_utils.dart';
 import 'package:uni_control_hub/app/services/communication_service.dart';
 import 'package:uni_control_hub/app/data/capabilities.dart';
-import 'package:uni_control_hub/app/data/client.dart';
+import 'package:uni_control_hub/app/client/client.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
 import 'package:uni_control_hub/app/data/dialog_handler.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';

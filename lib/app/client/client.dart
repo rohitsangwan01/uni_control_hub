@@ -1,6 +1,6 @@
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:synergy_client_dart/synergy_client_dart.dart';
-import 'package:uni_control_hub/app/data/client_screen.dart';
+import 'package:uni_control_hub/app/client/client_screen.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
 import 'package:uni_control_hub/app/models/client_alias.dart';
 import 'package:uni_control_hub/app/models/screen_link.dart';
