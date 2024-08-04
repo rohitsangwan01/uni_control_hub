@@ -1,5 +1,6 @@
 class AppData {
-  static String uniHubServerPath = "assets/UniHubServer_0.1.jar";
+  // App name without space
+  static const String appName = "UniControlHub";
 
   static const gitIssueUrl =
       "https://github.com/rohitsangwan01/uni_control_hub/issues";

@@ -4,20 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:synergy_client_dart/synergy_client_dart.dart';
 import 'package:uni_control_hub/app/client/report_handler.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
-import 'package:uni_control_hub/app/client/client.dart';
 import 'package:uni_control_hub/app/models/screen_link.dart';
-import 'package:uni_control_hub/app/data/dialog_handler.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
 
 class ClientScreen extends ScreenInterface {
-  final Client client;
-  final InputReportHandler _inputReportHandler;
-  final Function(int x, int y)? onMouseMove;
+  late final StorageService _storageService = StorageService.to;
+  Function(int x, int y)? onMouseMove;
+  final VoidCallback onConnectCallback;
+  final VoidCallback onDisconnectCallback;
+  final Function(String error) onErrorCallback;
+  final Function(List<int>) inputReportCallback;
+  final Direction direction;
 
-  ClientScreen(
-    this.client,
-    this._inputReportHandler, {
-    this.onMouseMove,
+  ClientScreen({
+    required this.direction,
+    required this.inputReportCallback,
+    required this.onConnectCallback,
+    required this.onDisconnectCallback,
+    required this.onErrorCallback,
   });
 
   List<int> lastSent = List.filled(4, 0);
@@ -71,7 +75,7 @@ class ClientScreen extends ScreenInterface {
   void mouseWheel(int x, int y) {
     int wheel = x != 0 ? x : y;
     // convert wheel in +1 or -1
-    if (client.storageService.invertMouseScroll) {
+    if (_storageService.invertMouseScroll) {
       wheel = -wheel;
     }
 
@@ -95,7 +99,7 @@ class ClientScreen extends ScreenInterface {
 
   @override
   RectObj getShape() {
-    Size size = StorageService.to.clientDefaultSize;
+    Size size = _storageService.clientDefaultSize;
     return RectObj(width: size.width, height: size.height);
   }
 
@@ -152,7 +156,7 @@ class ClientScreen extends ScreenInterface {
   @override
   bool leave() {
     logInfo("ClientScreen: leave");
-    switch (client.direction) {
+    switch (direction) {
       case Direction.left:
         _moveMouseMultipleEvents(x: 4);
         break;
@@ -172,21 +176,13 @@ class ClientScreen extends ScreenInterface {
   }
 
   @override
-  void onConnect() {
-    client.setConnected(true);
-  }
+  void onConnect() => onConnectCallback();
 
   @override
-  void onDisconnect() {
-    client.setConnected(false);
-  }
+  void onDisconnect() => onDisconnectCallback();
 
   @override
-  void onError(String error) {
-    logError("${client.id}: $error");
-    client.setConnected(false);
-    DialogHandler.showError("Error connecting to Synergy Server: $error");
-  }
+  void onError(String error) => onErrorCallback(error);
 
   Future<void> _sendText(String text) async {
     final List<int> report = List<int>.filled(9, 0);
@@ -201,15 +197,7 @@ class ClientScreen extends ScreenInterface {
     }
   }
 
-  Future<void> _addInputReport(List<int> inputReport) async {
-    await _inputReportHandler(client.id, inputReport);
-  }
-
-  void _moveMouseMultipleEvents({
-    int? x,
-    int? y,
-    int count = 100,
-  }) {
+  void _moveMouseMultipleEvents({int? x, int? y, int count = 100}) {
     for (int i = 0; i < count; i++) {
       var reportData = Uint8List(5);
       reportData[0] = 0x02; // Report ID
@@ -220,4 +208,7 @@ class ClientScreen extends ScreenInterface {
       _addInputReport(reportData);
     }
   }
+
+  Future<void> _addInputReport(List<int> inputReport) =>
+      inputReportCallback(inputReport);
 }

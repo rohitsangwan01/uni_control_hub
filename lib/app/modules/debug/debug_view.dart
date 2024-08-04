@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:uni_control_hub/app/data/app_data.dart';
 import 'package:uni_control_hub/app/data/dialog_handler.dart';
 
 import 'package:uni_control_hub/app/data/logger.dart';
@@ -40,7 +41,7 @@ class _DebugViewState extends State<DebugView> {
   }
 
   String get logsData =>
-      "UniControlHub (v${AppService.to.appVersion}) Logs: \n\n${logs.join('\n')}";
+      "${AppData.appName} (v${AppService.to.appVersion}) Logs: \n\n${logs.join('\n')}";
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +90,10 @@ class _DebugViewState extends State<DebugView> {
                     child: ListView.builder(
                       itemCount: logs.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Text(logs[index]);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2.0),
+                          child: Text(logs[index]),
+                        );
                       },
                     ),
                   ),

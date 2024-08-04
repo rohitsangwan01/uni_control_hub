@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uni_control_hub/app/data/app_data.dart';
 import 'package:uni_control_hub/app/models/synergy_client.dart';
 
 import 'package:uni_control_hub/app/services/storage_service.dart';
@@ -29,7 +30,7 @@ class _SynergyServerClientTileState extends State<SynergyServerClientTile> {
       serverPotController.text = synergyClient!.serverPort.toString();
       clientNameController.text = synergyClient!.clientName;
     } else {
-      clientNameController.text = "UniControlHub";
+      clientNameController.text = AppData.appName;
       serverPotController.text = "24800";
     }
   }

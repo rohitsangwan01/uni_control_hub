@@ -1,61 +1,59 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:uni_control_hub/app/data/app_data.dart';
+import 'package:uni_control_hub/app/services/file_service.dart';
 import 'package:uni_control_hub/app/models/android_connection_type.dart';
 import 'package:uni_control_hub/app/models/synergy_client.dart';
 
 class StorageService {
   static StorageService get to => GetIt.instance<StorageService>();
 
-  late final SharedPreferences _storage;
+  late final GetStorage _storage;
 
   Future<void> init() async {
-    _storage = await SharedPreferences.getInstance();
+    _storage = GetStorage(AppData.appName, await FileService.to.dbDirectory);
+    await _storage.initStorage;
   }
 
-  int? get synergyProcessId => _storage.getInt('synergyProcessId');
+  int? get synergyProcessId => _readDb('synergyProcessId');
   set synergyProcessId(int? value) => value == null
-      ? _storage.remove('synergyProcessId')
-      : _storage.setInt('synergyProcessId', value);
+      ? _removeDb('synergyProcessId')
+      : _writeDb('synergyProcessId', value);
 
-  bool get autoStartServer => _storage.getBool('autoStartServer') ?? false;
-  set autoStartServer(bool value) => _storage.setBool('autoStartServer', value);
+  bool get autoStartServer => _readDb('autoStartServer') ?? false;
+  set autoStartServer(bool value) => _writeDb('autoStartServer', value);
 
   bool get enableBluetoothConnection =>
-      _storage.getBool('enableBluetoothConnection') ?? true;
+      _readDb('enableBluetoothConnection') ?? true;
   set enableBluetoothConnection(bool value) =>
-      _storage.setBool('enableBluetoothConnection', value);
+      _writeDb('enableBluetoothConnection', value);
 
-  bool get invertMouseScroll => _storage.getBool('invertMouseScroll') ?? false;
-  set invertMouseScroll(bool value) =>
-      _storage.setBool('invertMouseScroll', value);
+  bool get invertMouseScroll => _readDb('invertMouseScroll') ?? false;
+  set invertMouseScroll(bool value) => _writeDb('invertMouseScroll', value);
 
-  bool get useInternalServer => _storage.getBool('useInternalServer') ?? true;
-  set useInternalServer(bool value) =>
-      _storage.setBool('useInternalServer', value);
+  bool get useInternalServer => _readDb('useInternalServer') ?? true;
+  set useInternalServer(bool value) => _writeDb('useInternalServer', value);
 
-  String? get testStatus => _storage.getString('testStatus');
-  set testStatus(String? value) => value == null
-      ? _storage.remove('testStatus')
-      : _storage.setString('testStatus', value);
+  String? get testStatus => _readDb('testStatus');
+  set testStatus(String? value) =>
+      value == null ? _removeDb('testStatus') : _writeDb('testStatus', value);
 
-  String? getClientAlias(String id) => _storage.getString('client_local_$id');
+  String? getClientAlias(String id) => _readDb('client_local_$id');
   void setClientAlias(String id, String alias) =>
-      _storage.setString('client_local_$id', alias);
+      _writeDb('client_local_$id', alias);
 
   Size get clientDefaultSize {
-    List<String>? size = _storage.getStringList("clientDefaultSize");
-    if (size == null) return const Size(8000, 8000);
-    return Size(double.parse(size[0]), double.parse(size[1]));
+    List<double> size = List<double>.from(_readDb("clientDefaultSize") ?? []);
+    if (size.isEmpty) return const Size(8000, 8000);
+    return Size(size[0], size[1]);
   }
 
-  set clientDefaultSize(Size size) => _storage.setStringList(
-      "clientDefaultSize", [size.width.toString(), size.height.toString()]);
+  set clientDefaultSize(Size size) =>
+      _writeDb("clientDefaultSize", [size.width, size.height]);
 
   AndroidConnectionType get androidConnection {
-    String? value = _storage.getString("androidConnection");
+    String? value = _readDb("androidConnection");
     return AndroidConnectionType.values.firstWhere(
       (element) => element.name == value,
       orElse: () => AndroidConnectionType.aoa,
@@ -63,28 +61,19 @@ class StorageService {
   }
 
   set androidConnection(AndroidConnectionType value) =>
-      _storage.setString('androidConnection', value.name);
+      _writeDb('androidConnection', value.name);
 
   SynergyClient? get synergyClient {
-    final json = _storage.getString('synergyClient');
-    if (json != null) {
-      return SynergyClient.fromJsonString(json);
-    }
-    return null;
+    final json = _readDb('synergyClient');
+    if (json == null) return null;
+    return SynergyClient.fromJson(json);
   }
 
   set synergyClient(SynergyClient? value) => value == null
-      ? _storage.remove('synergyClient')
-      : _storage.setString('synergyClient', value.toJsonString());
+      ? _removeDb('synergyClient')
+      : _writeDb('synergyClient', value.toJson());
 
-  void saveJson(String key, Map<String, dynamic> data) =>
-      _storage.setString(key, json.encode(data));
-
-  Map<String, dynamic>? readJson(String key) {
-    final json = _storage.getString(key);
-    if (json != null) {
-      return jsonDecode(json);
-    }
-    return null;
-  }
+  T? _readDb<T>(String key) => _storage.read(key);
+  Future<void> _writeDb<T>(String key, T value) => _storage.write(key, value);
+  Future<void> _removeDb(String key) => _storage.remove(key);
 }

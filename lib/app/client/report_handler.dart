@@ -104,7 +104,6 @@ int? keyCodeToByte(final int keyCode) {
   try {
     return textToByte(utf8.decode([keyCode]));
   } catch (e) {
-    // print("keyCode: $keyCode");
     return null;
   }
 }

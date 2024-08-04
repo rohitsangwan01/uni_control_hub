@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:ffi';
 import 'dart:io';
 
-import 'package:uni_control_hub/app/data/file_manager.dart';
+import 'package:uni_control_hub/app/services/file_service.dart';
 import 'package:uni_control_hub/app/services/adb_service.dart';
 import 'package:uni_control_hub/app/services/communication_service.dart';
 import 'package:uni_control_hub/app/client/report_handler.dart';
@@ -21,7 +21,7 @@ class UsbDeviceCommunication {
 
   void setup() {
     try {
-      String? libUsbFile = FileManager.libUsbBinaryPath;
+      String? libUsbFile = FileService.to.libUsbBinaryPath;
       if (libUsbFile == null) {
         logError('LibUsb not found for this platform');
         return;

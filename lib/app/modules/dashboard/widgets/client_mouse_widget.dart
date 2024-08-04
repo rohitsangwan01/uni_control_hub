@@ -2,60 +2,71 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:signals_flutter/signals_flutter.dart';
 import 'package:uni_control_hub/app/client/client.dart';
 import 'package:uni_control_hub/app/data/extensions.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
 
 class ClientMouseWidget extends StatefulWidget {
   final Client client;
-
-  const ClientMouseWidget({
-    super.key,
-    required this.client,
-  });
+  const ClientMouseWidget({super.key, required this.client});
 
   @override
   State<ClientMouseWidget> createState() => _ClientMouseWidgetState();
 }
 
 class _ClientMouseWidgetState extends State<ClientMouseWidget> {
-  final TextEditingController widthController = TextEditingController();
-  final TextEditingController heightController = TextEditingController();
+  final TextEditingController _widthController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  late Size clientShape = widget.client.screen.getShape().toSize();
-  Size get appShape => MediaQuery.sizeOf(context);
-  double get scaleX => min(500, appShape.width) / clientShape.width;
-  double get scaleY => min(600, appShape.height) / clientShape.height;
-  double get scale => (scaleX < scaleY ? scaleX : scaleY) - 0.005;
-  Size get scaledClientShape =>
-      Size(clientShape.width * scale, clientShape.height * scale);
+  late Size _clientShape = widget.client.screen.getShape().toSize();
+  Size get _appShape => MediaQuery.sizeOf(context);
+  double get _scaleX => min(500, _appShape.width) / _clientShape.width;
+  double get _scaleY => min(600, _appShape.height) / _clientShape.height;
+  double get _scale => (_scaleX < _scaleY ? _scaleX : _scaleY) - 0.005;
+  Size get _scaledClientShape => Size(
+        _clientShape.width * _scale,
+        _clientShape.height * _scale,
+      );
+  (int x, int y) mouseMovement = (0, 0);
 
   @override
   void initState() {
-    widthController.text = clientShape.width.toString();
-    heightController.text = clientShape.height.toString();
+    _widthController.text = _clientShape.width.toString();
+    _heightController.text = _clientShape.height.toString();
+    widget.client.screen.onMouseMove = (x, y) {
+      setState(() {
+        mouseMovement = (x, y);
+      });
+    };
     super.initState();
   }
 
-  void updateClientSize() {
+  void _updateClientSize() {
     if (!_formKey.currentState!.validate()) return;
-    final width = double.tryParse(widthController.text);
-    final height = double.tryParse(heightController.text);
+    final width = double.tryParse(_widthController.text);
+    final height = double.tryParse(_heightController.text);
     Size size = Size(
-      width ?? clientShape.width,
-      height ?? clientShape.height,
+      width ?? _clientShape.width,
+      height ?? _clientShape.height,
     );
     StorageService.to.clientDefaultSize = size;
-    clientShape = size;
+    _clientShape = size;
     widget.client.reConnectClient();
     // Restart server
     setState(() {});
   }
 
   @override
+  void dispose() {
+    widget.client.screen.onMouseMove = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    double scaledMouseX = mouseMovement.$1.toDouble() * _scale;
+    double scaledMouseY = mouseMovement.$2.toDouble() * _scale;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.client.id),
@@ -70,41 +81,35 @@ class _ClientMouseWidgetState extends State<ClientMouseWidget> {
                 const SizedBox(height: 10),
                 const Text("Client's screen size from server's POV"),
                 const SizedBox(height: 6),
-                Watch((context) {
-                  var mouseMovement = widget.client.mouseMovement.value;
-                  double scaledMouseX = mouseMovement.$1.toDouble() * scale;
-                  double scaledMouseY = mouseMovement.$2.toDouble() * scale;
-                  return Column(
-                    children: [
-                      SizedBox(
-                        width: scaledClientShape.width,
-                        height: scaledClientShape.height,
-                        child: Stack(
-                          children: [
-                            Container(
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary,
-                              width: scaledClientShape.width,
-                              height: scaledClientShape.height,
+                Column(
+                  children: [
+                    SizedBox(
+                      width: _scaledClientShape.width,
+                      height: _scaledClientShape.height,
+                      child: Stack(
+                        children: [
+                          Container(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            width: _scaledClientShape.width,
+                            height: _scaledClientShape.height,
+                          ),
+                          Positioned(
+                            left: scaledMouseX,
+                            top: scaledMouseY,
+                            child: Icon(
+                              Icons.circle,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
-                            Positioned(
-                              left: scaledMouseX,
-                              top: scaledMouseY,
-                              child: Icon(
-                                Icons.circle,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        "Client Absolute Movements: x: ${mouseMovement.$1}, y: ${mouseMovement.$2}",
-                      ),
-                    ],
-                  );
-                }),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      "Client Absolute Movements: x: ${mouseMovement.$1}, y: ${mouseMovement.$2}",
+                    ),
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 8.0,
@@ -116,7 +121,7 @@ class _ClientMouseWidgetState extends State<ClientMouseWidget> {
                       children: [
                         Expanded(
                           child: TextFormField(
-                            controller: widthController,
+                            controller: _widthController,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
@@ -137,7 +142,7 @@ class _ClientMouseWidgetState extends State<ClientMouseWidget> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: TextFormField(
-                            controller: heightController,
+                            controller: _heightController,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
@@ -162,12 +167,11 @@ class _ClientMouseWidgetState extends State<ClientMouseWidget> {
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.9,
                   child: ElevatedButton(
-                    onPressed: updateClientSize,
+                    onPressed: _updateClientSize,
                     child: const Text("Update Client Size"),
                   ),
                 ),
                 const SizedBox(height: 10),
-                
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Card(

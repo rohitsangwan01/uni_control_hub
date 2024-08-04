@@ -166,7 +166,7 @@ class _NoClientWidget extends StatelessWidget {
           style: TextStyle(color: Colors.grey),
         ),
         subtitle: Text(
-          "Connect your device either with bluetooth or usb",
+          "Connect your device either with bluetooth or usb and refresh",
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
                 color: Colors.grey,
               ),

@@ -51,7 +51,6 @@ class SynergyConfig {
       data['options'] = options!.toJson();
     }
 
-    // print(data);
     return _formatData(data);
   }
 
