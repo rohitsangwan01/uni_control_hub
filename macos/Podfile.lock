@@ -3,6 +3,8 @@ PODS:
     - Flutter
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
+  - mixin_logger (0.0.1):
+    - FlutterMacOS
   - network_info_plus (0.0.1):
     - FlutterMacOS
   - package_info_plus (0.0.1):
@@ -14,9 +16,6 @@ PODS:
     - FlutterMacOS
   - share_plus (0.0.1):
     - FlutterMacOS
-  - shared_preferences_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - unihub (1.0.0)
   - url_launcher_macos (0.0.1):
     - FlutterMacOS
@@ -26,12 +25,12 @@ PODS:
 DEPENDENCIES:
   - ble_peripheral (from `Flutter/ephemeral/.symlinks/plugins/ble_peripheral/darwin`)
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - mixin_logger (from `Flutter/ephemeral/.symlinks/plugins/mixin_logger/macos`)
   - network_info_plus (from `Flutter/ephemeral/.symlinks/plugins/network_info_plus/macos`)
   - package_info_plus (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - screen_retriever (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos`)
   - share_plus (from `Flutter/ephemeral/.symlinks/plugins/share_plus/macos`)
-  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - unihub (from `./`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
   - window_manager (from `Flutter/ephemeral/.symlinks/plugins/window_manager/macos`)
@@ -41,6 +40,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/ble_peripheral/darwin
   FlutterMacOS:
     :path: Flutter/ephemeral
+  mixin_logger:
+    :path: Flutter/ephemeral/.symlinks/plugins/mixin_logger/macos
   network_info_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/network_info_plus/macos
   package_info_plus:
@@ -51,8 +52,6 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos
   share_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/share_plus/macos
-  shared_preferences_foundation:
-    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
   unihub:
     :path: "./"
   url_launcher_macos:
@@ -63,12 +62,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   ble_peripheral: e80b0809599f5406e5d321c12a6dbc07ecdab8bd
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  mixin_logger: 011219cd258a9229c11e97e1b637e1c223330462
   network_info_plus: aeb9c4ed699cae128bc94b9d0f04f2389a414cbb
   package_info_plus: fa739dd842b393193c5ca93c26798dff6e3d0e0c
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
   share_plus: 36537c04ce0c3e3f5bd297ce4318b6d5ee5fd6cf
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   unihub: c3cc2c93e74952fb82f4cf1538726ff1ed924f25
   url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
   window_manager: 3a1844359a6295ab1e47659b1a777e36773cd6e8

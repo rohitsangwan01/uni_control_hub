@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mixin_logger/mixin_logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:uni_control_hub/app/services/file_service.dart';
 
 /// Common Service for the app
 class AppService {
@@ -17,6 +19,11 @@ class AppService {
     addLicenses();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appVersion = packageInfo.version;
+    initLogger(
+      await FileService.to.logsDirectory,
+      maxFileCount: 5,
+      maxFileLength: 5 * 1024 * 1024, // max to 5 MB for single file.
+    );
   }
 
   void addLicenses() {

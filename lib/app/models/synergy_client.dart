@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:uni_control_hub/app/data/app_data.dart';
 
 class SynergyClient {
   String clientName;
@@ -13,7 +13,7 @@ class SynergyClient {
 
   factory SynergyClient.fromJson(Map<String, dynamic> json) {
     return SynergyClient(
-      clientName: json['clientName'] ?? 'UniControlHub',
+      clientName: json['clientName'] ?? AppData.appName,
       serverAddress: json['serverAddress'],
       serverPort: json['serverPort'],
     );
@@ -26,9 +26,4 @@ class SynergyClient {
       'serverPort': serverPort,
     };
   }
-
-  String toJsonString() => json.encode(toJson());
-
-  factory SynergyClient.fromJsonString(String jsonString) =>
-      SynergyClient.fromJson(json.decode(jsonString));
 }

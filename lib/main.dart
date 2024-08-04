@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:signals_flutter/signals_flutter.dart';
+import 'package:uni_control_hub/app/data/app_data.dart';
+import 'package:uni_control_hub/app/services/file_service.dart';
 import 'package:uni_control_hub/app/services/communication_service.dart';
 import 'package:uni_control_hub/app/modules/dashboard/dashboard_view.dart';
 import 'package:uni_control_hub/app/services/adb_service.dart';
@@ -31,6 +33,7 @@ Future<void> _initialize() async {
 
   // Initialize services
   var getIt = GetIt.instance;
+  await getIt.registerSingleton(FileService()).init();
   await getIt.registerSingleton(AppService()).init();
   await getIt.registerSingleton(StorageService()).init();
   await getIt.registerSingleton(SynergyService()).init();
@@ -46,7 +49,7 @@ void main() async {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: AppService.to.navigatorKey,
-      title: "UniControlHub",
+      title: AppData.appName,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,

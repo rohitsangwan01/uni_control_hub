@@ -1,5 +1,5 @@
 name: uni_control_hub
-version: 0.0.4
+version: 0.0.5
 publish_to: none
 description: Seamlessly Bridge Your Devices
 environment:
@@ -8,9 +8,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  signals_flutter: ^5.2.2
+  signals_flutter: ^5.3.0
   get_it: ^7.7.0
-  shared_preferences: ^2.2.3
+  get_storage: ^2.1.1
   lottie: ^3.1.0
   network_info_plus: ^5.0.3
   synergy_client_dart: ^0.1.0
@@ -23,6 +23,8 @@ dependencies:
   markdown_widget: ^2.3.2+6
   path_provider: ^2.1.2
   share_plus: ^9.0.0
+  mixin_logger: ^0.1.1
+  path: ^1.9.0
 
 ## flutter pub run flutter_launcher_icons
 dev_dependencies:

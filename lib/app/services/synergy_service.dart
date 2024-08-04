@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:signals_flutter/signals_flutter.dart';
+import 'package:uni_control_hub/app/data/app_data.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
 import 'package:uni_control_hub/app/models/client_alias.dart';
 import 'package:uni_control_hub/app/models/screen_config.dart';
@@ -11,7 +12,7 @@ import 'package:uni_control_hub/app/models/screen_options.dart';
 import 'package:uni_control_hub/app/data/native_communication.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
 import 'package:uni_control_hub/app/synergy/synergy_config.dart';
-import 'package:uni_control_hub/app/data/file_manager.dart';
+import 'package:uni_control_hub/app/services/file_service.dart';
 import 'package:uni_control_hub/app/synergy/synergy_server.dart';
 import 'package:uni_control_hub/app/data/dialog_handler.dart';
 
@@ -20,7 +21,7 @@ class SynergyService {
 
   late final storageService = StorageService.to;
 
-  String serverName = "UniControlHub";
+  String serverName = AppData.appName;
   Signal<bool> userInternalServer = Signal(true);
   Signal<bool> autoStartServer = Signal(false);
   Signal<bool> isServerRunning = Signal(false);
@@ -64,7 +65,7 @@ class SynergyService {
     closeServerIfRunning();
     logInfo("Trying to Start");
 
-    String? serverPath = await FileManager.synergyServerPath;
+    String? serverPath = await FileService.to.synergyServerPath;
     if (serverPath == null) throw Exception("Synergy Server not found");
 
     // First Ask permission on MacOS to execute this file
@@ -73,7 +74,7 @@ class SynergyService {
       logInfo("Asked for permission");
     }
 
-    String configPath = await FileManager.configPath(_config);
+    String configPath = await FileService.to.configPath(_config);
     logInfo('Synergy Config: $configPath');
     int? pid = await SynergyServer.startServer(
       serverPath: serverPath,

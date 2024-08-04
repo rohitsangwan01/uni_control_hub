@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uni_control_hub/app/data/file_manager.dart';
+import 'package:uni_control_hub/app/services/file_service.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
 
 class AdbService {
@@ -44,7 +44,7 @@ class AdbService {
       args.add(device);
     }
 
-    String filePath = await FileManager.uniHubAndroidServerPath();
+    String filePath = await FileService.to.uniHubAndroidServerPath;
     args.add('push');
     args.add(filePath);
     args.add('/data/local/tmp/');

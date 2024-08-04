@@ -1,9 +1,9 @@
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:synergy_client_dart/synergy_client_dart.dart';
 import 'package:uni_control_hub/app/client/client_screen.dart';
+import 'package:uni_control_hub/app/data/dialog_handler.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
 import 'package:uni_control_hub/app/models/client_alias.dart';
-import 'package:uni_control_hub/app/models/screen_link.dart';
 import 'package:uni_control_hub/app/models/synergy_client.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
 import 'package:uni_control_hub/app/services/synergy_service.dart';
@@ -19,22 +19,20 @@ enum ClientType { ble, usb, uhid }
 class Client {
   String id;
   Function(bool)? onConnectionUpdate;
-  late final ScreenInterface screen;
-  late final StorageService storageService = StorageService.to;
-
+  late final ClientScreen screen;
+  late final StorageService _storageService = StorageService.to;
   final ClientType type;
 
   /// Signals
   Signal<bool> isConnected = Signal(false, autoDispose: true);
   Signal<String?> error = Signal<String?>(null, autoDispose: true);
-  Signal<(int x, int y)> mouseMovement = Signal((0, 0), autoDispose: true);
-  Signal<ClientAlias> clientAlias =
-      Signal(SynergyService.to.clientAliases.first, autoDispose: true);
+  Signal<ClientAlias> clientAlias = Signal(
+    SynergyService.to.clientAliases.first,
+    autoDispose: true,
+  );
 
   bool _lastConnectedValue = false;
-
-  SynergyClientDart? synergyClient;
-  Direction get direction => clientAlias.value.direction.value;
+  SynergyClientDart? _synergyClient;
 
   Client({
     required this.id,
@@ -43,20 +41,26 @@ class Client {
     this.onConnectionUpdate,
   }) {
     screen = ClientScreen(
-      this,
-      inputReportHandler,
-      onMouseMove: (x, y) => mouseMovement.value = (x, y),
+      direction: clientAlias.value.direction.value,
+      inputReportCallback: (report) => inputReportHandler(id, report),
+      onConnectCallback: () => _setConnected(true),
+      onDisconnectCallback: () => _setConnected(false),
+      onErrorCallback: (error) {
+        logError("$id: $error");
+        _setConnected(false);
+        DialogHandler.showError("Error connecting to Synergy Server: $error");
+      },
     );
 
     // Try to load alias from cache
-    String? clientAliasCache = storageService.getClientAlias(id);
+    String? clientAliasCache = _storageService.getClientAlias(id);
     clientAlias.value = SynergyService.to.clientAliases.firstWhere(
       (element) => element.name == clientAliasCache,
       orElse: () => SynergyService.to.clientAliases.first,
     );
   }
 
-  void setConnected(bool connected) {
+  void _setConnected(bool connected) {
     if (_lastConnectedValue == connected) return;
     _lastConnectedValue = connected;
     logInfo("Client $id is connected: $connected");
@@ -73,13 +77,13 @@ class Client {
     }
     if (!isConnected.value) return;
     clientAlias.value = alias;
-    storageService.setClientAlias(id, alias.name);
+    _storageService.setClientAlias(id, alias.name);
     reConnectClient();
   }
 
   void toggleConnection() {
     isConnected.value = !isConnected.value;
-    setConnected(isConnected.value);
+    _setConnected(isConnected.value);
     if (isConnected.value) {
       connectSynergySever();
     } else {
@@ -99,8 +103,8 @@ class Client {
       SynergyClient? synergyCl = await _getAddress();
       logInfo("Synergy Client: $synergyCl");
       if (synergyCl == null) return;
-      synergyClient = SynergyClientDart();
-      await synergyClient?.connect(
+      _synergyClient = SynergyClientDart();
+      await _synergyClient?.connect(
         screen: screen,
         synergyServer: SocketServer(
           synergyCl.serverAddress,
@@ -120,7 +124,7 @@ class Client {
       if (!SynergyService.to.isServerRunning.value) {
         logInfo("Synergy Server is not running");
         error.value = "Server is not running, please start the server.";
-        setConnected(false);
+        _setConnected(false);
         return null;
       }
     }
@@ -130,7 +134,7 @@ class Client {
       SynergyClient? synergyClient = StorageService.to.synergyClient;
       if (synergyClient == null) {
         error.value = "Please add a Synergy Server";
-        setConnected(false);
+        _setConnected(false);
         return null;
       }
       return synergyClient;
@@ -146,8 +150,8 @@ class Client {
   void disconnectSynergyServer({
     bool notifyConnectionState = true,
   }) {
-    synergyClient?.disconnect();
-    synergyClient = null;
-    if (notifyConnectionState) setConnected(false);
+    _synergyClient?.disconnect();
+    _synergyClient = null;
+    if (notifyConnectionState) _setConnected(false);
   }
 }
