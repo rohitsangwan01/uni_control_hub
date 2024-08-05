@@ -4,22 +4,23 @@ on:
   workflow_dispatch:
     inputs:
       platform:
+        description: "Platform"
         required: true
         type: choice
         options:
-        - all
-        - linux
-        - windows
-        - macos
+          - all
+          - linux
+          - windows
+          - macos
 
 jobs:
   # Runs on Linux x64
   linux:
-    if: {{github.event.inputs.platform == 'linux' || github.event.inputs.platform == 'all'}} 
+    if: ${{ github.event.inputs.platform == 'linux' || github.event.inputs.platform == 'all' }}
     runs-on: ubuntu-22.04
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Apply Flutter Environment
         uses: subosito/flutter-action@v2
         with:
@@ -39,11 +40,11 @@ jobs:
 
   # Runs on Windows x64
   windows:
-    if: {{github.event.inputs.platform == 'windows' || github.event.inputs.platform == 'all'}} 
+    if: ${{github.event.inputs.platform == 'windows' || github.event.inputs.platform == 'all'}}
     runs-on: windows-latest
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Apply Flutter Environment
         uses: subosito/flutter-action@v2
         with:
@@ -59,11 +60,11 @@ jobs:
 
   # Runs on Macos Arm64
   macos:
-    if: {{github.event.inputs.platform == 'macos' || github.event.inputs.platform == 'all'}} 
+    if: ${{github.event.inputs.platform == 'macos' || github.event.inputs.platform == 'all'}}
     runs-on: macos-latest
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install appdmg
         run: npm install -g appdmg
       - name: Apply Flutter Environment
