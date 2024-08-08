@@ -18,8 +18,6 @@ Download app for your platform from [Release](https://github.com/rohitsangwan01/
 
 ### MacOS
 
-- App will ask for `Accessibility` and `Bluetooth` permission on MacOS, ( After updating, app might again ask for `Accessibility` permission, even if its already given, try to remove the app from Accessibility and run again )
-
 - Install libusb: `brew install libusb`
 
 ### Windows
@@ -46,7 +44,7 @@ Download app for your platform from [Release](https://github.com/rohitsangwan01/
 [![](http://markdown-videos-api.jorgenkh.no/youtube/KYsqdJkG2N0)](https://youtu.be/KYsqdJkG2N0)
 
 ## Troubleshooting
-
+- On MacOS, App will ask for `Accessibility` and `Bluetooth` permission on MacOS, ( After updating, app might again ask for Accessibility permission, even if its already given, try to remove the app from Accessibility and run again )
 - To use UHID mode for Android, make sure `ADB` is installed ( not required for AOA mode )
 - For Desktop and IOS connection, make sure Bluetooth is on
 - After connecting Android device, click refresh button
