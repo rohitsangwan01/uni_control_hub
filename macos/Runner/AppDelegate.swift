@@ -1,7 +1,7 @@
 import Cocoa
 import FlutterMacOS
 
-@NSApplicationMain
+@main
 class AppDelegate: FlutterAppDelegate {
   override func applicationDidFinishLaunching(_: Notification) {
     let controller: FlutterViewController = mainFlutterWindow?.contentViewController as! FlutterViewController

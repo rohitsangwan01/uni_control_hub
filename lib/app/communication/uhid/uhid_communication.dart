@@ -38,6 +38,7 @@ class UhidCommunication {
         logInfo("Server started on $device");
       }
     } catch (e) {
+      logError("UHID Error: $e");
       DialogHandler.showError(e.toString());
     }
   }

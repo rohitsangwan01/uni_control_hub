@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:uni_control_hub/app/services/file_service.dart';
@@ -87,17 +86,25 @@ class AdbService {
     Process result = await Process.start('adb', args, runInShell: true);
 
     result.stdout.listen((event) {
-      log("UniHubAndroidServer Stdout: ${utf8.decode(event)}");
+      String log = utf8.decode(event);
+      logDebug("UniHubAndroidServer Stdout: $log");
+      if (log.contains("failed to connect")) {
+        onError?.call(
+          "Failed to Connect, make sure you are connected on same network",
+        );
+      } else if (log.contains('Error')) {
+        onError?.call(log);
+      }
     });
 
     result.stderr.listen((event) {
       String error = utf8.decode(event);
-      log("UniHubAndroidServer Stderr: $error");
+      logDebug("UniHubAndroidServer Stderr: $error");
       onError?.call(error);
     });
 
     result.exitCode.then((value) {
-      log("UniHubAndroidServer ExitCode: $value");
+      logDebug("UniHubAndroidServer ExitCode: $value");
       onStop?.call();
     });
   }
@@ -113,8 +120,9 @@ class AdbService {
   }
 
   Future<void> _startAdbServerIfNotRunning() async {
+    logInfo("Checking Adb Server");
     try {
-      await Process.run('adb', []);
+      await Process.run('adb', [], runInShell: true);
     } on ProcessException catch (err) {
       throw "Adb Executable not found $err";
     }

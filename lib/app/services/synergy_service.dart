@@ -123,7 +123,7 @@ class SynergyService {
         logError("Accessibility Permission not granted");
         if (context.mounted) {
           DialogHandler.showError(
-            "Accessibility Permission not granted",
+            "Please grant Accessibility Permission, if already enabled, remove that and enable again",
           );
         }
         return false;
