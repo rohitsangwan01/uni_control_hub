@@ -119,6 +119,9 @@ class AdbService {
     }
   }
 
+  /// Starts ADB server if not running already
+  ///
+  /// Might not work on MacOS yet: https://github.com/flutter/flutter/issues/89837
   Future<void> _startAdbServerIfNotRunning() async {
     logInfo("Checking Adb Server");
     try {

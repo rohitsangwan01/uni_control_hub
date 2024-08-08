@@ -16,7 +16,17 @@ UniControlHub revolutionizes the way you interact with your digital environment 
 
 Download app for your platform from [Release](https://github.com/rohitsangwan01/uni_control_hub/releases) section
 
-App will ask for Accessibility and Bluetooth permission on MacOS
+### MacOS
+
+- App will ask for `Accessibility` and `Bluetooth` permission on MacOS, ( After updating, app might again ask for `Accessibility` permission, even if its already given, try to remove the app from Accessibility and run again )
+
+- Install libusb: `brew install libusb`
+
+### Windows
+
+- Install `Microsoft Visual C++ 2015-2022` for your [x86](https://aka.ms/vs/17/release/vc_redist.x86.exe) or [x64](https://aka.ms/vs/17/release/vc_redist.x64.exe) OS.
+
+- If Android device not getting detected, make sure you have libusb [drivers](https://github.com/libusb/libusb/wiki/Windows#driver-installation) installed.
 
 ## Supported Platforms
 
@@ -37,13 +47,9 @@ App will ask for Accessibility and Bluetooth permission on MacOS
 
 ## Troubleshooting
 
-- If not working/crashing on Mac, try to install libusb `brew install libusb`
-- If Mac asks for Accessibility permission on fresh install even if its already given, try to remove the app from Accessibility and run again
 - To use UHID mode for Android, make sure `ADB` is installed ( not required for AOA mode )
 - For Desktop and IOS connection, make sure Bluetooth is on
 - After connecting Android device, click refresh button
-- On Windows, if android device not getting detected, checkout libusb Windows [wiki](https://github.com/libusb/libusb/wiki/Windows#driver-installation) page for more info about drivers
-- On Windows, if you get `MSVCP120.dll` or `VCRUNTIME140.dll` not found error, try installing `Microsoft Visual C++ 2015-2022` for your [x86](https://aka.ms/vs/17/release/vc_redist.x86.exe)  or [x64](https://aka.ms/vs/17/release/vc_redist.x64.exe) OS
 
 ## Developer's Guide
 
