@@ -8,7 +8,7 @@ import 'package:uni_control_hub/app/data/logger.dart';
 
 class AdbService {
   static AdbService get to => GetIt.instance<AdbService>();
-
+  final String _localAbstract = 'uni';
   Future<void> init() async {}
 
   Future<List<String>> getDevices() async {
@@ -52,7 +52,7 @@ class AdbService {
   Future<void> setPortForwarding(int port, String device) async {
     ProcessResult result = await Process.run(
       'adb',
-      ['-s', device, 'reverse', 'tcp:$port', 'tcp:$port'],
+      ['-s', device, 'reverse', 'localabstract:$_localAbstract', 'tcp:$port'],
       runInShell: true,
     );
     if (result.stderr.isNotEmpty) {
@@ -69,23 +69,25 @@ class AdbService {
     VoidCallback? onStop,
   }) async {
     // adb shell CLASSPATH=/data/local/tmp/UniHubServer.jar app_process / UniHubServer
-    List<String> args = [];
     String file = FileService.to.uniHubAndroidServerFile;
-    args.addAll([
-      '-s',
-      device,
-      'shell',
-      'CLASSPATH=/data/local/tmp/$file',
-      'app_process',
-      '/',
-      'UniHubServer',
-      '-deviceId',
-      device
-    ]);
-    args.addAll(['-port', port.toString(), '-host', host]);
-    //args.addAll(['-localSocket', 'uni']);
-    Process result = await Process.start('adb', args, runInShell: true);
-
+    // For socket connection: '-port', port.toString(), '-host', host;
+    Process result = await Process.start(
+      'adb',
+      [
+        '-s',
+        device,
+        'shell',
+        'CLASSPATH=/data/local/tmp/$file',
+        'app_process',
+        '/',
+        'UniHubServer',
+        '-deviceId',
+        device,
+        '-localSocket',
+        _localAbstract
+      ],
+      runInShell: true,
+    );
     result.stdout.listen((event) {
       String log = utf8.decode(event);
       logDebug("UniHubAndroidServer Stdout: $log");
@@ -122,7 +124,7 @@ class AdbService {
 
   /// Starts ADB server if not running already
   ///
-  /// Might not work on MacOS yet: https://github.com/flutter/flutter/issues/89837
+  /// Might not work on MacOS release build yet: https://github.com/flutter/flutter/issues/89837
   Future<void> _startAdbServerIfNotRunning() async {
     logInfo("Checking Adb Server");
     try {

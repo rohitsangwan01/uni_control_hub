@@ -39,6 +39,9 @@ class StorageService {
   set testStatus(String? value) =>
       value == null ? _removeDb('testStatus') : _writeDb('testStatus', value);
 
+  int get uhidPort => _readDb('uhidPort') ?? 9945;
+  set uhidPort(int value) => _writeDb('uhidPort', value);
+
   String? getClientAlias(String id) => _readDb('client_local_$id');
   void setClientAlias(String id, String alias) =>
       _writeDb('client_local_$id', alias);

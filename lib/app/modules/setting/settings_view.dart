@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:uni_control_hub/app/modules/setting/android_connection_mode_tile.dart';
+import 'package:uni_control_hub/app/modules/setting/uhid_port_tile.dart';
 import 'package:uni_control_hub/app/services/communication_service.dart';
 import 'package:uni_control_hub/app/data/capabilities.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
@@ -73,6 +74,9 @@ class SettingsView extends StatelessWidget {
             tiles: [
               const CustomSettingsTile(
                 child: AndroidConnectionModeTile(),
+              ),
+              const CustomSettingsTile(
+                child: UhidPortTile(),
               ),
               CustomSettingsTile(
                 child: Watch(
