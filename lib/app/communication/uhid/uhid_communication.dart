@@ -28,6 +28,8 @@ class UhidCommunication {
       for (String device in devices) {
         await _adbService.pushUniHubServerFile(device);
         logInfo("Server pushed to $device");
+        // await _adbService.setPortForwarding(port, device);
+        // logInfo('Adb port forwarded: $port');
         await _adbService.startUniHubServerFile(
           device: device,
           host: address,
@@ -35,7 +37,7 @@ class UhidCommunication {
           onStop: () => logInfo('$device Server stopped'),
           onError: (error) => DialogHandler.showError(error),
         );
-        logInfo("Server started on $device");
+        logInfo("Server setup done, waiting for response from $device");
       }
     } catch (e) {
       logError("UHID Error: $e");

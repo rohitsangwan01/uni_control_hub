@@ -39,11 +39,12 @@ class FileService {
 
   Future<String> get logsDirectory => _getDirectory('logs');
 
+  String uniHubAndroidServerFile = 'UniHubServer_0.1.jar';
+
   Future<String> get uniHubAndroidServerPath {
-    String fileName = 'UniHubServer_0.1.jar';
     return _copyAndGetFile(
-      to: join(_cachePath, fileName),
-      fromAsset: 'assets/$fileName',
+      to: join(_cachePath, uniHubAndroidServerFile),
+      fromAsset: 'assets/$uniHubAndroidServerFile',
     );
   }
 

@@ -41,7 +41,7 @@ class UsbDeviceCommunication {
     List<UsbHidDevice> removedDevices = [];
 
     for (UsbHidDevice device in aoaDevices) {
-      if (!_activeDevices.contains(device.deviceId)) {
+      if (!_activeDevices.any((e) => e.deviceId == device.deviceId)) {
         newDevices.add(device);
       }
     }
@@ -160,10 +160,12 @@ class UsbDeviceCommunication {
       "LIBUSB_ERROR_NOT_FOUND"
     ];
     if (invalidError.contains(e.toString())) {
-      if (!_activeDevices.contains(usbHidDevice.deviceId)) return;
+      if (!_activeDevices.any((e) => e.deviceId == usbHidDevice.deviceId)) {
+        return;
+      }
       log("Device not found, or failed to open");
       _communicationService.removeClient(usbHidDevice.deviceId);
-      _activeDevices.remove(usbHidDevice.deviceId);
+      _activeDevices.removeWhere((e) => e.deviceId == usbHidDevice.deviceId);
     } else {
       log(e.toString());
       usbHidDevice.client?.error.value = e.toString();

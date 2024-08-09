@@ -18,6 +18,7 @@
     "libgtk",
     "libstdc",
     "libusb",
+    "localabstract",
     "marvinpinto",
     "mikefarah",
     "nullptr",

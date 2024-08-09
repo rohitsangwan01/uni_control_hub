@@ -3,7 +3,7 @@ version: 0.0.6
 publish_to: none
 description: Seamlessly Bridge Your Devices
 environment:
-  sdk: ">=3.2.5 <4.0.0"
+  sdk: ">=3.5.0 <4.0.0"
 
 dependencies:
   flutter:

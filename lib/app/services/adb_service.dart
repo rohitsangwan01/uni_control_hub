@@ -35,54 +35,55 @@ class AdbService {
     return devices;
   }
 
-  Future<void> pushUniHubServerFile([String? device]) async {
+  Future<void> pushUniHubServerFile(String device) async {
     // adb push UniHubServer.jar /data/local/tmp/
-    List<String> args = [];
-    if (device != null) {
-      args.add('-s');
-      args.add(device);
-    }
-
     String filePath = await FileService.to.uniHubAndroidServerPath;
-    args.add('push');
-    args.add(filePath);
-    args.add('/data/local/tmp/');
-
-    final result = await Process.run('adb', args, runInShell: true);
-
+    ProcessResult result = await Process.run(
+      'adb',
+      ['-s', device, 'push', filePath, '/data/local/tmp/'],
+      runInShell: true,
+    );
     if (result.stderr.isNotEmpty) {
       throw Exception(result.stderr);
     }
     return result.stdout;
   }
 
+  Future<void> setPortForwarding(int port, String device) async {
+    ProcessResult result = await Process.run(
+      'adb',
+      ['-s', device, 'reverse', 'tcp:$port', 'tcp:$port'],
+      runInShell: true,
+    );
+    if (result.stderr.isNotEmpty) {
+      throw Exception(result.stderr);
+    }
+    logInfo('PortForwarding ${result.stdout}');
+  }
+
   Future<void> startUniHubServerFile({
     required String host,
     required int port,
-    String? device,
+    required String device,
     Function(String error)? onError,
     VoidCallback? onStop,
   }) async {
     // adb shell CLASSPATH=/data/local/tmp/UniHubServer.jar app_process / UniHubServer
     List<String> args = [];
-    if (device != null) {
-      args.add('-s');
-      args.add(device);
-    }
-    args.add('shell');
-    args.add('CLASSPATH=/data/local/tmp/UniHubServer.jar');
-    args.add('app_process');
-    args.add('/');
-    args.add('UniHubServer');
-    if (device != null) {
-      args.add('-deviceId');
-      args.add(device);
-    }
-    args.add('-port');
-    args.add('$port');
-    args.add('-host');
-    args.add(host);
-
+    String file = FileService.to.uniHubAndroidServerFile;
+    args.addAll([
+      '-s',
+      device,
+      'shell',
+      'CLASSPATH=/data/local/tmp/$file',
+      'app_process',
+      '/',
+      'UniHubServer',
+      '-deviceId',
+      device
+    ]);
+    args.addAll(['-port', port.toString(), '-host', host]);
+    //args.addAll(['-localSocket', 'uni']);
     Process result = await Process.start('adb', args, runInShell: true);
 
     result.stdout.listen((event) {

@@ -19,9 +19,10 @@ class UsbHidDevice {
   final int _aoaUnregisterHid = 55;
   final int _aoaSetHidReportDesc = 56;
   final int _aoaSendHidEvent = 57;
-  final int _libUsbEndpointOut = libusb_endpoint_direction.LIBUSB_ENDPOINT_OUT;
+  final int _libUsbEndpointOut =
+      libusb_endpoint_direction.LIBUSB_ENDPOINT_OUT.value;
   final int _libUsbRequestTypeVendor =
-      libusb_request_type.LIBUSB_REQUEST_TYPE_VENDOR;
+      libusb_request_type.LIBUSB_REQUEST_TYPE_VENDOR.value;
   Client? client;
   bool isOpened = false;
 
@@ -170,7 +171,7 @@ class UsbHidDevice {
       var device = _libusb.libusb_get_device(handle);
       if (device != nullptr) {
         var getDesc = _libusb.libusb_get_device_descriptor(device, descPtr) ==
-            libusb_error.LIBUSB_SUCCESS;
+            libusb_error.LIBUSB_SUCCESS.value;
         if (getDesc) {
           if (descPtr.ref.iManufacturer > 0) {
             manufacturer =
@@ -223,7 +224,8 @@ class LibUsbDesktop {
   final NativeLibrary _libusb;
   LibUsbDesktop(this._libusb);
 
-  bool init() => _libusb.libusb_init(nullptr) == libusb_error.LIBUSB_SUCCESS;
+  bool init() =>
+      _libusb.libusb_init(nullptr) == libusb_error.LIBUSB_SUCCESS.value;
 
   void exit() => _libusb.libusb_exit(nullptr);
 
@@ -250,7 +252,7 @@ class LibUsbDesktop {
       var dev = deviceList[i];
       var addr = _libusb.libusb_get_device_address(dev);
       var getDesc = _libusb.libusb_get_device_descriptor(dev, descPtr) ==
-          libusb_error.LIBUSB_SUCCESS;
+          libusb_error.LIBUSB_SUCCESS.value;
       yield UsbDevice(
         identifier: addr.toString(),
         vendorId: getDesc ? descPtr.ref.idVendor : 0,
