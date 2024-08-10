@@ -136,7 +136,7 @@ class SynergyService {
     return SynergyConfig(
       screens: [
         ScreenConfig(serverName),
-        ...clientAliases.map((e) => ScreenConfig(e.name)).toList(),
+        ...clientAliases.map((e) => ScreenConfig(e.name)),
       ],
       links: [
         ScreenLink(

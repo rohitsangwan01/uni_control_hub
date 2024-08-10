@@ -35,7 +35,7 @@ class AdbService {
     return devices;
   }
 
-  Future<void> pushUniHubServerFile(String device) async {
+  Future<String?> pushUniHubServerFile(String device) async {
     // adb push UniHubServer.jar /data/local/tmp/
     String filePath = await FileService.to.uniHubAndroidServerPath;
     ProcessResult result = await Process.run(
@@ -43,10 +43,10 @@ class AdbService {
       ['-s', device, 'push', filePath, '/data/local/tmp/'],
       runInShell: true,
     );
-    if (result.stderr.isNotEmpty) {
-      throw Exception(result.stderr);
-    }
-    return result.stdout;
+    String? stdout = result.stdout?.toString();
+    String? stderr = result.stderr?.toString();
+    if (stderr != null && stderr.isNotEmpty) return stderr;
+    return stdout;
   }
 
   Future<void> setPortForwarding(int port, String device) async {

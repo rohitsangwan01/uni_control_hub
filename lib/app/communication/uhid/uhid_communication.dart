@@ -28,8 +28,8 @@ class UhidCommunication {
       await _startUhidSocket();
       // Push server to all devices
       for (String device in devices) {
-        await _adbService.pushUniHubServerFile(device);
-        logInfo("Server pushed to $device");
+        var pushResult = await _adbService.pushUniHubServerFile(device);
+        logInfo("Server pushed to $device, $pushResult");
         await _adbService.setPortForwarding(_port, device);
         logInfo('Adb port forwarded: $_port');
         await _adbService.startUniHubServerFile(
