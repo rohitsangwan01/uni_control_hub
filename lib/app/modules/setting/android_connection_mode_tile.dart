@@ -4,16 +4,14 @@ import 'package:signals_flutter/signals_flutter.dart';
 import 'package:uni_control_hub/app/data/dialog_handler.dart';
 import 'package:uni_control_hub/app/data/info_data.dart';
 import 'package:uni_control_hub/app/models/android_connection_type.dart';
-import 'package:uni_control_hub/app/services/communication_service.dart';
-import 'package:uni_control_hub/app/services/storage_service.dart';
+import 'package:uni_control_hub/app/services/app_service.dart';
 
 class AndroidConnectionModeTile extends StatelessWidget {
   const AndroidConnectionModeTile({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final StorageService storageService = StorageService.to;
-    final CommunicationService communicationService = CommunicationService.to;
+    final AppService appService = AppService.to;
     return Watch(
       (_) => SettingsTile(
         title: Row(
@@ -34,7 +32,7 @@ class AndroidConnectionModeTile extends StatelessWidget {
         ),
         leading: const Icon(Icons.android),
         trailing: DropdownButton<AndroidConnectionType>(
-          value: communicationService.androidConnection.value,
+          value: appService.androidConnection.value,
           elevation: 0,
           underline: const SizedBox(),
           enableFeedback: false,
@@ -50,8 +48,7 @@ class AndroidConnectionModeTile extends StatelessWidget {
               .toList(),
           onChanged: (AndroidConnectionType? connection) {
             if (connection == null) return;
-            storageService.androidConnection = connection;
-            communicationService.androidConnection.value = connection;
+            appService.androidConnection.value = connection;
           },
         ),
       ),

@@ -24,10 +24,7 @@ class SynergyService {
   late final fileService = FileService.to;
 
   String serverName = AppData.appName;
-  Signal<bool> userInternalServer = Signal(true);
-  Signal<bool> autoStartServer = Signal(false);
-  Signal<bool> isServerRunning = Signal(false);
-  Signal<bool> invertMouseScroll = Signal(false);
+  Signal<bool> isSynergyServerRunning = Signal(false);
 
   List<ClientAlias> clientAliases = <ClientAlias>[
     ClientAlias.left(),
@@ -38,13 +35,10 @@ class SynergyService {
 
   Future<void> init() async {
     closeServerIfRunning();
-    userInternalServer.value = storageService.useInternalServer;
-    autoStartServer.value = storageService.autoStartServer;
-    invertMouseScroll.value = storageService.invertMouseScroll;
   }
 
   Future<void> toggleServer(BuildContext context) async {
-    if (isServerRunning.value) {
+    if (isSynergyServerRunning.value) {
       await stopServer();
     } else {
       await startServer(context);
@@ -89,7 +83,7 @@ class SynergyService {
     );
 
     if (pid != null) {
-      isServerRunning.value = true;
+      isSynergyServerRunning.value = true;
     }
 
     logInfo("Server started with pid: $pid");
@@ -108,7 +102,7 @@ class SynergyService {
   Future<void> stopServer() async {
     SynergyServer.stopServer();
     storageService.synergyProcessId = null;
-    isServerRunning.value = false;
+    isSynergyServerRunning.value = false;
     logInfo("Server stopped");
   }
 

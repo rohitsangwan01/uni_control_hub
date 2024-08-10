@@ -30,6 +30,7 @@ class _DashboardViewState extends State<DashboardView> with WindowListener {
   late final CommunicationService communicationService =
       CommunicationService.to;
   late final SynergyService synergyService = SynergyService.to;
+  late final AppService _appService = AppService.to;
 
   @override
   void initState() {
@@ -114,13 +115,12 @@ class _DashboardViewState extends State<DashboardView> with WindowListener {
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
-                    Watch((_) => synergyService.userInternalServer.value
+                    Watch((_) => _appService.userInternalServer.value
                         ? const ServerStateTile()
                         : const SynergyServerClientTile()),
-                    Watch((_) =>
-                        communicationService.isPeripheralModeEnabled.value
-                            ? const BleAdvertiseStateTile()
-                            : const SizedBox.shrink()),
+                    Watch((_) => _appService.enableBluetoothMode.value
+                        ? const BleAdvertiseStateTile()
+                        : const SizedBox.shrink()),
                     const SizedBox(height: 20),
                     const _ClientTitleWidget(),
                     const SizedBox(height: 10),
