@@ -16,8 +16,9 @@ class FileService {
   final List<String> _copiedFiles = [];
   late final _executablePath = File(Platform.resolvedExecutable).parent.path;
 
-  Future<void> init() async {
+  Future<FileService> init() async {
     _cachePath = (await getApplicationCacheDirectory()).path;
+    return this;
   }
 
   Future<String?> get synergyServerPath async => switch (Abi.current()) {

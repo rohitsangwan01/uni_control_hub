@@ -4,11 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mixin_logger/mixin_logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:uni_control_hub/app/services/native_communication.dart';
 import 'package:uni_control_hub/app/services/file_service.dart';
+import 'package:uni_control_hub/app/services/synergy_service.dart';
 
-/// Common Service for the app
 class AppService {
   static AppService get to => GetIt.instance<AppService>();
+
+  late final nativeChannelService = NativeChannelService.to;
+  late final fileService = FileService.to;
+  late final synergyService = SynergyService.to;
 
   String appVersion = 'Unknown';
   final navigatorKey = GlobalKey<NavigatorState>();
@@ -20,10 +25,15 @@ class AppService {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appVersion = packageInfo.version;
     initLogger(
-      await FileService.to.logsDirectory,
+      await fileService.logsDirectory,
       maxFileCount: 5,
-      maxFileLength: 5 * 1024 * 1024, // max to 5 MB for single file.
+      maxFileLength: 5 * 1024 * 1024,
     );
+  }
+
+  Future<void> disposeResources() async {
+    nativeChannelService.dispose();
+    synergyService.closeServerIfRunning();
   }
 
   void addLicenses() {

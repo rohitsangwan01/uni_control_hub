@@ -9,7 +9,7 @@ import 'package:uni_control_hub/app/models/client_alias.dart';
 import 'package:uni_control_hub/app/models/screen_config.dart';
 import 'package:uni_control_hub/app/models/screen_link.dart';
 import 'package:uni_control_hub/app/models/screen_options.dart';
-import 'package:uni_control_hub/app/data/native_communication.dart';
+import 'package:uni_control_hub/app/services/native_communication.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
 import 'package:uni_control_hub/app/synergy/synergy_config.dart';
 import 'package:uni_control_hub/app/services/file_service.dart';
@@ -20,6 +20,8 @@ class SynergyService {
   static SynergyService get to => GetIt.instance<SynergyService>();
 
   late final storageService = StorageService.to;
+  late final nativeChannelService = NativeChannelService.to;
+  late final fileService = FileService.to;
 
   String serverName = AppData.appName;
   Signal<bool> userInternalServer = Signal(true);
@@ -65,7 +67,7 @@ class SynergyService {
     closeServerIfRunning();
     logInfo("Trying to Start");
 
-    String? serverPath = await FileService.to.synergyServerPath;
+    String? serverPath = await fileService.synergyServerPath;
     if (serverPath == null) throw Exception("Synergy Server not found");
 
     // First Ask permission on MacOS to execute this file
@@ -74,7 +76,7 @@ class SynergyService {
       logInfo("Asked for permission");
     }
 
-    String configPath = await FileService.to.configPath(_config);
+    String configPath = await fileService.configPath(_config);
     logInfo('Synergy Config: $configPath');
     int? pid = await SynergyServer.startServer(
       serverPath: serverPath,
@@ -113,10 +115,10 @@ class SynergyService {
   Future<bool> validatePermission(BuildContext context) async {
     if (Platform.isMacOS) {
       bool haveAccessibilityPermission =
-          await NativeCommunication.haveMacAccessibilityPermission();
+          await nativeChannelService.haveMacAccessibilityPermission();
       if (!haveAccessibilityPermission) {
         haveAccessibilityPermission =
-            await NativeCommunication.requestMacAccessibilityPermission();
+            await nativeChannelService.requestMacAccessibilityPermission();
       }
       logInfo("HaveAccessibilityPermission: $haveAccessibilityPermission");
       if (!haveAccessibilityPermission) {

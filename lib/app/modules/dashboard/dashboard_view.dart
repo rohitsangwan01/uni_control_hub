@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:signals_flutter/signals_flutter.dart';
+import 'package:uni_control_hub/app/services/app_service.dart';
 import 'package:uni_control_hub/app/services/communication_service.dart';
 import 'package:uni_control_hub/app/data/info_data.dart';
 import 'package:uni_control_hub/app/data/dialog_handler.dart';
@@ -66,7 +67,7 @@ class _DashboardViewState extends State<DashboardView> with WindowListener {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                synergyService.closeServerIfRunning();
+                await AppService.to.disposeResources();
                 await windowManager.destroy();
               },
               child: const Text('Yes'),
