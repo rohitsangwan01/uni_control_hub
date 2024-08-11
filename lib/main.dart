@@ -36,8 +36,8 @@ Future<void> _initialize() async {
   var getIt = GetIt.instance;
   await getIt.registerSingleton(FileService()).init();
   await getIt.registerSingleton(StorageService()).init();
-  await getIt.registerSingleton(AppService()).init();
   await getIt.registerSingleton(NativeChannelService()).init();
+  await getIt.registerSingleton(AppService()).init();
   await getIt.registerSingleton(SynergyService()).init();
   await getIt.registerSingleton(AdbService()).init();
   await getIt.registerSingleton(CommunicationService()).init();

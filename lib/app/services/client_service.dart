@@ -32,7 +32,6 @@ class ClientService {
       logDebug("UsbDevice: $usbDevices Connected: $connected");
       refreshClients();
     };
-    _nativeChannelService.startUsbDetection();
   }
 
   void refreshClients() {

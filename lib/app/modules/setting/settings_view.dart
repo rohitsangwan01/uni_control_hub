@@ -83,6 +83,19 @@ class SettingsView extends StatelessWidget {
                   ),
                 ),
               ),
+              if (Capabilities.canStopUsbTracking)
+                CustomSettingsTile(
+                  child: Watch(
+                    (_) => SettingsTile.switchTile(
+                      title: const Text('Auto Detect USB Devices'),
+                      initialValue: _appService.trackUsbConnectedDevices.value,
+                      onToggle: (value) {
+                        _appService.trackUsbConnectedDevices.value = value;
+                      },
+                      leading: const Icon(Icons.usb),
+                    ),
+                  ),
+                ),
             ],
           ),
         ],

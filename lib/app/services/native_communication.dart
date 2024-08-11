@@ -58,6 +58,7 @@ class NativeChannelService {
   }
 
   Future<void> startUsbDetection() async {
+    logDebug("Starting UsbDetection");
     if (Platform.isMacOS) {
       return _channel.invokeMethod('startUsbDetection');
     } else if (Platform.isLinux) {
@@ -68,6 +69,7 @@ class NativeChannelService {
   }
 
   Future<void> stopUsbDetection() async {
+    logDebug("Stopping UsbDetection");
     if (Platform.isMacOS) {
       return _channel.invokeMethod('stopUsbDetection');
     } else if (Platform.isLinux) {

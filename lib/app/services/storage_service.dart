@@ -42,6 +42,9 @@ class StorageService {
   int get uhidPort => _readDb('uhidPort') ?? 9945;
   set uhidPort(int value) => _writeDb('uhidPort', value);
 
+  bool get trackUsbConnectedDevices => _readDb("autoDetectUsb") ?? true;
+  set trackUsbConnectedDevices(bool value) => _writeDb("autoDetectUsb", value);
+
   String? getClientAlias(String id) => _readDb('client_local_$id');
   void setClientAlias(String id, String alias) =>
       _writeDb('client_local_$id', alias);

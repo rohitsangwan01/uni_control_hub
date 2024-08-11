@@ -29,6 +29,7 @@ class AppService {
   Signal<bool> autoStartServer = Signal(false);
   Signal<bool> invertMouseScroll = Signal(false);
   Signal<bool> enableBluetoothMode = Signal(true);
+  Signal<bool> trackUsbConnectedDevices = Signal(true);
   Signal<AndroidConnectionType> androidConnection =
       Signal(AndroidConnectionType.aoa);
 
@@ -38,7 +39,8 @@ class AppService {
     invertMouseScroll.value = storageService.invertMouseScroll;
     enableBluetoothMode.value = Capabilities.supportsBleConnection &&
         storageService.enableBluetoothConnection;
-    androidConnection.value = StorageService.to.androidConnection;
+    androidConnection.value = storageService.androidConnection;
+    trackUsbConnectedDevices.value = storageService.trackUsbConnectedDevices;
 
     // Auto sync localStorage values
     effect(() {
@@ -47,6 +49,17 @@ class AppService {
       storageService.invertMouseScroll = invertMouseScroll.value;
       storageService.enableBluetoothConnection = enableBluetoothMode.value;
       storageService.androidConnection = androidConnection.value;
+    });
+
+    // UsbDetection Tracker Hook
+    effect(() {
+      bool track = trackUsbConnectedDevices.value;
+      storageService.trackUsbConnectedDevices = track;
+      if (track) {
+        nativeChannelService.startUsbDetection();
+      } else {
+        nativeChannelService.stopUsbDetection();
+      }
     });
   }
 
