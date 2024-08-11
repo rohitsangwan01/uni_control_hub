@@ -4,6 +4,7 @@ import 'package:uni_control_hub/app/communication/uhid/uhid_communication.dart';
 import 'package:uni_control_hub/app/communication/usb/usb_device_communication.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
 import 'package:uni_control_hub/app/models/android_connection_type.dart';
+import 'package:uni_control_hub/app/models/usb_device.dart';
 import 'package:uni_control_hub/app/services/app_service.dart';
 import 'package:uni_control_hub/app/services/native_communication.dart';
 
@@ -26,7 +27,8 @@ class ClientService {
     _blePeripheralService.setup();
     _usbDeviceService.setup();
 
-    _nativeChannelService.usbDeviceHandler = (usbDevices, connected) {
+    _nativeChannelService.usbDeviceHandler =
+        (List<UsbDevice> usbDevices, bool? connected) {
       logDebug("UsbDevice: $usbDevices Connected: $connected");
       refreshClients();
     };

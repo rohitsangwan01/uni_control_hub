@@ -1,19 +1,24 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:uni_control_hub/app/data/linux_usb_hotplug.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
 import 'package:uni_control_hub/app/models/usb_device.dart';
 
 class NativeChannelService {
   static NativeChannelService get to => GetIt.instance<NativeChannelService>();
 
+  late final _linuxHotplug = LinuxUsbHotplug();
   final _channel = const MethodChannel('@uni_control_hub/native_channel');
   final _messageConnector = const BasicMessageChannel(
-      "@uni_control_hub/message_connector", StandardMessageCodec());
+    "@uni_control_hub/message_connector",
+    StandardMessageCodec(),
+  );
 
-  // List to usb device connection/disconnection events
-  Function(List<UsbDevice> usbDevice, bool connected)? usbDeviceHandler;
+  // Listen to usb device connection/disconnection events
+  Function(List<UsbDevice> usbDevice, bool? connected)? usbDeviceHandler;
 
   Future<NativeChannelService> init() async {
     _messageConnector.setMessageHandler(_handleMessage);
@@ -53,12 +58,20 @@ class NativeChannelService {
   }
 
   Future<void> startUsbDetection() async {
-    if (!Platform.isMacOS) return;
-    return _channel.invokeMethod('startUsbDetection');
+    if (Platform.isMacOS) {
+      return _channel.invokeMethod('startUsbDetection');
+    } else if (Platform.isLinux) {
+      _linuxHotplug.startUsbDetection(() {
+        usbDeviceHandler?.call([], null);
+      });
+    }
   }
 
   Future<void> stopUsbDetection() async {
-    if (!Platform.isMacOS) return;
-    return _channel.invokeMethod('stopUsbDetection');
+    if (Platform.isMacOS) {
+      return _channel.invokeMethod('stopUsbDetection');
+    } else if (Platform.isLinux) {
+      _linuxHotplug.stopUsbDetection();
+    }
   }
 }
