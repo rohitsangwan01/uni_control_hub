@@ -3,17 +3,15 @@ import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:uni_control_hub/app/modules/setting/android_connection_mode_tile.dart';
 import 'package:uni_control_hub/app/modules/setting/uhid_port_tile.dart';
-import 'package:uni_control_hub/app/services/communication_service.dart';
+import 'package:uni_control_hub/app/services/app_service.dart';
 import 'package:uni_control_hub/app/data/capabilities.dart';
-import 'package:uni_control_hub/app/services/storage_service.dart';
 import 'package:uni_control_hub/app/services/synergy_service.dart';
 
 class SettingsView extends StatelessWidget {
   SettingsView({super.key});
 
-  final StorageService _storageService = StorageService.to;
   final SynergyService _synergyService = SynergyService.to;
-  final CommunicationService _communicationService = CommunicationService.to;
+  final AppService _appService = AppService.to;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +28,10 @@ class SettingsView extends StatelessWidget {
               CustomSettingsTile(
                 child: Watch((_) => SettingsTile.switchTile(
                       title: const Text('Use default server'),
-                      initialValue: _synergyService.userInternalServer.value,
+                      initialValue: _appService.userInternalServer.value,
                       onToggle: (value) {
-                        _storageService.useInternalServer = value;
-                        _synergyService.userInternalServer.value = value;
-                        if (_synergyService.isServerRunning.value) {
+                        _appService.userInternalServer.value = value;
+                        if (_synergyService.isSynergyServerRunning.value) {
                           _synergyService.stopServer();
                         }
                       },
@@ -43,12 +40,11 @@ class SettingsView extends StatelessWidget {
               ),
               CustomSettingsTile(
                 child: Watch((_) => SettingsTile.switchTile(
-                      enabled: _synergyService.userInternalServer.value,
+                      enabled: _appService.userInternalServer.value,
                       title: const Text('Auto start server on launch'),
-                      initialValue: _synergyService.autoStartServer.value,
+                      initialValue: _appService.autoStartServer.value,
                       onToggle: (value) {
-                        _synergyService.autoStartServer.value = value;
-                        _storageService.autoStartServer = value;
+                        _appService.autoStartServer.value = value;
                       },
                       leading: const Icon(Icons.mouse),
                     )),
@@ -57,12 +53,9 @@ class SettingsView extends StatelessWidget {
                 CustomSettingsTile(
                   child: Watch((_) => SettingsTile.switchTile(
                         title: const Text('Enable Bluetooth connection'),
-                        initialValue:
-                            _communicationService.isPeripheralModeEnabled.value,
+                        initialValue: _appService.enableBluetoothMode.value,
                         onToggle: (value) {
-                          _communicationService.isPeripheralModeEnabled.value =
-                              value;
-                          _storageService.enableBluetoothConnection = value;
+                          _appService.enableBluetoothMode.value = value;
                         },
                         leading: const Icon(Icons.bluetooth),
                       )),
@@ -82,10 +75,9 @@ class SettingsView extends StatelessWidget {
                 child: Watch(
                   (_) => SettingsTile.switchTile(
                     title: const Text('Invert Mouse Scroll'),
-                    initialValue: _synergyService.invertMouseScroll.value,
+                    initialValue: _appService.invertMouseScroll.value,
                     onToggle: (value) {
-                      _synergyService.invertMouseScroll.value = value;
-                      _storageService.invertMouseScroll = value;
+                      _appService.invertMouseScroll.value = value;
                     },
                     leading: const Icon(Icons.swap_vert),
                   ),

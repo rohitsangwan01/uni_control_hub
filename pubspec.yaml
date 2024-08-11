@@ -25,6 +25,7 @@ dependencies:
   share_plus: ^10.0.0
   mixin_logger: ^0.1.1
   path: ^1.9.0
+  udev: ^0.0.3
 
 ## flutter pub run flutter_launcher_icons
 dev_dependencies:

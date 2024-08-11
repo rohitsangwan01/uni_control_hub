@@ -2,11 +2,11 @@
 
 ### App cache path
 
+Linux: `/home/YOUR_USERNAME/.cache/com.rohit.uni_control_hub/`
+
 MacOS: `/Users/YOUR_USERNAME/Library/Caches/com.rohit.uniControlHub/`
 
 Windows: `C:\Users\YOUR_USERNAME\AppData\Local\com.rohit\uni_control_hub\`
-
-Linux:
 
 ### Database and Log files
 

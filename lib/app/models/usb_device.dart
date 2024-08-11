@@ -13,6 +13,16 @@ class UsbDevice {
     required this.maxPacketSize,
   });
 
+  factory UsbDevice.fromJson(json) {
+    return UsbDevice(
+      identifier: json['product'] ?? "",
+      vendorId: json["vendorId"] ?? 0,
+      productId: json["productId"] ?? 0,
+      configurationCount: -1,
+      maxPacketSize: -1,
+    );
+  }
+
   String get uid => '$vendorId:$productId';
 
   @override

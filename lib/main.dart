@@ -9,6 +9,7 @@ import 'package:uni_control_hub/app/modules/dashboard/dashboard_view.dart';
 import 'package:uni_control_hub/app/services/adb_service.dart';
 import 'package:uni_control_hub/app/services/app_service.dart';
 import 'package:uni_control_hub/app/services/client_service.dart';
+import 'package:uni_control_hub/app/services/native_communication.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
 import 'package:uni_control_hub/app/services/synergy_service.dart';
 import 'package:window_manager/window_manager.dart';
@@ -34,8 +35,9 @@ Future<void> _initialize() async {
   // Initialize services
   var getIt = GetIt.instance;
   await getIt.registerSingleton(FileService()).init();
-  await getIt.registerSingleton(AppService()).init();
   await getIt.registerSingleton(StorageService()).init();
+  await getIt.registerSingleton(AppService()).init();
+  await getIt.registerSingleton(NativeChannelService()).init();
   await getIt.registerSingleton(SynergyService()).init();
   await getIt.registerSingleton(AdbService()).init();
   await getIt.registerSingleton(CommunicationService()).init();

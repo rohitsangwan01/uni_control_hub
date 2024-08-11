@@ -5,15 +5,15 @@ import 'dart:typed_data';
 
 import 'package:ble_peripheral/ble_peripheral.dart';
 import 'package:uni_control_hub/app/communication/ble/ble_peripheral_utils.dart';
+import 'package:uni_control_hub/app/services/app_service.dart';
 import 'package:uni_control_hub/app/services/communication_service.dart';
-import 'package:uni_control_hub/app/data/capabilities.dart';
 import 'package:uni_control_hub/app/client/client.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
 import 'package:uni_control_hub/app/data/dialog_handler.dart';
-import 'package:uni_control_hub/app/services/storage_service.dart';
 
 class BlePeripheralCommunication {
-  final CommunicationService _communicationService = CommunicationService.to;
+  late final _communicationService = CommunicationService.to;
+  late final _appService = AppService.to;
 
   late final _blePeripheralUtils = BlePeripheralUtils();
 
@@ -21,11 +21,7 @@ class BlePeripheralCommunication {
   bool _isInitialized = false;
 
   void setup() async {
-    _communicationService.isPeripheralModeEnabled.value =
-        Capabilities.supportsBleConnection &&
-            StorageService.to.enableBluetoothConnection;
-
-    if (_communicationService.isPeripheralModeEnabled.value) {
+    if (_appService.enableBluetoothMode.value) {
       _setupListeners();
     }
   }

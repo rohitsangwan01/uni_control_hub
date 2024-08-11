@@ -3,20 +3,18 @@ import 'package:signals_flutter/signals_flutter.dart';
 import 'package:uni_control_hub/app/client/client.dart';
 import 'package:uni_control_hub/app/data/extensions.dart';
 import 'package:uni_control_hub/app/data/logger.dart';
-import 'package:uni_control_hub/app/models/android_connection_type.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
 
 class CommunicationService {
   static CommunicationService get to => GetIt.instance<CommunicationService>();
 
   final ListSignal<Client> devices = ListSignal<Client>([]);
-  final Signal<bool> isPeripheralModeEnabled = Signal(true);
-  final Signal<bool> isPeripheralAdvertising = Signal(false);
-  final androidConnection = Signal(AndroidConnectionType.aoa);
 
-  Future<void> init() async {
-    androidConnection.value = StorageService.to.androidConnection;
-  }
+  final Signal<bool> isPeripheralAdvertising = Signal(false);
+
+  late final StorageService storageService = StorageService.to;
+
+  Future<void> init() async {}
 
   bool existsDevice(String deviceId) =>
       devices.any((element) => element.id == deviceId);

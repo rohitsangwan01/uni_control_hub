@@ -37,7 +37,7 @@ class ServerStateTile extends StatelessWidget {
                   ),
             ),
             trailing: Switch.adaptive(
-              value: SynergyService.to.isServerRunning.value,
+              value: SynergyService.to.isSynergyServerRunning.value,
               onChanged: (_) {
                 SynergyService.to.toggleServer(context);
               },

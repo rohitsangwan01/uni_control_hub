@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:signals_flutter/signals_flutter.dart';
+import 'package:uni_control_hub/app/services/app_service.dart';
 import 'package:uni_control_hub/app/services/communication_service.dart';
 import 'package:uni_control_hub/app/data/info_data.dart';
 import 'package:uni_control_hub/app/data/dialog_handler.dart';
@@ -29,6 +30,7 @@ class _DashboardViewState extends State<DashboardView> with WindowListener {
   late final CommunicationService communicationService =
       CommunicationService.to;
   late final SynergyService synergyService = SynergyService.to;
+  late final AppService _appService = AppService.to;
 
   @override
   void initState() {
@@ -66,7 +68,7 @@ class _DashboardViewState extends State<DashboardView> with WindowListener {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                synergyService.closeServerIfRunning();
+                await AppService.to.disposeResources();
                 await windowManager.destroy();
               },
               child: const Text('Yes'),
@@ -113,13 +115,12 @@ class _DashboardViewState extends State<DashboardView> with WindowListener {
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
-                    Watch((_) => synergyService.userInternalServer.value
+                    Watch((_) => _appService.userInternalServer.value
                         ? const ServerStateTile()
                         : const SynergyServerClientTile()),
-                    Watch((_) =>
-                        communicationService.isPeripheralModeEnabled.value
-                            ? const BleAdvertiseStateTile()
-                            : const SizedBox.shrink()),
+                    Watch((_) => _appService.enableBluetoothMode.value
+                        ? const BleAdvertiseStateTile()
+                        : const SizedBox.shrink()),
                     const SizedBox(height: 20),
                     const _ClientTitleWidget(),
                     const SizedBox(height: 10),

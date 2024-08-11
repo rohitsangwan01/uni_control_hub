@@ -121,7 +121,7 @@ class Client {
   Future<SynergyClient?> _getAddress() async {
     // check if synergy serer is ready
     if (StorageService.to.useInternalServer) {
-      if (!SynergyService.to.isServerRunning.value) {
+      if (!SynergyService.to.isSynergyServerRunning.value) {
         logInfo("Synergy Server is not running");
         error.value = "Server is not running, please start the server.";
         _setConnected(false);
