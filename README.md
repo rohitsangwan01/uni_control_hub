@@ -28,10 +28,11 @@ Download app for your platform from [Release](https://github.com/rohitsangwan01/
 
 ## Supported Platforms
 
-| Platform | Bluetooth | USB |
-| -------- | --------- | --- |
-| IOS      | ✅        | ❌  |
-| Android  | ⏳        | ✅  |
+| Platform | Bluetooth | USB | ADB |
+| -------- | --------- | --- | --- |
+| IOS      | ✅        | ❌  | ❌  |
+| Android  | ⏳        | ✅  | ✅  |
+
 
 ## Screenshot
 
