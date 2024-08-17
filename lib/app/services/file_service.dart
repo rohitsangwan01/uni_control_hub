@@ -36,9 +36,11 @@ class FileService {
         _ => null,
       };
 
-  Future<String> get dbDirectory => _getDirectory('db');
+  String get dbDirectory => _getDirectory('db');
 
-  Future<String> get logsDirectory => _getDirectory('logs');
+  String get logsDirectory => _getDirectory('logs');
+
+  String get assetsDirectory => _getDirectory('assets');
 
   String uniHubAndroidServerFile = 'UniHubServer_0.1.jar';
 
@@ -70,11 +72,11 @@ class FileService {
   }
 
   /// Create a directory in cache folder
-  Future<String> _getDirectory(String name) async {
+  String _getDirectory(String name) {
     String path = join(_cachePath, name);
     Directory directory = Directory(path);
-    if (await directory.exists()) return path;
-    await directory.create(recursive: true);
+    if (directory.existsSync()) return path;
+    directory.createSync(recursive: true);
     return path;
   }
 

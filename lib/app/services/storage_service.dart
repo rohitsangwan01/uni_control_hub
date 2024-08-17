@@ -12,7 +12,7 @@ class StorageService {
   late final GetStorage _storage;
 
   Future<void> init() async {
-    _storage = GetStorage(AppData.appName, await FileService.to.dbDirectory);
+    _storage = GetStorage(AppData.appName, FileService.to.dbDirectory);
     await _storage.initStorage;
   }
 

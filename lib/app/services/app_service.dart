@@ -69,7 +69,7 @@ class AppService {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appVersion = packageInfo.version;
     initLogger(
-      await fileService.logsDirectory,
+      fileService.logsDirectory,
       maxFileCount: 5,
       maxFileLength: 5 * 1024 * 1024,
     );
