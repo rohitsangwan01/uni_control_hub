@@ -113,6 +113,7 @@ class _DashboardViewState extends State<DashboardView> with WindowListener {
               SizedBox(
                 width: min(450, MediaQuery.sizeOf(context).width),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
                     Watch((_) => _appService.userInternalServer.value
@@ -123,6 +124,7 @@ class _DashboardViewState extends State<DashboardView> with WindowListener {
                         : const SizedBox.shrink()),
                     const SizedBox(height: 20),
                     const _ClientTitleWidget(),
+                    const _CursorLockedWidget(),
                     const SizedBox(height: 10),
                     const _ClientsListWidget(),
                   ],
@@ -133,6 +135,31 @@ class _DashboardViewState extends State<DashboardView> with WindowListener {
         ),
       ),
     );
+  }
+}
+
+class _CursorLockedWidget extends StatelessWidget {
+  const _CursorLockedWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    final SynergyService synergyService = SynergyService.to;
+    return Watch((_) => synergyService.cursorLocked.value
+        ? Row(
+            children: [
+              const SizedBox(width: 10),
+              Text(
+                'Cursor locked to current Screen',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              const SizedBox(width: 10),
+              const Icon(
+                Icons.lock,
+                size: 14,
+              ),
+            ],
+          )
+        : const SizedBox.shrink());
   }
 }
 
@@ -205,7 +232,7 @@ class _ClientTitleWidget extends StatelessWidget {
                   Icons.info_outline,
                   size: 18,
                 ),
-              )
+              ),
             ],
           ),
           Row(

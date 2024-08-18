@@ -11,6 +11,7 @@
     "Cntrl",
     "dylib",
     "ffigen",
+    "Henkan",
     "hotplug",
     "intf",
     "libblkid",
@@ -31,7 +32,8 @@
     "Uhid",
     "upgrader",
     "Xinerama",
-    "xtest"
+    "xtest",
+    "Zenkaku"
   ],
   "search.exclude": {
     "**/lib/generated/": true,

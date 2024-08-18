@@ -39,6 +39,11 @@ class StorageService {
   set testStatus(String? value) =>
       value == null ? _removeDb('testStatus') : _writeDb('testStatus', value);
 
+  String? get toggleKeyStroke => _readDb('toggleKeyStroke');
+  set toggleKeyStroke(String? value) => value == null
+      ? _removeDb('toggleKeyStroke')
+      : _writeDb('toggleKeyStroke', value);
+
   int get uhidPort => _readDb('uhidPort') ?? 9945;
   set uhidPort(int value) => _writeDb('uhidPort', value);
 

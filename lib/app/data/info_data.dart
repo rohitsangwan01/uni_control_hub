@@ -63,3 +63,9 @@ This mode requires ADB, and can also work over wireless ADB
 
 Note: Both devices must be under same network
 ''';
+
+String get lockMouseTileInfo => '''
+Assign a hotkey to confine the mouse cursor within the bounds of a specific device. 
+Once locked, the mouse will only move relative to that device's screen. 
+Pressing the hotkey again will release the lock, allowing the mouse to move freely between devices.
+''';
