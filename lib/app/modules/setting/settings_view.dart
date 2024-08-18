@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:uni_control_hub/app/modules/setting/android_connection_mode_tile.dart';
+import 'package:uni_control_hub/app/modules/setting/lock_mouse_tile.dart';
 import 'package:uni_control_hub/app/modules/setting/uhid_port_tile.dart';
 import 'package:uni_control_hub/app/services/app_service.dart';
 import 'package:uni_control_hub/app/data/capabilities.dart';
@@ -46,7 +47,7 @@ class SettingsView extends StatelessWidget {
                       onToggle: (value) {
                         _appService.autoStartServer.value = value;
                       },
-                      leading: const Icon(Icons.mouse),
+                      leading: const Icon(Icons.dns),
                     )),
               ),
               if (Capabilities.supportsBleConnection)
@@ -65,6 +66,9 @@ class SettingsView extends StatelessWidget {
           SettingsSection(
             title: const Text('Client'),
             tiles: [
+              const CustomSettingsTile(
+                child: LockMouseTile(),
+              ),
               const CustomSettingsTile(
                 child: AndroidConnectionModeTile(),
               ),

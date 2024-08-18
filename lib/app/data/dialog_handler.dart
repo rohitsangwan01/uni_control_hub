@@ -45,6 +45,26 @@ class DialogHandler {
     );
   }
 
+  static void showSnackbar(String message) {
+    BuildContext? context = AppService.to.overlayContext;
+    if (context == null) {
+      logError("Navigator context is null: $message");
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white),
+        ),
+        closeIconColor: Colors.white,
+        backgroundColor: Colors.orange,
+        duration: const Duration(seconds: 2),
+        showCloseIcon: true,
+      ),
+    );
+  }
+
   static void showInfoDialog({
     required BuildContext context,
     required String title,

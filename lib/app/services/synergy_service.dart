@@ -25,6 +25,8 @@ class SynergyService {
 
   String serverName = AppData.appName;
   Signal<bool> isSynergyServerRunning = Signal(false);
+  Signal<String?> toggleKeyStroke = Signal(null);
+  Signal<bool> cursorLocked = Signal(false);
 
   List<ClientAlias> clientAliases = <ClientAlias>[
     ClientAlias.left(),
@@ -35,6 +37,12 @@ class SynergyService {
 
   Future<void> init() async {
     closeServerIfRunning();
+    toggleKeyStroke.value = storageService.toggleKeyStroke;
+
+    effect(() {
+      String? keyStroke = toggleKeyStroke.value;
+      storageService.toggleKeyStroke = keyStroke;
+    });
   }
 
   Future<void> toggleServer(BuildContext context) async {
@@ -77,7 +85,7 @@ class SynergyService {
       configPath: configPath,
       screenName: serverName,
       doNotRestartOnFailure: true,
-      onLogs: logInfo,
+      onLogs: onLogs,
       onErrors: _parseError,
       onStop: stopServer,
     );
@@ -88,6 +96,18 @@ class SynergyService {
 
     logInfo("Server started with pid: $pid");
     storageService.synergyProcessId = pid;
+  }
+
+  void onLogs(String logs) {
+    logInfo(logs);
+    String logsLower = logs.toLowerCase();
+    if (logsLower.contains('cursor unlocked from current screen')) {
+      DialogHandler.showSnackbar('Cursor unlocked from current screen');
+      cursorLocked.value = false;
+    } else if (logsLower.contains('cursor locked to current screen')) {
+      DialogHandler.showSnackbar('Cursor locked to current screen');
+      cursorLocked.value = true;
+    }
   }
 
   void _parseError(error) {
@@ -103,6 +123,7 @@ class SynergyService {
     SynergyServer.stopServer();
     storageService.synergyProcessId = null;
     isSynergyServerRunning.value = false;
+    cursorLocked.value = false;
     logInfo("Server stopped");
   }
 
@@ -148,6 +169,8 @@ class SynergyService {
       ],
       options: ScreenOptions(
         clipboardSharing: false,
+        relativeMouseMoves: toggleKeyStroke.value != null,
+        toggleKeyStroke: toggleKeyStroke.value,
       ),
     );
   }

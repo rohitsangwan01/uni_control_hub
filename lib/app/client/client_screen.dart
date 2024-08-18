@@ -72,6 +72,19 @@ class ClientScreen extends ScreenInterface {
   }
 
   @override
+  void mouseRelativeMove(int x, int y) {
+    var reportData = Uint8List(5);
+    reportData[0] = 0x02; // Report ID
+    reportData[1] = buttonPressed ?? 0; // Button state
+    reportData[2] = x; // X movement
+    reportData[3] = y; // Y movement
+    reportData[4] = 0; // Wheel movement
+    _addInputReport(reportData);
+    relativeX = x;
+    relativeY = y;
+  }
+
+  @override
   void mouseWheel(int x, int y) {
     int wheel = x != 0 ? x : y;
     // convert wheel in +1 or -1
