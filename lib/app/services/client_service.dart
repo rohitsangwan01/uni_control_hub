@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:adb_monitor/adb_monitor.dart';
 import 'package:get_it/get_it.dart';
 import 'package:uni_control_hub/app/communication/ble/ble_peripheral_communication.dart';
 import 'package:uni_control_hub/app/communication/uhid/uhid_communication.dart';
@@ -17,6 +20,7 @@ class ClientService {
   late UsbDeviceCommunication _usbDeviceService;
   late UhidCommunication _uhidService;
   late BlePeripheralCommunication _blePeripheralService;
+  StreamSubscription? adbDeviceSubscription;
 
   Future<void> init() async {
     _blePeripheralService = BlePeripheralCommunication();
@@ -27,11 +31,28 @@ class ClientService {
     _blePeripheralService.setup();
     _usbDeviceService.setup();
 
-    _nativeChannelService.usbDeviceHandler =
-        (List<UsbDevice> usbDevices, bool? connected) {
-      logDebug("UsbDevice: $usbDevices Connected: $connected");
-      refreshClients();
-    };
+    _nativeChannelService.usbDeviceHandler = _onUsbDeviceConnectionUpdate;
+    await AdbMonitor.init();
+    adbDeviceSubscription = AdbMonitor.devices.listen(
+      _onAdbDeviceConnectionUpdate,
+    );
+    AdbMonitor.start();
+  }
+
+  void dispose() {
+    adbDeviceSubscription?.cancel();
+    AdbMonitor.stop();
+  }
+
+  void _onUsbDeviceConnectionUpdate(
+      List<UsbDevice> usbDevices, bool? connected) {
+    logDebug("UsbDevice: $usbDevices Connected: $connected");
+    refreshClients();
+  }
+
+  void _onAdbDeviceConnectionUpdate(String device) {
+    logDebug("AdbDeviceConnected: $device");
+    refreshClients();
   }
 
   void refreshClients() {

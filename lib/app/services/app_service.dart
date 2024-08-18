@@ -7,6 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import 'package:uni_control_hub/app/data/capabilities.dart';
 import 'package:uni_control_hub/app/models/android_connection_type.dart';
+import 'package:uni_control_hub/app/services/client_service.dart';
 import 'package:uni_control_hub/app/services/native_communication.dart';
 import 'package:uni_control_hub/app/services/file_service.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
@@ -66,18 +67,19 @@ class AppService {
   Future<void> init() async {
     _loadInitialValues();
     addLicenses();
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    appVersion = packageInfo.version;
     initLogger(
       fileService.logsDirectory,
       maxFileCount: 5,
       maxFileLength: 5 * 1024 * 1024,
     );
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appVersion = packageInfo.version;
   }
 
   Future<void> disposeResources() async {
     nativeChannelService.dispose();
     synergyService.closeServerIfRunning();
+    ClientService.to.dispose();
   }
 
   void addLicenses() {
