@@ -14,6 +14,8 @@ UniControlHub revolutionizes the way you interact with your digital environment 
 
 ## Getting Started
 
+![Downloads](https://img.shields.io/github/downloads/rohitsangwan01/uni_control_hub/total.svg)
+
 Download app for your platform from [Release](https://github.com/rohitsangwan01/uni_control_hub/releases) section
 
 ### MacOS
