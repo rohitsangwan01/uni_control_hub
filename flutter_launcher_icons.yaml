@@ -1,0 +1,11 @@
+# flutter pub run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/icon/icon_rounded_corner.png"
+
+  windows:
+    generate: true
+    image_path: "assets/icon/icon_rounded_corner.png"
+    icon_size: 256 # min:48, max:256, default: 48
+
+  macos:
+    generate: true

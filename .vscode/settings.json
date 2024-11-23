@@ -1,8 +1,44 @@
 {
-    "cSpell.words": [
-        "cdylib",
-        "Deskflow",
-        "nusb",
-        "staticlib"
-    ]
+  "cSpell.words": [
+    "altsetting",
+    "Appcast",
+    "appdmg",
+    "assistivetouch",
+    "backsapce",
+    "calloc",
+    "CLASSPATH",
+    "Cnst",
+    "Cntrl",
+    "Datagram",
+    "dylib",
+    "ffigen",
+    "Henkan",
+    "hotplug",
+    "intf",
+    "libblkid",
+    "libcrypto",
+    "libgtk",
+    "libstdc",
+    "libusb",
+    "localabstract",
+    "marvinpinto",
+    "mikefarah",
+    "nullptr",
+    "oneplus",
+    "softprops",
+    "sublist",
+    "subosito",
+    "supabase",
+    "udev",
+    "Uhid",
+    "upgrader",
+    "Xinerama",
+    "xtest",
+    "Zenkaku"
+  ],
+  "search.exclude": {
+    "**/lib/generated/": true,
+    "**/uni_hub_android_server/": true,
+    "**/windows/": true
+  },
 }

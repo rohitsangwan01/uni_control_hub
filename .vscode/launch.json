@@ -5,14 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "flutter",
-            "cwd": "flutter",
+            "name": "uni_control_hub",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "flutter (release mode)",
-            "cwd": "flutter",
+            "name": "uni_control_hub (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "uni_control_hub (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
