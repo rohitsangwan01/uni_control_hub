@@ -1,0 +1,50 @@
+name: uni_control_hub
+version: 0.0.8
+publish_to: none
+description: Seamlessly Bridge Your Devices
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  signals_flutter: ^5.3.0
+  get_it: ^7.7.0
+  get_storage: ^2.1.1
+  lottie: ^3.1.2
+  network_info_plus: ^6.0.0
+  synergy_client_dart: ^0.1.0
+  package_info_plus: ^8.0.1
+  ffi: ^2.1.2
+  window_manager: ^0.3.9
+  flutter_settings_ui: ^3.0.1
+  url_launcher: ^6.3.0
+  ble_peripheral: ^2.3.2
+  markdown_widget: ^2.3.2+6
+  path_provider: ^2.1.4
+  share_plus: ^10.0.0
+  mixin_logger: ^0.1.1
+  path: ^1.9.0
+  udev: ^0.0.3
+
+## flutter pub run flutter_launcher_icons
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
+  ffigen: ^13.0.0
+
+ffigen:
+  output: 'lib/generated/generated_bindings.dart'
+  headers:
+    entry-points:
+        - 'libusb.h'
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/licenses/
+    - assets/icon/
+    - assets/anim/

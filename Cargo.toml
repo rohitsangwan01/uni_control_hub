@@ -1,0 +1,22 @@
+[package]
+name = "uni_control_hub_rust"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+deskflow_client = { path = "/Users/rohitsangwan/Drive/Devlopment/rust/deskflow_rust/deskflow_client" }
+tokio = { version = "1.40.0" }
+input-capture = { git = "https://github.com/feschber/lan-mouse" }
+input-event = { git = "https://github.com/feschber/lan-mouse" }
+futures = "0.3.28"
+anyhow = "1.0.71"
+hickory-resolver = "0.24.1"
+log = "0.4.20"
+env_logger = "0.11.3"
+slab = "0.4.9"
+tokio-util = "0.7.11"
+# ble-peripheral-rust = "0.1.0"
+ble-peripheral-rust = { path = "/Users/rohitsangwan/Drive/Devlopment/rust/ble-peripheral-rust" }
+uuid = "1.11.0"
+nusb = { git = "https://github.com/kevinmehall/nusb" }

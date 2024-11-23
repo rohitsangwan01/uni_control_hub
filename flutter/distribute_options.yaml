@@ -1,0 +1,51 @@
+# flutter_distributor release --name bundle
+# flutter_distributor package --platform macos --targets dmg --artifact-name '{{name}}-{{version}}-{{platform}}-arm.{{ext}}'
+# flutter_distributor publish --path APP_PATH --targets github --github-repo-owner=rohitsangwan01 --github-repo-name uni_control_hub
+output: dist/
+artifact_name: '{{name}}-{{version}}-{{platform}}.{{ext}}'
+releases:
+  ## Only Build Locally
+  - name: bundle
+    jobs:
+      - name: macos
+        package:
+          platform: macos
+          target: dmg
+      - name: windows
+        package:
+            platform: windows
+            target: exe
+      - name: linux
+        package:
+            platform: linux
+            target: deb
+  ## Build and publish to github
+  - name: publish
+    jobs:
+      - name: macos
+        package:
+          platform: macos
+          target: dmg
+        publish:
+          target: github
+          args:
+            repo-owner: rohitsangwan01
+            repo-name: uni_control_hub
+      - name: windows
+        package:
+            platform: windows
+            target: exe
+        publish:
+          target: github
+          args:
+            repo-owner: rohitsangwan01
+            repo-name: uni_control_hub
+      - name: linux
+        package:
+            platform: linux
+            target: deb
+        publish:
+          target: github
+          args:
+            repo-owner: rohitsangwan01
+            repo-name: uni_control_hub

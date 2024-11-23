@@ -1,0 +1,10 @@
+title: UniControlHub
+contents:
+  - x: 448
+    y: 150
+    type: link
+    path: "/Applications"
+  - x: 192
+    y: 150
+    type: file
+    path: UniControlHub.app
