@@ -12,10 +12,12 @@ import 'package:uni_control_hub/app/services/client_service.dart';
 import 'package:uni_control_hub/app/services/native_communication.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
 import 'package:uni_control_hub/app/services/synergy_service.dart';
+import 'package:uni_control_hub/rust/frb_generated.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> _initialize() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await RustLib.init();
 
   // Disable Signal logs
   SignalsObserver.instance = null;

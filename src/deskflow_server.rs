@@ -91,10 +91,10 @@ impl DeskflowServer {
         self.command = Some(command);
     }
 
-    async fn stop_server(&mut self) {
-        if let Some(mut command) = self.command.take() {
-            command.kill().unwrap();
-            self.command = None;
-        }
-    }
+    // async fn stop_server(&mut self) {
+    //     if let Some(mut command) = self.command.take() {
+    //         command.kill().unwrap();
+    //         self.command = None;
+    //     }
+    // }
 }

@@ -26,6 +26,9 @@ dependencies:
   mixin_logger: ^0.1.1
   path: ^1.9.0
   udev: ^0.0.3
+  rust_lib_uni_control_hub:
+    path: rust_builder
+  flutter_rust_bridge: 2.6.0
 
 ## flutter pub run flutter_launcher_icons
 dev_dependencies:
@@ -34,6 +37,8 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.13.1
   ffigen: ^13.0.0
+  integration_test:
+    sdk: flutter
 
 ffigen:
   output: 'lib/generated/generated_bindings.dart'

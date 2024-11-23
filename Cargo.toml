@@ -2,15 +2,15 @@
 name = "uni_control_hub_rust"
 version = "0.1.0"
 edition = "2021"
-
+description = "UniControlHub rust backend"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/rohitsangwan01/uni_control_hub"
 
 [dependencies]
-deskflow_client = { path = "/Users/rohitsangwan/Drive/Devlopment/rust/deskflow_rust/deskflow_client" }
-tokio = { version = "1.40.0" }
-input-capture = { git = "https://github.com/feschber/lan-mouse" }
-input-event = { git = "https://github.com/feschber/lan-mouse" }
+deskflow_client = { path = "./deskflow_client" }
+tokio = { version = "1.41.1" }
 futures = "0.3.28"
-anyhow = "1.0.71"
+anyhow = "1.0.93"
 hickory-resolver = "0.24.1"
 log = "0.4.20"
 env_logger = "0.11.3"

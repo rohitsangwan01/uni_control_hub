@@ -12,6 +12,8 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - rust_lib_uni_control_hub (0.0.1):
+    - FlutterMacOS
   - screen_retriever (0.0.1):
     - FlutterMacOS
   - share_plus (0.0.1):
@@ -29,6 +31,7 @@ DEPENDENCIES:
   - network_info_plus (from `Flutter/ephemeral/.symlinks/plugins/network_info_plus/macos`)
   - package_info_plus (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - rust_lib_uni_control_hub (from `Flutter/ephemeral/.symlinks/plugins/rust_lib_uni_control_hub/macos`)
   - screen_retriever (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos`)
   - share_plus (from `Flutter/ephemeral/.symlinks/plugins/share_plus/macos`)
   - unihub (from `./`)
@@ -48,6 +51,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos
   path_provider_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
+  rust_lib_uni_control_hub:
+    :path: Flutter/ephemeral/.symlinks/plugins/rust_lib_uni_control_hub/macos
   screen_retriever:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos
   share_plus:
@@ -66,6 +71,7 @@ SPEC CHECKSUMS:
   network_info_plus: aeb9c4ed699cae128bc94b9d0f04f2389a414cbb
   package_info_plus: fa739dd842b393193c5ca93c26798dff6e3d0e0c
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  rust_lib_uni_control_hub: 3ddf32e820b2ce79d6d61c43e71652a125fb9bff
   screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
   share_plus: 36537c04ce0c3e3f5bd297ce4318b6d5ee5fd6cf
   unihub: c3cc2c93e74952fb82f4cf1538726ff1ed924f25
@@ -74,4 +80,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 340d2e92b44074356899888d11d189df4f073ee6
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
