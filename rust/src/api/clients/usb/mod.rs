@@ -1,4 +1,3 @@
-use crate::hid_report::COMBINED_REPORT;
 use anyhow::anyhow;
 use anyhow::Error;
 use futures::StreamExt;
@@ -6,6 +5,8 @@ use nusb::{
     transfer::{Completion, ControlOut, ControlType, Recipient, ResponseBuffer},
     Device, DeviceInfo,
 };
+
+use crate::api::hid_report::COMBINED_REPORT;
 
 pub struct UsbClient {
     usb_devices: Vec<UsbDevice>,

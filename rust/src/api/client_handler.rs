@@ -1,19 +1,14 @@
-mod clients;
-mod deskflow_server;
-mod hid_report;
-
-use clients::{ble::BleClient, usb::UsbClient};
-// use clients::usb::UsbClient;
 use deskflow_client::{
     messages::{message::Message, screen_info_message::ScreenInfoMessage},
     server_update::ServerUpdate,
 };
-use deskflow_server::DeskflowServer;
-use tokio::sync::mpsc;
+use tokio::sync::mpsc::{self, Receiver, Sender};
 
-pub async fn run_client() {
-    let mut client: BleClient = BleClient::new().await;
-   // let mut client: UsbClient = UsbClient::new();
+use crate::api::clients::usb::UsbClient;
+
+pub async fn run_client(server_tx: Sender<Vec<u8>>, mut listener_rx: Receiver<ServerUpdate>) {
+    // let mut client: BleClient = BleClient::new().await;
+    let mut client: UsbClient = UsbClient::new();
 
     let mut relative_x: i16 = 0;
     let mut relative_y: i16 = 0;
@@ -23,7 +18,6 @@ pub async fn run_client() {
         println!("Error loading devices: {}", err);
         return;
     }
-    let (server_tx, mut listener_rx) = DeskflowServer::new().connect_client().await;
 
     println!("Starting loop");
     while let Some(update) = listener_rx.recv().await {

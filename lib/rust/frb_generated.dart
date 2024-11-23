@@ -68,7 +68,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.6.0';
 
   @override
-  int get rustContentHash => 712463054;
+  int get rustContentHash => 1131576629;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -79,11 +79,12 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  String crateApiUniControlHubGreet({required String name});
-
   Future<void> crateApiUniControlHubInitApp();
 
-  Future<void> crateApiUniControlHubRunApp();
+  Future<void> crateApiUniControlHubRunApp(
+      {required String clientName,
+      required String serverHost,
+      required int serverPort});
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -95,35 +96,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  String crateApiUniControlHubGreet({required String name}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(name, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiUniControlHubGreetConstMeta,
-      argValues: [name],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiUniControlHubGreetConstMeta => const TaskConstMeta(
-        debugName: "greet",
-        argNames: ["name"],
-      );
-
-  @override
   Future<void> crateApiUniControlHubInitApp() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 2, port: port_);
+            funcId: 1, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -142,19 +120,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiUniControlHubRunApp() {
+  Future<void> crateApiUniControlHubRunApp(
+      {required String clientName,
+      required String serverHost,
+      required int serverPort}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(clientName, serializer);
+        sse_encode_String(serverHost, serializer);
+        sse_encode_u_16(serverPort, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
+            funcId: 2, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiUniControlHubRunAppConstMeta,
-      argValues: [],
+      argValues: [clientName, serverHost, serverPort],
       apiImpl: this,
     ));
   }
@@ -162,7 +146,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiUniControlHubRunAppConstMeta =>
       const TaskConstMeta(
         debugName: "run_app",
-        argNames: [],
+        argNames: ["clientName", "serverHost", "serverPort"],
       );
 
   @protected
@@ -175,6 +159,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
+  }
+
+  @protected
+  int dco_decode_u_16(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
   }
 
   @protected
@@ -201,6 +191,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  int sse_decode_u_16(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint16();
   }
 
   @protected
@@ -238,6 +234,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_u_16(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint16(self);
   }
 
   @protected

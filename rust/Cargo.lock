@@ -1439,8 +1439,19 @@ dependencies = [
 name = "rust_lib_uni_control_hub"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
+ "ble-peripheral-rust",
+ "deskflow_client",
+ "env_logger 0.11.5",
  "flutter_rust_bridge",
- "uni_control_hub_rust",
+ "futures",
+ "hickory-resolver",
+ "log",
+ "nusb",
+ "slab",
+ "tokio",
+ "tokio-util",
+ "uuid",
 ]
 
 [[package]]
@@ -1734,24 +1745,6 @@ name = "typenum"
 version = "1.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42ff0bf0c66b8238c6f3b578df37d0b7848e55df8577b3f74f92a69acceeb825"
-
-[[package]]
-name = "uni_control_hub_rust"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "ble-peripheral-rust",
- "deskflow_client",
- "env_logger 0.11.5",
- "futures",
- "hickory-resolver",
- "log",
- "nusb",
- "slab",
- "tokio",
- "tokio-util",
- "uuid",
-]
 
 [[package]]
 name = "unicode-bidi"

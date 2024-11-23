@@ -6,7 +6,11 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-String greet({required String name}) =>
-    RustLib.instance.api.crateApiUniControlHubGreet(name: name);
+// These functions are ignored because they are not marked as `pub`: `connect_client`
 
-Future<void> runApp() => RustLib.instance.api.crateApiUniControlHubRunApp();
+Future<void> runApp(
+        {required String clientName,
+        required String serverHost,
+        required int serverPort}) =>
+    RustLib.instance.api.crateApiUniControlHubRunApp(
+        clientName: clientName, serverHost: serverHost, serverPort: serverPort);

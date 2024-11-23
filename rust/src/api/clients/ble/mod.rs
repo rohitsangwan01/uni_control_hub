@@ -17,7 +17,7 @@ use ble_peripheral_rust::{
 use tokio::sync::mpsc::channel;
 use uuid::Uuid;
 
-use crate::hid_report::COMBINED_REPORT;
+use crate::api::hid_report::COMBINED_REPORT;
 
 pub struct BleClient {
     peripheral: Peripheral,

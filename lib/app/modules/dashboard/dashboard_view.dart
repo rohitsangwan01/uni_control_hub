@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:signals_flutter/signals_flutter.dart';
+import 'package:uni_control_hub/app/models/client_alias.dart';
 import 'package:uni_control_hub/app/services/app_service.dart';
 import 'package:uni_control_hub/app/services/communication_service.dart';
 import 'package:uni_control_hub/app/data/info_data.dart';
@@ -17,6 +18,7 @@ import 'package:uni_control_hub/app/data/app_data.dart';
 import 'package:uni_control_hub/app/services/client_service.dart';
 import 'package:uni_control_hub/app/services/storage_service.dart';
 import 'package:uni_control_hub/app/services/synergy_service.dart';
+import 'package:uni_control_hub/app/synergy/synergy_server.dart';
 import 'package:uni_control_hub/rust/api/uni_control_hub.dart' as rust;
 import 'package:window_manager/window_manager.dart';
 
@@ -112,8 +114,12 @@ class _DashboardViewState extends State<DashboardView> with WindowListener {
                 style: TextStyle(color: Colors.grey),
               ),
               ElevatedButton(
-                onPressed: () {
-                  rust.runApp();
+                onPressed: () async {
+                  rust.runApp(
+                    clientName: ClientAlias.left().name,
+                    serverHost: await SynergyServer.address ?? "0.0.0.0",
+                    serverPort: SynergyServer.defaultPort,
+                  );
                 },
                 child: const Text('test'),
               ),
