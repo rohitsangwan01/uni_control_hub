@@ -1,7 +1,10 @@
-
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.concurrent.ConcurrentHashMap;
 
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
@@ -9,19 +12,9 @@ import android.system.ErrnoException;
 import android.system.Os;
 import android.system.OsConstants;
 
-import java.io.FileDescriptor;
-import java.nio.ByteBuffer;
-
-import android.util.ArrayMap;
-
-import java.io.IOException;
-import java.nio.ByteOrder;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-
 public class UniHubServer extends Thread {
-    private static final ArrayMap<Integer, FileDescriptor> fds = new ArrayMap<>();
-    private static OutputStream outputStream;
+    private static final ConcurrentHashMap<Integer, FileDescriptor> fds = new ConcurrentHashMap<>();
+    private static BufferedOutputStream bufferedOutputStream;
     private static Thread thread;
     private final static byte CMD_OPEN = 1;
     private final static byte CMD_WRITE = 2;
@@ -91,11 +84,10 @@ public class UniHubServer extends Thread {
 
 
     private static void connectToServer(String host, int port) {
-        try {
-            Socket localSocket = new Socket(host, port);
-            outputStream = localSocket.getOutputStream();
+        try (Socket socket = new Socket(host, port)) {
+            bufferedOutputStream = new BufferedOutputStream(socket.getOutputStream(), 1024);
             notifyServer();
-            listenToServer(localSocket.getInputStream());
+            listenToServer(socket.getInputStream());
         } catch (Exception e) {
             System.out.println("Error connecting to server: " + e.getMessage());
             sendOutput("Error connecting to server: " + e.getMessage());
@@ -103,10 +95,9 @@ public class UniHubServer extends Thread {
     }
 
     private static void connectToLocalServer(String name) {
-        try {
-            LocalSocket localSocket = new LocalSocket();
+        try (LocalSocket localSocket = new LocalSocket()) {
             localSocket.connect(new LocalSocketAddress(name));
-            outputStream = localSocket.getOutputStream();
+            bufferedOutputStream = new BufferedOutputStream(localSocket.getOutputStream(), 1024);
             notifyServer();
             listenToServer(localSocket.getInputStream());
         } catch (Exception e) {
@@ -158,42 +149,35 @@ public class UniHubServer extends Thread {
     }
 
     /// Handle UHID methods
-    public static void open(int id, byte[] reportDesc) throws IOException {
+    public static void open(int id, byte[] reportDesc) {
         try {
             FileDescriptor fd = Os.open("/dev/uhid", OsConstants.O_RDWR, 0);
-            try {
-                FileDescriptor old = fds.put(id, fd);
-                if (old != null) {
-                    System.out.print("Duplicate UHID id: " + id);
-                    close(old);
-                }
-                byte[] req = buildUhidCreate2Req(reportDesc);
-                Os.write(fd, req, 0, req.length);
-            } catch (Exception e) {
-                close(fd);
-                sendOutput("Error opening uhid: " + e.getMessage());
-            }
-        } catch (ErrnoException e) {
+            FileDescriptor old = fds.put(id, fd);
+            if (old != null) close(old);
+
+            byte[] req = buildUhidCreateReq(reportDesc);
+            Os.write(fd, req, 0, req.length);
+        } catch (ErrnoException | IOException e) {
             sendOutput("Error opening uhid: " + e.getMessage());
         }
     }
 
-    private static void writeInput(int id, byte[] data) throws IOException {
+    private static void writeInput(int id, byte[] data) {
         FileDescriptor fd = fds.get(id);
         if (fd == null) {
             sendOutput("Unknown UHID id: " + id);
             return;
         }
         try {
-            byte[] req = buildUhidInput2Req(data);
+            byte[] req = buildUhidInputReq(data);
             Os.write(fd, req, 0, req.length);
-        } catch (ErrnoException e) {
+        } catch (ErrnoException | IOException e) {
             sendOutput("Error writing uhid: " + e.getMessage());
         }
     }
 
     private static void close(int id) {
-        FileDescriptor fd = fds.get(id);
+        FileDescriptor fd = fds.remove(id);
         if (fd != null) {
             close(fd);
         }
@@ -206,9 +190,8 @@ public class UniHubServer extends Thread {
         thread.interrupt();
     }
 
-    /// Private Methods
-    private static byte[] buildUhidCreate2Req(byte[] reportDesc) {
-        byte[] empty = new byte[256];
+    private static byte[] buildUhidCreateReq(byte[] reportDesc) {
+       byte[] empty = new byte[256];
         ByteBuffer buf = ByteBuffer.allocate(280 + reportDesc.length).order(ByteOrder.nativeOrder());
         buf.putInt(11);
         buf.put("unihub".getBytes(StandardCharsets.US_ASCII));
@@ -223,7 +206,7 @@ public class UniHubServer extends Thread {
         return buf.array();
     }
 
-    private static byte[] buildUhidInput2Req(byte[] data) {
+    private static byte[] buildUhidInputReq(byte[] data) {
         ByteBuffer buf = ByteBuffer.allocate(6 + data.length).order(ByteOrder.nativeOrder());
         buf.putInt(12);
         buf.putShort((short) data.length);
@@ -251,10 +234,11 @@ public class UniHubServer extends Thread {
 
     private static void sendOutput(String data) {
         try {
-            if (outputStream != null) {
-                outputStream.write(data.getBytes());
+            if (bufferedOutputStream != null) {
+                bufferedOutputStream.write(data.getBytes());
+                bufferedOutputStream.flush();
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Error sending data: " + e.getMessage());
         }
     }

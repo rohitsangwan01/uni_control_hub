@@ -9,6 +9,7 @@
     "CLASSPATH",
     "Cnst",
     "Cntrl",
+    "Datagram",
     "dylib",
     "ffigen",
     "Henkan",
