@@ -15,6 +15,9 @@ UniControlHub revolutionizes the way you interact with your digital environment 
 ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/rohitsangwan)
+
+
 ## Getting Started
 
 Download app for your platform from [Release](https://github.com/rohitsangwan01/uni_control_hub/releases) section
@@ -71,6 +74,9 @@ This section guides you through setting up and running UniControlHub for develop
 If you find this project useful, consider sponsoring it! Your support helps keep development active, adds new features, and improves stability. You can also share your ideas or feedback in the [Discussions](https://github.com/rohitsangwan01/uni_control_hub/discussions). Thanks for your support! 🚀
 
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/rohitsangwan01)
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/rohitsangwan)
+
 
 ## Additional Notes:
 
