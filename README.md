@@ -1,5 +1,8 @@
 # UniControlHub
 
+[![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/rohitsangwan01)
+![Downloads](https://img.shields.io/github/downloads/rohitsangwan01/uni_control_hub/total.svg)
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/41c886c0-f08c-4186-bc98-153aa2769d13" height=150 />
 </p>
@@ -13,8 +16,6 @@ UniControlHub revolutionizes the way you interact with your digital environment 
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 
 ## Getting Started
-
-![Downloads](https://img.shields.io/github/downloads/rohitsangwan01/uni_control_hub/total.svg)
 
 Download app for your platform from [Release](https://github.com/rohitsangwan01/uni_control_hub/releases) section
 
@@ -64,6 +65,12 @@ This section guides you through setting up and running UniControlHub for develop
 #### Running/Debugging the App:
 
 - Once Flutter is set up, run `flutter pub get` to download dependencies, and run `flutter run` to start the app
+
+## Sponsor
+
+If you find this project useful, consider sponsoring it! Your support helps keep development active, adds new features, and improves stability. You can also share your ideas or feedback in the [Discussions](https://github.com/rohitsangwan01/uni_control_hub/discussions). Thanks for your support! 🚀
+
+[![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/rohitsangwan01)
 
 ## Additional Notes:
 
