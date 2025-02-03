@@ -1,4 +1,6 @@
 PODS:
+  - adb_monitor (0.0.1):
+    - FlutterMacOS
   - ble_peripheral (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -23,6 +25,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - adb_monitor (from `Flutter/ephemeral/.symlinks/plugins/adb_monitor/macos`)
   - ble_peripheral (from `Flutter/ephemeral/.symlinks/plugins/ble_peripheral/darwin`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - mixin_logger (from `Flutter/ephemeral/.symlinks/plugins/mixin_logger/macos`)
@@ -36,6 +39,8 @@ DEPENDENCIES:
   - window_manager (from `Flutter/ephemeral/.symlinks/plugins/window_manager/macos`)
 
 EXTERNAL SOURCES:
+  adb_monitor:
+    :path: Flutter/ephemeral/.symlinks/plugins/adb_monitor/macos
   ble_peripheral:
     :path: Flutter/ephemeral/.symlinks/plugins/ble_peripheral/darwin
   FlutterMacOS:
@@ -60,6 +65,7 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/window_manager/macos
 
 SPEC CHECKSUMS:
+  adb_monitor: 7b77170f627a8ef8a5fd8e78c8aff7ed427d8fd7
   ble_peripheral: e80b0809599f5406e5d321c12a6dbc07ecdab8bd
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   mixin_logger: 011219cd258a9229c11e97e1b637e1c223330462
