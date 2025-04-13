@@ -17,7 +17,6 @@ UniControlHub revolutionizes the way you interact with your digital environment 
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/rohitsangwan)
 
-
 ## Getting Started
 
 Download app for your platform from [Release](https://github.com/rohitsangwan01/uni_control_hub/releases) section
@@ -32,13 +31,35 @@ Download app for your platform from [Release](https://github.com/rohitsangwan01/
 
 - If Android device not getting detected, make sure you have libusb [drivers](https://github.com/libusb/libusb/wiki/Windows#driver-installation) installed.
 
+### Linux
+
+Make sure On `libqt5dbus5` is installed
+
+Ubuntu/Debian-based systems, run:
+
+```bash
+sudo apt update
+sudo apt install libqt5dbus5
+```
+
+On Fedora/RHEL/CentOS, run:
+
+```bash
+sudo dnf install qt5-qtbase
+```
+
+On Arch Linux, run:
+
+```bash
+sudo pacman -S qt5-base
+```
+
 ## Supported Platforms
 
 | Platform | Bluetooth | USB | ADB |
 | -------- | --------- | --- | --- |
 | IOS      | ✅        | ❌  | ❌  |
 | Android  | ⏳        | ✅  | ✅  |
-
 
 ## Screenshot
 
@@ -51,6 +72,7 @@ Download app for your platform from [Release](https://github.com/rohitsangwan01/
 [![](http://markdown-videos-api.jorgenkh.no/youtube/KYsqdJkG2N0)](https://youtu.be/KYsqdJkG2N0)
 
 ## Troubleshooting
+
 - On MacOS, App will ask for `Accessibility` and `Bluetooth` permission on MacOS, ( After updating, app might again ask for Accessibility permission, even if its already given, try to remove the app from Accessibility and run again )
 - To use UHID mode for Android, make sure `ADB` is installed ( not required for AOA mode )
 - For Desktop and IOS connection, make sure Bluetooth is on
@@ -76,7 +98,6 @@ If you find this project useful, consider sponsoring it! Your support helps keep
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/rohitsangwan01)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/rohitsangwan)
-
 
 ## Additional Notes:
 
