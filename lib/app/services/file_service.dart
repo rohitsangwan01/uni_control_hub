@@ -23,7 +23,7 @@ class FileService {
 
   Future<String?> get synergyServerPath async => switch (Abi.current()) {
         Abi.macosArm64 => _getMacSynergy("synergy_arm64"),
-        Abi.macosX64 => _getMacSynergy("synergy_x64"),
+        Abi.macosX64 => _getMacSynergy("synergy_ x64"),
         Abi.windowsX64 => "synergy_x64.dll",
         Abi.linuxX64 => await _getLinuxSynergy("synergy_x64"),
         _ => null,
