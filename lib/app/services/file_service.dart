@@ -29,12 +29,33 @@ class FileService {
         _ => null,
       };
 
-  String? get libUsbBinaryPath => switch (defaultTargetPlatform) {
-        TargetPlatform.macOS => "libusb.dylib",
-        TargetPlatform.windows => "libusb.dll",
-        TargetPlatform.linux => "$_executablePath/lib/libusb.so",
-        _ => null,
-      };
+  String? get libUsbBinaryPath {
+    return switch (defaultTargetPlatform) {
+      TargetPlatform.macOS => () {
+          // intel macs and apple sillicon macs have different brew install locations:
+          // for apple sillicon:
+          if (File('/opt/homebrew/lib/libusb-1.0.0.dylib').existsSync()) {
+            return '/opt/homebrew/lib/libusb-1.0.0.dylib';
+          }
+          // for intel macs:
+          if (File('/usr/local/lib/libusb-1.0.0.dylib').existsSync()) {
+            return '/usr/local/lib/libusb-1.0.0.dylib';
+          }
+          if (File('/opt/homebrew/lib/libusb.dylib').existsSync()) {
+            return '/opt/homebrew/lib/libusb.dylib';
+          }
+          if (File('/usr/local/lib/libusb.dylib').existsSync()) {
+            return '/usr/local/lib/libusb.dylib';
+          }
+
+          print('LibUsb not found at expected macOS locations.');
+          return null;
+        }(),
+      TargetPlatform.windows => "libusb.dll",
+      TargetPlatform.linux => "$_executablePath/lib/libusb.so",
+      _ => null,
+    };
+  }
 
   String get dbDirectory => _getDirectory('db');
 
