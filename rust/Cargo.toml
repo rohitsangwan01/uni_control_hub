@@ -1,0 +1,26 @@
+[package]
+name = "rust_lib_uni_control_hub"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+flutter_rust_bridge = "=2.11.1"
+tokio = { version = "1.40.0" }
+input-capture = { git = "https://github.com/feschber/lan-mouse" }
+input-event = { git = "https://github.com/feschber/lan-mouse" }
+futures = "0.3.28"
+anyhow = "1.0.95"
+hickory-resolver = "0.24.2"
+log = "0.4.20"
+env_logger = "0.11.6"
+slab = "0.4.9"
+tokio-util = "0.7.13"
+ble-peripheral-rust = "0.2.0"
+uuid = "1.11.0"
+nusb = { git = "https://github.com/kevinmehall/nusb" }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
