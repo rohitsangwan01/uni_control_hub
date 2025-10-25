@@ -97,6 +97,15 @@ class _HomeViewState extends State<HomeView> {
                     await inputHandler.sendCaptureRequest(
                       request: CaptureRequest.create(Position.left),
                     );
+                    await inputHandler.sendCaptureRequest(
+                      request: CaptureRequest.create(Position.right),
+                    );
+                    await inputHandler.sendCaptureRequest(
+                      request: CaptureRequest.create(Position.bottom),
+                    );
+                    await inputHandler.sendCaptureRequest(
+                      request: CaptureRequest.create(Position.top),
+                    );
                     debugPrint('Capture Request Sent');
                   },
                   child: const Text('Create Capture Request'),

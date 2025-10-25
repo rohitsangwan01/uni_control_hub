@@ -182,7 +182,7 @@ impl UsbDevice {
         let mut interface: Option<nusb::Interface> = None;
         #[cfg(any(target_os = "windows"))]
         {
-            let result = device.claim_interface(0);
+            let result = device.claim_interface(0).await;
             if result.is_ok() {
                 interface = Some(result.unwrap());
             } else {
@@ -245,27 +245,27 @@ impl UsbDevice {
         return Ok(());
     }
 
-    #[allow(unused)]
-    async fn unregister_hid(&self) -> Result<(), Error> {
-        let result = self
-            .device
-            .control_out(
-                ControlOut {
-                    control_type: ControlType::Vendor,
-                    recipient: Recipient::Endpoint,
-                    request: 55,
-                    value: 0,
-                    index: 0,
-                    data: &mut vec![0; 0],
-                },
-                Duration::from_secs(2),
-            )
-            .await;
-        if let Err(err) = result {
-            return Err(anyhow!(format!("TransferError: {:?}", err)));
-        }
-        return Ok(());
-    }
+    // #[allow(unused)]
+    // async fn unregister_hid(&self) -> Result<(), Error> {
+    //     let result = self
+    //         .device
+    //         .control_out(
+    //             ControlOut {
+    //                 control_type: ControlType::Vendor,
+    //                 recipient: Recipient::Endpoint,
+    //                 request: 55,
+    //                 value: 0,
+    //                 index: 0,
+    //                 data: &mut vec![0; 0],
+    //             },
+    //             Duration::from_secs(2),
+    //         )
+    //         .await;
+    //     if let Err(err) = result {
+    //         return Err(anyhow!(format!("TransferError: {:?}", err)));
+    //     }
+    //     return Ok(());
+    // }
 
     async fn send_hid_event(&self, event: Vec<u8>) -> Result<(), Error> {
         let result = self

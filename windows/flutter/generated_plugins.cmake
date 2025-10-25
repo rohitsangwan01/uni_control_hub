@@ -4,7 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   ble_peripheral
-  screen_retriever
+  screen_retriever_windows
   share_plus
   url_launcher_windows
   window_manager
@@ -12,6 +12,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
   mixin_logger
+  rust_lib_uni_control_hub
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)
