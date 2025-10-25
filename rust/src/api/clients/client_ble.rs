@@ -1,5 +1,8 @@
 use crate::{
-    api::events::{ClientEvent, COMBINED_REPORT},
+    api::{
+        events::{ClientEvent, COMBINED_REPORT},
+        rx_handlers::PositionVecU8Receiver,
+    },
     frb_generated::StreamSink,
 };
 use ble_peripheral_rust::{
@@ -314,8 +317,16 @@ impl BleClient {
         log::info!("Advertising started");
     }
 
-    pub async fn send_hid_event(&mut self, event: Vec<u8>, _: String) {
-        // Use this deviceId
+    pub fn setup_client_listener(&mut self, receiver: PositionVecU8Receiver) {
+        let mut receiver_clone = receiver.clone();
+        tokio::spawn(async move {
+            while let Ok(event) = receiver_clone.recv() {
+                println!("Client Event: {:?}", event);
+            }
+        });
+    }
+
+    pub async fn send_hid_event(&mut self, event: Vec<u8>) {
         if let Err(err) = self
             .peripheral
             .update_characteristic(self.characteristic_report, event)

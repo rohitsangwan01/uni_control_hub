@@ -48,7 +48,7 @@ impl InputHandler {
     }
 
     pub async fn create_position_stream(&self) -> (PositionVecU8Sender, PositionVecU8Receiver) {
-        let (sender, receiver) = mpsc::channel::<(Position, Vec<u8>)>(100);
+        let (sender, receiver) = crossbeam_channel::unbounded::<(Position, Vec<u8>)>();
         (PositionVecU8Sender(sender), PositionVecU8Receiver(receiver))
     }
 

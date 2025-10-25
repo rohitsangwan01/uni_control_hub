@@ -5,15 +5,18 @@
 
 import '../../frb_generated.dart';
 import '../events.dart';
+import '../rx_handlers.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-
-// These functions have error during generation (see debug logs or enable `stop_on_error: true` for more details): `send_hid_event`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BleClient>>
 abstract class BleClient implements RustOpaqueInterface {
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   static Future<BleClient> newInstance() =>
-      RustLib.instance.api.crateApiClientsBleClientBleClientNew();
+      RustLib.instance.api.crateApiClientsClientBleBleClientNew();
+
+  Future<void> sendHidEvent({required List<int> event});
+
+  Future<void> setupClientListener({required PositionVecU8Receiver receiver});
 
   Stream<ClientEvent> watchDevices();
 }

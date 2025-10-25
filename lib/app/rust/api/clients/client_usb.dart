@@ -15,7 +15,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 abstract class UsbClient implements RustOpaqueInterface {
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   static Future<UsbClient> newInstance() =>
-      RustLib.instance.api.crateApiClientsUsbClientUsbClientNew();
+      RustLib.instance.api.crateApiClientsClientUsbUsbClientNew();
 
   Future<void> sendHidEvent({required List<int> event, required String uid});
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uni_control_hub/app/rust/api/clients/ble_client.dart';
-import 'package:uni_control_hub/app/rust/api/clients/usb_client.dart';
+import 'package:uni_control_hub/app/rust/api/clients/client_ble.dart';
+import 'package:uni_control_hub/app/rust/api/clients/client_usb.dart';
 import 'package:uni_control_hub/app/rust/api/input_handler.dart';
 import 'package:uni_control_hub/app/rust/api/rx_handlers.dart';
 
@@ -39,17 +39,15 @@ class _HomeViewState extends State<HomeView> {
     positionStream = await inputHandler.createPositionStream();
     listening = true;
     while (listening) {
-      final position = await positionStream.$2.recv();
-      if (position == null) {
-        continue;
-      }
-      debugPrint('Position: ${position.$1}, Data: ${position.$2}');
+      try {
+        final position = await positionStream.$2.recv();
+        debugPrint('Position: ${position.$1}, Data: ${position.$2}');
+      } catch (_) {}
     }
   }
 
   void disposeStream() {
     listening = false;
-    positionStream.$2.close();
   }
 
   @override

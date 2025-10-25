@@ -7,31 +7,30 @@ import '../frb_generated.dart';
 import 'input_handler.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PositionVecU8Receiver>>
 abstract class PositionVecU8Receiver implements RustOpaqueInterface {
-  Future<void> close();
-
-  Future<(Position, Uint8List)?> recv();
+  Future<(Position, Uint8List)> recv();
 
   Future<(Position, Uint8List)> tryRecv();
 }
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PositionVecU8Sender>>
 abstract class PositionVecU8Sender implements RustOpaqueInterface {
-  Future<bool> isClosed();
-
   Future<void> send({required (Position, Uint8List) data});
 
   Future<void> trySend({required (Position, Uint8List) data});
 }
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner< SendError < (Position , Vec < u8 >) >>>
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RecvError>>
+abstract class RecvError implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<SendError < (Position , Vec < u8 >) >>>
 abstract class SendErrorPositionVecU8 implements RustOpaqueInterface {}
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner< TryRecvError>>
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TryRecvError>>
 abstract class TryRecvError implements RustOpaqueInterface {}
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner< TrySendError < (Position , Vec < u8 >) >>>
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TrySendError < (Position , Vec < u8 >) >>>
 abstract class TrySendErrorPositionVecU8 implements RustOpaqueInterface {}

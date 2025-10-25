@@ -3,8 +3,9 @@
 
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
-import 'api/clients/ble_client.dart';
-import 'api/clients/usb_client.dart';
+import 'api/clients/client_adb.dart';
+import 'api/clients/client_ble.dart';
+import 'api/clients/client_usb.dart';
 import 'api/events.dart';
 import 'api/input_handler.dart';
 import 'api/rx_handlers.dart';
@@ -74,7 +75,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1570745535;
+  int get rustContentHash => 766663790;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -85,9 +86,15 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<BleClient> crateApiClientsBleClientBleClientNew();
+  Future<BleClient> crateApiClientsClientBleBleClientNew();
 
-  Stream<ClientEvent> crateApiClientsBleClientBleClientWatchDevices(
+  Future<void> crateApiClientsClientBleBleClientSendHidEvent(
+      {required BleClient that, required List<int> event});
+
+  Future<void> crateApiClientsClientBleBleClientSetupClientListener(
+      {required BleClient that, required PositionVecU8Receiver receiver});
+
+  Stream<ClientEvent> crateApiClientsClientBleBleClientWatchDevices(
       {required BleClient that});
 
   Future<(PositionVecU8Sender, PositionVecU8Receiver)>
@@ -106,17 +113,11 @@ abstract class RustLibApi extends BaseApi {
   Future<void> crateApiInputHandlerInputHandlerStop(
       {required InputHandler that});
 
-  Future<void> crateApiRxHandlersPositionVecU8ReceiverClose(
-      {required PositionVecU8Receiver that});
-
-  Future<(Position, Uint8List)?> crateApiRxHandlersPositionVecU8ReceiverRecv(
+  Future<(Position, Uint8List)> crateApiRxHandlersPositionVecU8ReceiverRecv(
       {required PositionVecU8Receiver that});
 
   Future<(Position, Uint8List)> crateApiRxHandlersPositionVecU8ReceiverTryRecv(
       {required PositionVecU8Receiver that});
-
-  Future<bool> crateApiRxHandlersPositionVecU8SenderIsClosed(
-      {required PositionVecU8Sender that});
 
   Future<void> crateApiRxHandlersPositionVecU8SenderSend(
       {required PositionVecU8Sender that, required (Position, Uint8List) data});
@@ -124,13 +125,15 @@ abstract class RustLibApi extends BaseApi {
   Future<void> crateApiRxHandlersPositionVecU8SenderTrySend(
       {required PositionVecU8Sender that, required (Position, Uint8List) data});
 
-  Future<UsbClient> crateApiClientsUsbClientUsbClientNew();
+  Future<UsbClient> crateApiClientsClientUsbUsbClientNew();
 
-  Future<void> crateApiClientsUsbClientUsbClientSendHidEvent(
+  Future<void> crateApiClientsClientUsbUsbClientSendHidEvent(
       {required UsbClient that, required List<int> event, required String uid});
 
-  Stream<ClientEvent> crateApiClientsUsbClientUsbClientWatchDevices(
+  Stream<ClientEvent> crateApiClientsClientUsbUsbClientWatchDevices(
       {required UsbClient that});
+
+  Future<AdbClient> crateApiClientsClientAdbAdbClientNew();
 
   Future<void> crateApiUniControlInitApp();
 
@@ -167,6 +170,14 @@ abstract class RustLibApi extends BaseApi {
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_PositionVecU8SenderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_RecvError;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_RecvError;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_RecvErrorPtr;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_SendErrorPositionVecU8;
@@ -212,7 +223,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Future<BleClient> crateApiClientsBleClientBleClientNew() {
+  Future<BleClient> crateApiClientsClientBleBleClientNew() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -224,20 +235,78 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiClientsBleClientBleClientNewConstMeta,
+      constMeta: kCrateApiClientsClientBleBleClientNewConstMeta,
       argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiClientsBleClientBleClientNewConstMeta =>
+  TaskConstMeta get kCrateApiClientsClientBleBleClientNewConstMeta =>
       const TaskConstMeta(
         debugName: "BleClient_new",
         argNames: [],
       );
 
   @override
-  Stream<ClientEvent> crateApiClientsBleClientBleClientWatchDevices(
+  Future<void> crateApiClientsClientBleBleClientSendHidEvent(
+      {required BleClient that, required List<int> event}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+            that, serializer);
+        sse_encode_list_prim_u_8_loose(event, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 2, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiClientsClientBleBleClientSendHidEventConstMeta,
+      argValues: [that, event],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiClientsClientBleBleClientSendHidEventConstMeta =>
+      const TaskConstMeta(
+        debugName: "BleClient_send_hid_event",
+        argNames: ["that", "event"],
+      );
+
+  @override
+  Future<void> crateApiClientsClientBleBleClientSetupClientListener(
+      {required BleClient that, required PositionVecU8Receiver receiver}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+            that, serializer);
+        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+            receiver, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 3, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiClientsClientBleBleClientSetupClientListenerConstMeta,
+      argValues: [that, receiver],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiClientsClientBleBleClientSetupClientListenerConstMeta =>
+          const TaskConstMeta(
+            debugName: "BleClient_setup_client_listener",
+            argNames: ["that", "receiver"],
+          );
+
+  @override
+  Stream<ClientEvent> crateApiClientsClientBleBleClientWatchDevices(
       {required BleClient that}) {
     final senderTx = RustStreamSink<ClientEvent>();
     unawaited(handler.executeNormal(NormalTask(
@@ -247,20 +316,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_StreamSink_client_event_Sse(senderTx, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 2, port: port_);
+            funcId: 4, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiClientsBleClientBleClientWatchDevicesConstMeta,
+      constMeta: kCrateApiClientsClientBleBleClientWatchDevicesConstMeta,
       argValues: [that, senderTx],
       apiImpl: this,
     )));
     return senderTx.stream;
   }
 
-  TaskConstMeta get kCrateApiClientsBleClientBleClientWatchDevicesConstMeta =>
+  TaskConstMeta get kCrateApiClientsClientBleBleClientWatchDevicesConstMeta =>
       const TaskConstMeta(
         debugName: "BleClient_watch_devices",
         argNames: ["that", "senderTx"],
@@ -276,7 +345,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
+            funcId: 5, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -301,7 +370,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -332,7 +401,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
             positionStream, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 5, port: port_);
+            funcId: 7, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -360,7 +429,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_box_autoadd_capture_request(request, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 6, port: port_);
+            funcId: 8, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -388,7 +457,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 7, port: port_);
+            funcId: 9, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -407,7 +476,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiRxHandlersPositionVecU8ReceiverClose(
+  Future<(Position, Uint8List)> crateApiRxHandlersPositionVecU8ReceiverRecv(
       {required PositionVecU8Receiver that}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -415,39 +484,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 8, port: port_);
+            funcId: 10, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiRxHandlersPositionVecU8ReceiverCloseConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiRxHandlersPositionVecU8ReceiverCloseConstMeta =>
-      const TaskConstMeta(
-        debugName: "PositionVecU8Receiver_close",
-        argNames: ["that"],
-      );
-
-  @override
-  Future<(Position, Uint8List)?> crateApiRxHandlersPositionVecU8ReceiverRecv(
-      {required PositionVecU8Receiver that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 9, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_opt_box_autoadd_record_position_list_prim_u_8_strict,
-        decodeErrorData: null,
+        decodeSuccessData: sse_decode_record_position_list_prim_u_8_strict,
+        decodeErrorData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError,
       ),
       constMeta: kCrateApiRxHandlersPositionVecU8ReceiverRecvConstMeta,
       argValues: [that],
@@ -470,7 +512,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 10, port: port_);
+            funcId: 11, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_record_position_list_prim_u_8_strict,
@@ -486,33 +528,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiRxHandlersPositionVecU8ReceiverTryRecvConstMeta =>
       const TaskConstMeta(
         debugName: "PositionVecU8Receiver_try_recv",
-        argNames: ["that"],
-      );
-
-  @override
-  Future<bool> crateApiRxHandlersPositionVecU8SenderIsClosed(
-      {required PositionVecU8Sender that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 11, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_bool,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiRxHandlersPositionVecU8SenderIsClosedConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiRxHandlersPositionVecU8SenderIsClosedConstMeta =>
-      const TaskConstMeta(
-        debugName: "PositionVecU8Sender_is_closed",
         argNames: ["that"],
       );
 
@@ -579,7 +594,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<UsbClient> crateApiClientsUsbClientUsbClientNew() {
+  Future<UsbClient> crateApiClientsClientUsbUsbClientNew() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -591,20 +606,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiClientsUsbClientUsbClientNewConstMeta,
+      constMeta: kCrateApiClientsClientUsbUsbClientNewConstMeta,
       argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiClientsUsbClientUsbClientNewConstMeta =>
+  TaskConstMeta get kCrateApiClientsClientUsbUsbClientNewConstMeta =>
       const TaskConstMeta(
         debugName: "UsbClient_new",
         argNames: [],
       );
 
   @override
-  Future<void> crateApiClientsUsbClientUsbClientSendHidEvent(
+  Future<void> crateApiClientsClientUsbUsbClientSendHidEvent(
       {required UsbClient that,
       required List<int> event,
       required String uid}) {
@@ -622,20 +637,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiClientsUsbClientUsbClientSendHidEventConstMeta,
+      constMeta: kCrateApiClientsClientUsbUsbClientSendHidEventConstMeta,
       argValues: [that, event, uid],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiClientsUsbClientUsbClientSendHidEventConstMeta =>
+  TaskConstMeta get kCrateApiClientsClientUsbUsbClientSendHidEventConstMeta =>
       const TaskConstMeta(
         debugName: "UsbClient_send_hid_event",
         argNames: ["that", "event", "uid"],
       );
 
   @override
-  Stream<ClientEvent> crateApiClientsUsbClientUsbClientWatchDevices(
+  Stream<ClientEvent> crateApiClientsClientUsbUsbClientWatchDevices(
       {required UsbClient that}) {
     final clientsTx = RustStreamSink<ClientEvent>();
     unawaited(handler.executeNormal(NormalTask(
@@ -651,17 +666,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiClientsUsbClientUsbClientWatchDevicesConstMeta,
+      constMeta: kCrateApiClientsClientUsbUsbClientWatchDevicesConstMeta,
       argValues: [that, clientsTx],
       apiImpl: this,
     )));
     return clientsTx.stream;
   }
 
-  TaskConstMeta get kCrateApiClientsUsbClientUsbClientWatchDevicesConstMeta =>
+  TaskConstMeta get kCrateApiClientsClientUsbUsbClientWatchDevicesConstMeta =>
       const TaskConstMeta(
         debugName: "UsbClient_watch_devices",
         argNames: ["that", "clientsTx"],
+      );
+
+  @override
+  Future<AdbClient> crateApiClientsClientAdbAdbClientNew() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 17, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_adb_client,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiClientsClientAdbAdbClientNewConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiClientsClientAdbAdbClientNewConstMeta =>
+      const TaskConstMeta(
+        debugName: "adb_client_new",
+        argNames: [],
       );
 
   @override
@@ -670,7 +709,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 17, port: port_);
+            funcId: 18, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -718,6 +757,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustArcDecrementStrongCountFnType
       get rust_arc_decrement_strong_count_PositionVecU8Sender => wire
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_RecvError => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_RecvError => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_SendErrorPositionVecU8 => wire
@@ -787,6 +834,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return PositionVecU8SenderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RecvError
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RecvErrorImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -904,6 +959,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RecvError
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RecvErrorImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   SendErrorPositionVecU8
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
           dynamic raw) {
@@ -951,9 +1014,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  bool dco_decode_bool(dynamic raw) {
+  AdbClient dco_decode_adb_client(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw as bool;
+    final arr = raw as List<dynamic>;
+    if (arr.isNotEmpty)
+      throw Exception('unexpected arr length: expect 0 but see ${arr.length}');
+    return AdbClient();
   }
 
   @protected
@@ -1021,16 +1087,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
-  }
-
-  @protected
-  (Position, Uint8List)?
-      dco_decode_opt_box_autoadd_record_position_list_prim_u_8_strict(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null
-        ? null
-        : dco_decode_box_autoadd_record_position_list_prim_u_8_strict(raw);
   }
 
   @protected
@@ -1130,6 +1186,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return PositionVecU8SenderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RecvError
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RecvErrorImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -1260,6 +1325,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RecvError
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RecvErrorImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   SendErrorPositionVecU8
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
           SseDeserializer deserializer) {
@@ -1310,9 +1384,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  bool sse_decode_bool(SseDeserializer deserializer) {
+  AdbClient sse_decode_adb_client(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getUint8() != 0;
+    return AdbClient();
   }
 
   @protected
@@ -1387,20 +1461,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  (Position, Uint8List)?
-      sse_decode_opt_box_autoadd_record_position_list_prim_u_8_strict(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_record_position_list_prim_u_8_strict(
-          deserializer));
-    } else {
-      return null;
-    }
-  }
-
-  @protected
   Position sse_decode_position(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_i_32(deserializer);
@@ -1450,6 +1510,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  bool sse_decode_bool(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint8() != 0;
+  }
+
+  @protected
   void sse_encode_AnyhowException(
       AnyhowException self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1493,6 +1559,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_usize(
         (self as PositionVecU8SenderImpl).frbInternalSseEncode(move: true),
         serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+          RecvError self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RecvErrorImpl).frbInternalSseEncode(move: true), serializer);
   }
 
   @protected
@@ -1634,6 +1709,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+          RecvError self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as RecvErrorImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
           SendErrorPositionVecU8 self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -1692,9 +1776,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_bool(bool self, SseSerializer serializer) {
+  void sse_encode_adb_client(AdbClient self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putUint8(self ? 1 : 0);
   }
 
   @protected
@@ -1764,18 +1847,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_opt_box_autoadd_record_position_list_prim_u_8_strict(
-      (Position, Uint8List)? self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    sse_encode_bool(self != null, serializer);
-    if (self != null) {
-      sse_encode_box_autoadd_record_position_list_prim_u_8_strict(
-          self, serializer);
-    }
-  }
-
-  @protected
   void sse_encode_position(Position self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.index, serializer);
@@ -1817,6 +1888,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putBigUint64(self);
   }
+
+  @protected
+  void sse_encode_bool(bool self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint8(self ? 1 : 0);
+  }
 }
 
 @sealed
@@ -1838,8 +1915,15 @@ class BleClientImpl extends RustOpaque implements BleClient {
         RustLib.instance.api.rust_arc_decrement_strong_count_BleClientPtr,
   );
 
+  Future<void> sendHidEvent({required List<int> event}) => RustLib.instance.api
+      .crateApiClientsClientBleBleClientSendHidEvent(that: this, event: event);
+
+  Future<void> setupClientListener({required PositionVecU8Receiver receiver}) =>
+      RustLib.instance.api.crateApiClientsClientBleBleClientSetupClientListener(
+          that: this, receiver: receiver);
+
   Stream<ClientEvent> watchDevices() =>
-      RustLib.instance.api.crateApiClientsBleClientBleClientWatchDevices(
+      RustLib.instance.api.crateApiClientsClientBleBleClientWatchDevices(
         that: this,
       );
 }
@@ -1903,12 +1987,7 @@ class PositionVecU8ReceiverImpl extends RustOpaque
         .instance.api.rust_arc_decrement_strong_count_PositionVecU8ReceiverPtr,
   );
 
-  Future<void> close() =>
-      RustLib.instance.api.crateApiRxHandlersPositionVecU8ReceiverClose(
-        that: this,
-      );
-
-  Future<(Position, Uint8List)?> recv() =>
+  Future<(Position, Uint8List)> recv() =>
       RustLib.instance.api.crateApiRxHandlersPositionVecU8ReceiverRecv(
         that: this,
       );
@@ -1940,11 +2019,6 @@ class PositionVecU8SenderImpl extends RustOpaque
         .instance.api.rust_arc_decrement_strong_count_PositionVecU8SenderPtr,
   );
 
-  Future<bool> isClosed() =>
-      RustLib.instance.api.crateApiRxHandlersPositionVecU8SenderIsClosed(
-        that: this,
-      );
-
   Future<void> send({required (Position, Uint8List) data}) =>
       RustLib.instance.api
           .crateApiRxHandlersPositionVecU8SenderSend(that: this, data: data);
@@ -1952,6 +2026,26 @@ class PositionVecU8SenderImpl extends RustOpaque
   Future<void> trySend({required (Position, Uint8List) data}) =>
       RustLib.instance.api
           .crateApiRxHandlersPositionVecU8SenderTrySend(that: this, data: data);
+}
+
+@sealed
+class RecvErrorImpl extends RustOpaque implements RecvError {
+  // Not to be used by end users
+  RecvErrorImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  RecvErrorImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_RecvError,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_RecvError,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_RecvErrorPtr,
+  );
 }
 
 @sealed
@@ -2038,11 +2132,11 @@ class UsbClientImpl extends RustOpaque implements UsbClient {
   );
 
   Future<void> sendHidEvent({required List<int> event, required String uid}) =>
-      RustLib.instance.api.crateApiClientsUsbClientUsbClientSendHidEvent(
+      RustLib.instance.api.crateApiClientsClientUsbUsbClientSendHidEvent(
           that: this, event: event, uid: uid);
 
   Stream<ClientEvent> watchDevices() =>
-      RustLib.instance.api.crateApiClientsUsbClientUsbClientWatchDevices(
+      RustLib.instance.api.crateApiClientsClientUsbUsbClientWatchDevices(
         that: this,
       );
 }

@@ -3,8 +3,9 @@
 
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
-import 'api/clients/ble_client.dart';
-import 'api/clients/usb_client.dart';
+import 'api/clients/client_adb.dart';
+import 'api/clients/client_ble.dart';
+import 'api/clients/client_usb.dart';
 import 'api/events.dart';
 import 'api/input_handler.dart';
 import 'api/rx_handlers.dart';
@@ -36,6 +37,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_PositionVecU8SenderPtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8SenderPtr;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_RecvErrorPtr =>
+      wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvErrorPtr;
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_SendErrorPositionVecU8Ptr => wire
@@ -73,6 +77,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   PositionVecU8Sender
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          dynamic raw);
+
+  @protected
+  RecvError
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
           dynamic raw);
 
   @protected
@@ -146,6 +155,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  RecvError
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+          dynamic raw);
+
+  @protected
   SendErrorPositionVecU8
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
           dynamic raw);
@@ -173,7 +187,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
-  bool dco_decode_bool(dynamic raw);
+  AdbClient dco_decode_adb_client(dynamic raw);
 
   @protected
   CaptureRequest dco_decode_box_autoadd_capture_request(dynamic raw);
@@ -196,11 +210,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
-
-  @protected
-  (Position, Uint8List)?
-      dco_decode_opt_box_autoadd_record_position_list_prim_u_8_strict(
-          dynamic raw);
 
   @protected
   Position dco_decode_position(dynamic raw);
@@ -246,6 +255,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   PositionVecU8Sender
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          SseDeserializer deserializer);
+
+  @protected
+  RecvError
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
           SseDeserializer deserializer);
 
   @protected
@@ -319,6 +333,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  RecvError
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+          SseDeserializer deserializer);
+
+  @protected
   SendErrorPositionVecU8
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
           SseDeserializer deserializer);
@@ -346,7 +365,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
-  bool sse_decode_bool(SseDeserializer deserializer);
+  AdbClient sse_decode_adb_client(SseDeserializer deserializer);
 
   @protected
   CaptureRequest sse_decode_box_autoadd_capture_request(
@@ -373,11 +392,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
-  (Position, Uint8List)?
-      sse_decode_opt_box_autoadd_record_position_list_prim_u_8_strict(
-          SseDeserializer deserializer);
-
-  @protected
   Position sse_decode_position(SseDeserializer deserializer);
 
   @protected
@@ -399,6 +413,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt sse_decode_usize(SseDeserializer deserializer);
+
+  @protected
+  bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
   void sse_encode_AnyhowException(
@@ -423,6 +440,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
           PositionVecU8Sender self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+          RecvError self, SseSerializer serializer);
 
   @protected
   void
@@ -496,6 +518,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+          RecvError self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
           SendErrorPositionVecU8 self, SseSerializer serializer);
 
@@ -522,7 +549,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
-  void sse_encode_bool(bool self, SseSerializer serializer);
+  void sse_encode_adb_client(AdbClient self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_capture_request(
@@ -550,10 +577,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       Uint8List self, SseSerializer serializer);
 
   @protected
-  void sse_encode_opt_box_autoadd_record_position_list_prim_u_8_strict(
-      (Position, Uint8List)? self, SseSerializer serializer);
-
-  @protected
   void sse_encode_position(Position self, SseSerializer serializer);
 
   @protected
@@ -574,6 +597,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_usize(BigInt self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_bool(bool self, SseSerializer serializer);
 }
 
 // Section: wire_class
@@ -716,6 +742,38 @@ class RustLibWire implements BaseWire {
           'frbgen_uni_control_hub_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender');
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8SenderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvErrorPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_uni_control_hub_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvErrorPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvErrorPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_uni_control_hub_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvErrorPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void

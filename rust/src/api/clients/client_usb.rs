@@ -8,6 +8,7 @@ use nusb::{
     transfer::{ControlOut, ControlType, Recipient},
     Device, DeviceInfo,
 };
+use std::collections::HashMap;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
@@ -17,18 +18,18 @@ use tokio::sync::Mutex;
 #[derive(Clone)]
 #[flutter_rust_bridge::frb(opaque)]
 pub struct UsbClient {
-    usb_devices: Arc<Mutex<Vec<UsbDevice>>>,
+    usb_devices: Arc<Mutex<HashMap<String, UsbDevice>>>,
 }
 
 impl UsbClient {
     pub fn new() -> Self {
         Self {
-            usb_devices: Arc::new(Mutex::new(vec![])),
+            usb_devices: Arc::new(Mutex::new(HashMap::new())),
         }
     }
 
     pub async fn watch_devices(&mut self, clients_tx: StreamSink<ClientEvent>) {
-        let usb_devices: Arc<Mutex<Vec<UsbDevice>>> = Arc::clone(&self.usb_devices);
+        let usb_devices: Arc<Mutex<HashMap<String, UsbDevice>>> = Arc::clone(&self.usb_devices);
         async fn get_usb_device(device: DeviceInfo) -> Option<UsbDevice> {
             let usb_device = UsbDevice::new(device).await;
             if usb_device.is_none() {
@@ -45,13 +46,13 @@ impl UsbClient {
 
         async fn on_device_connected(
             event: DeviceInfo,
-            usb_devices: Arc<Mutex<Vec<UsbDevice>>>,
+            usb_devices: Arc<Mutex<HashMap<String, UsbDevice>>>,
             clients_tx: StreamSink<ClientEvent>,
         ) {
             if let Some(usb_device) = get_usb_device(event).await {
                 println!("UsbConnected: {:?}", usb_device.manufacturer);
                 let id = usb_device.uid.clone();
-                usb_devices.lock().await.push(usb_device);
+                usb_devices.lock().await.insert(id.clone(), usb_device);
                 let _ = clients_tx.add(ClientEvent::Added(id));
             }
         }
@@ -100,14 +101,14 @@ impl UsbClient {
                             // Get uid from device
                             let mut device_uid = None;
                             for d in devices.iter() {
-                                if d.device_id == device {
-                                    device_uid = Some(d.uid.clone());
+                                if d.1.device_id == device {
+                                    device_uid = Some(d.0.clone());
                                     break;
                                 }
                             }
                             // remove device from devices
-                            devices.retain(|d| d.device_id != device);
                             if let Some(uid) = device_uid {
+                                devices.remove(&uid);
                                 let _ = clients_tx.add(ClientEvent::Removed(uid));
                             }
                         }
@@ -118,11 +119,8 @@ impl UsbClient {
     }
 
     pub async fn send_hid_event(&mut self, event: Vec<u8>, uid: String) {
-        for usb_device in self.usb_devices.lock().await.iter() {
-            if usb_device.uid != uid {
-                continue;
-            }
-            let _ = usb_device.send_hid_event(event.clone()).await;
+        if let Some(usb_device) = self.usb_devices.lock().await.get(&uid) {
+            let _ = usb_device.send_hid_event(event).await;
         }
     }
 }

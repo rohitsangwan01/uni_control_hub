@@ -25,8 +25,8 @@
 
 // Section: imports
 
-use crate::api::clients::ble_client::*;
-use crate::api::clients::usb_client::*;
+use crate::api::clients::client_ble::*;
+use crate::api::clients::client_usb::*;
 use crate::api::input_handler::*;
 use crate::api::rx_handlers::*;
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
@@ -41,7 +41,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1570745535;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 766663790;
 
 // Section: executor
 
@@ -49,7 +49,7 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
-fn wire__crate__api__clients__ble_client__BleClient_new_impl(
+fn wire__crate__api__clients__client_ble__BleClient_new_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -76,7 +76,7 @@ fn wire__crate__api__clients__ble_client__BleClient_new_impl(
                 transform_result_sse::<_, ()>(
                     (move || async move {
                         let output_ok = Result::<_, ()>::Ok(
-                            crate::api::clients::ble_client::BleClient::new().await,
+                            crate::api::clients::client_ble::BleClient::new().await,
                         )?;
                         Ok(output_ok)
                     })()
@@ -86,7 +86,124 @@ fn wire__crate__api__clients__ble_client__BleClient_new_impl(
         },
     )
 }
-fn wire__crate__api__clients__ble_client__BleClient_watch_devices_impl(
+fn wire__crate__api__clients__client_ble__BleClient_send_hid_event_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "BleClient_send_hid_event",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BleClient>,
+            >>::sse_decode(&mut deserializer);
+            let api_event = <Vec<u8>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let mut api_that_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_that, 0, true,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_that_guard =
+                                        Some(api_that.lockable_decode_async_ref_mut().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let mut api_that_guard = api_that_guard.unwrap();
+                        let output_ok = Result::<_, ()>::Ok({
+                            crate::api::clients::client_ble::BleClient::send_hid_event(
+                                &mut *api_that_guard,
+                                api_event,
+                            )
+                            .await;
+                        })?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__clients__client_ble__BleClient_setup_client_listener_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "BleClient_setup_client_listener",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BleClient>,
+            >>::sse_decode(&mut deserializer);
+            let api_receiver = <PositionVecU8Receiver>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let mut api_that_guard = None;
+                    let decode_indices_ =
+                        flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                &api_that, 0, true,
+                            ),
+                        ]);
+                    for i in decode_indices_ {
+                        match i {
+                            0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
+                            _ => unreachable!(),
+                        }
+                    }
+                    let mut api_that_guard = api_that_guard.unwrap();
+                    let output_ok = Result::<_, ()>::Ok({
+                        crate::api::clients::client_ble::BleClient::setup_client_listener(
+                            &mut *api_that_guard,
+                            api_receiver,
+                        );
+                    })?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__clients__client_ble__BleClient_watch_devices_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -137,7 +254,7 @@ fn wire__crate__api__clients__ble_client__BleClient_watch_devices_impl(
                         }
                         let mut api_that_guard = api_that_guard.unwrap();
                         let output_ok = Result::<_, ()>::Ok({
-                            crate::api::clients::ble_client::BleClient::watch_devices(
+                            crate::api::clients::client_ble::BleClient::watch_devices(
                                 &mut *api_that_guard,
                                 api_sender_tx,
                             )
@@ -417,64 +534,13 @@ fn wire__crate__api__input_handler__InputHandler_stop_impl(
         },
     )
 }
-fn wire__crate__api__rx_handlers__PositionVecU8Receiver_close_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "PositionVecU8Receiver_close",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_that = <RustOpaqueMoi<
-                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PositionVecU8Receiver>,
-            >>::sse_decode(&mut deserializer);
-            deserializer.end();
-            move |context| {
-                transform_result_sse::<_, ()>((move || {
-                    let mut api_that_guard = None;
-                    let decode_indices_ =
-                        flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
-                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                                &api_that, 0, true,
-                            ),
-                        ]);
-                    for i in decode_indices_ {
-                        match i {
-                            0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
-                            _ => unreachable!(),
-                        }
-                    }
-                    let mut api_that_guard = api_that_guard.unwrap();
-                    let output_ok = Result::<_, ()>::Ok({
-                        crate::api::rx_handlers::PositionVecU8Receiver::close(&mut *api_that_guard);
-                    })?;
-                    Ok(output_ok)
-                })())
-            }
-        },
-    )
-}
 fn wire__crate__api__rx_handlers__PositionVecU8Receiver_recv_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "PositionVecU8Receiver_recv",
             port: Some(port_),
@@ -494,36 +560,26 @@ fn wire__crate__api__rx_handlers__PositionVecU8Receiver_recv_impl(
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PositionVecU8Receiver>,
             >>::sse_decode(&mut deserializer);
             deserializer.end();
-            move |context| async move {
-                transform_result_sse::<_, ()>(
-                    (move || async move {
-                        let mut api_that_guard = None;
-                        let decode_indices_ =
-                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
-                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                                    &api_that, 0, true,
-                                )],
-                            );
-                        for i in decode_indices_ {
-                            match i {
-                                0 => {
-                                    api_that_guard =
-                                        Some(api_that.lockable_decode_async_ref_mut().await)
-                                }
-                                _ => unreachable!(),
-                            }
+            move |context| {
+                transform_result_sse::<_, RecvError>((move || {
+                    let mut api_that_guard = None;
+                    let decode_indices_ =
+                        flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                &api_that, 0, true,
+                            ),
+                        ]);
+                    for i in decode_indices_ {
+                        match i {
+                            0 => api_that_guard = Some(api_that.lockable_decode_sync_ref_mut()),
+                            _ => unreachable!(),
                         }
-                        let mut api_that_guard = api_that_guard.unwrap();
-                        let output_ok = Result::<_, ()>::Ok(
-                            crate::api::rx_handlers::PositionVecU8Receiver::recv(
-                                &mut *api_that_guard,
-                            )
-                            .await,
-                        )?;
-                        Ok(output_ok)
-                    })()
-                    .await,
-                )
+                    }
+                    let mut api_that_guard = api_that_guard.unwrap();
+                    let output_ok =
+                        crate::api::rx_handlers::PositionVecU8Receiver::recv(&mut *api_that_guard)?;
+                    Ok(output_ok)
+                })())
             }
         },
     )
@@ -572,57 +628,6 @@ fn wire__crate__api__rx_handlers__PositionVecU8Receiver_try_recv_impl(
                     let mut api_that_guard = api_that_guard.unwrap();
                     let output_ok = crate::api::rx_handlers::PositionVecU8Receiver::try_recv(
                         &mut *api_that_guard,
-                    )?;
-                    Ok(output_ok)
-                })())
-            }
-        },
-    )
-}
-fn wire__crate__api__rx_handlers__PositionVecU8Sender_is_closed_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "PositionVecU8Sender_is_closed",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
-        },
-        move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_that = <RustOpaqueMoi<
-                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PositionVecU8Sender>,
-            >>::sse_decode(&mut deserializer);
-            deserializer.end();
-            move |context| {
-                transform_result_sse::<_, ()>((move || {
-                    let mut api_that_guard = None;
-                    let decode_indices_ =
-                        flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
-                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                                &api_that, 0, false,
-                            ),
-                        ]);
-                    for i in decode_indices_ {
-                        match i {
-                            0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
-                            _ => unreachable!(),
-                        }
-                    }
-                    let api_that_guard = api_that_guard.unwrap();
-                    let output_ok = Result::<_, ()>::Ok(
-                        crate::api::rx_handlers::PositionVecU8Sender::is_closed(&*api_that_guard),
                     )?;
                     Ok(output_ok)
                 })())
@@ -745,7 +750,7 @@ fn wire__crate__api__rx_handlers__PositionVecU8Sender_try_send_impl(
         },
     )
 }
-fn wire__crate__api__clients__usb_client__UsbClient_new_impl(
+fn wire__crate__api__clients__client_usb__UsbClient_new_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -771,14 +776,14 @@ fn wire__crate__api__clients__usb_client__UsbClient_new_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok =
-                        Result::<_, ()>::Ok(crate::api::clients::usb_client::UsbClient::new())?;
+                        Result::<_, ()>::Ok(crate::api::clients::client_usb::UsbClient::new())?;
                     Ok(output_ok)
                 })())
             }
         },
     )
 }
-fn wire__crate__api__clients__usb_client__UsbClient_send_hid_event_impl(
+fn wire__crate__api__clients__client_usb__UsbClient_send_hid_event_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -827,7 +832,7 @@ fn wire__crate__api__clients__usb_client__UsbClient_send_hid_event_impl(
                         }
                         let mut api_that_guard = api_that_guard.unwrap();
                         let output_ok = Result::<_, ()>::Ok({
-                            crate::api::clients::usb_client::UsbClient::send_hid_event(
+                            crate::api::clients::client_usb::UsbClient::send_hid_event(
                                 &mut *api_that_guard,
                                 api_event,
                                 api_uid,
@@ -842,7 +847,7 @@ fn wire__crate__api__clients__usb_client__UsbClient_send_hid_event_impl(
         },
     )
 }
-fn wire__crate__api__clients__usb_client__UsbClient_watch_devices_impl(
+fn wire__crate__api__clients__client_usb__UsbClient_watch_devices_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -893,7 +898,7 @@ fn wire__crate__api__clients__usb_client__UsbClient_watch_devices_impl(
                         }
                         let mut api_that_guard = api_that_guard.unwrap();
                         let output_ok = Result::<_, ()>::Ok({
-                            crate::api::clients::usb_client::UsbClient::watch_devices(
+                            crate::api::clients::client_usb::UsbClient::watch_devices(
                                 &mut *api_that_guard,
                                 api_clients_tx,
                             )
@@ -903,6 +908,39 @@ fn wire__crate__api__clients__usb_client__UsbClient_watch_devices_impl(
                     })()
                     .await,
                 )
+            }
+        },
+    )
+}
+fn wire__crate__api__clients__client_adb__adb_client_new_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "adb_client_new",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok =
+                        Result::<_, ()>::Ok(crate::api::clients::client_adb::AdbClient::new())?;
+                    Ok(output_ok)
+                })())
             }
         },
     )
@@ -955,6 +993,9 @@ flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PositionVecU8Sender>
+);
+flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RecvError>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<SendError<(Position, Vec<u8>)>>
@@ -1014,6 +1055,16 @@ impl SseDecode for PositionVecU8Sender {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <RustOpaqueMoi<
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PositionVecU8Sender>,
+        >>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
+
+impl SseDecode for RecvError {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RecvError>,
         >>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
     }
@@ -1104,6 +1155,16 @@ impl SseDecode
 }
 
 impl SseDecode
+    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RecvError>>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return decode_rust_opaque_moi(inner);
+    }
+}
+
+impl SseDecode
     for RustOpaqueMoi<
         flutter_rust_bridge::for_generated::RustAutoOpaqueInner<SendError<(Position, Vec<u8>)>>,
     >
@@ -1165,10 +1226,10 @@ impl SseDecode for String {
     }
 }
 
-impl SseDecode for bool {
+impl SseDecode for crate::api::clients::client_adb::AdbClient {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        deserializer.cursor.read_u8().unwrap() != 0
+        return crate::api::clients::client_adb::AdbClient {};
     }
 }
 
@@ -1236,19 +1297,6 @@ impl SseDecode for Vec<u8> {
     }
 }
 
-impl SseDecode for Option<(crate::api::input_handler::Position, Vec<u8>)> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        if (<bool>::sse_decode(deserializer)) {
-            return Some(
-                <(crate::api::input_handler::Position, Vec<u8>)>::sse_decode(deserializer),
-            );
-        } else {
-            return None;
-        }
-    }
-}
-
 impl SseDecode for crate::api::input_handler::Position {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1300,6 +1348,13 @@ impl SseDecode for usize {
     }
 }
 
+impl SseDecode for bool {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_u8().unwrap() != 0
+    }
+}
+
 fn pde_ffi_dispatcher_primary_impl(
     func_id: i32,
     port: flutter_rust_bridge::for_generated::MessagePort,
@@ -1309,61 +1364,61 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        1 => wire__crate__api__clients__ble_client__BleClient_new_impl(
+        1 => wire__crate__api__clients__client_ble__BleClient_new_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        2 => wire__crate__api__clients__ble_client__BleClient_watch_devices_impl(
+        2 => wire__crate__api__clients__client_ble__BleClient_send_hid_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        3 => wire__crate__api__input_handler__InputHandler_create_position_stream_impl(
+        3 => wire__crate__api__clients__client_ble__BleClient_setup_client_listener_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        5 => wire__crate__api__input_handler__InputHandler_run_impl(
+        4 => wire__crate__api__clients__client_ble__BleClient_watch_devices_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        6 => wire__crate__api__input_handler__InputHandler_send_capture_request_impl(
+        5 => wire__crate__api__input_handler__InputHandler_create_position_stream_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        7 => wire__crate__api__input_handler__InputHandler_stop_impl(
+        7 => wire__crate__api__input_handler__InputHandler_run_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        8 => wire__crate__api__rx_handlers__PositionVecU8Receiver_close_impl(
+        8 => wire__crate__api__input_handler__InputHandler_send_capture_request_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        9 => wire__crate__api__rx_handlers__PositionVecU8Receiver_recv_impl(
+        9 => wire__crate__api__input_handler__InputHandler_stop_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__rx_handlers__PositionVecU8Receiver_try_recv_impl(
+        10 => wire__crate__api__rx_handlers__PositionVecU8Receiver_recv_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => wire__crate__api__rx_handlers__PositionVecU8Sender_is_closed_impl(
+        11 => wire__crate__api__rx_handlers__PositionVecU8Receiver_try_recv_impl(
             port,
             ptr,
             rust_vec_len,
@@ -1381,25 +1436,31 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        14 => wire__crate__api__clients__usb_client__UsbClient_new_impl(
+        14 => wire__crate__api__clients__client_usb__UsbClient_new_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        15 => wire__crate__api__clients__usb_client__UsbClient_send_hid_event_impl(
+        15 => wire__crate__api__clients__client_usb__UsbClient_send_hid_event_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        16 => wire__crate__api__clients__usb_client__UsbClient_watch_devices_impl(
+        16 => wire__crate__api__clients__client_usb__UsbClient_watch_devices_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        17 => wire__crate__api__uni_control__init_app_impl(port, ptr, rust_vec_len, data_len),
+        17 => wire__crate__api__clients__client_adb__adb_client_new_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        18 => wire__crate__api__uni_control__init_app_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -1412,7 +1473,7 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        4 => wire__crate__api__input_handler__InputHandler_new_impl(ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__input_handler__InputHandler_new_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -1488,6 +1549,21 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<PositionVecU8Sender>> for Posi
 }
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<RecvError> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for FrbWrapper<RecvError> {}
+
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<RecvError>> for RecvError {
+    fn into_into_dart(self) -> FrbWrapper<RecvError> {
+        self.into()
+    }
+}
+
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for FrbWrapper<SendError<(Position, Vec<u8>)>> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
@@ -1557,6 +1633,23 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<UsbClient>> for UsbClient {
     }
 }
 
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::clients::client_adb::AdbClient {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        Vec::<u8>::new().into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::clients::client_adb::AdbClient
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::clients::client_adb::AdbClient>
+    for crate::api::clients::client_adb::AdbClient
+{
+    fn into_into_dart(self) -> crate::api::clients::client_adb::AdbClient {
+        self
+    }
+}
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::input_handler::CaptureRequest {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
@@ -1676,6 +1769,13 @@ impl SseEncode for PositionVecU8Sender {
     }
 }
 
+impl SseEncode for RecvError {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RecvError>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
+    }
+}
+
 impl SseEncode for SendError<(Position, Vec<u8>)> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1691,7 +1791,7 @@ impl SseEncode for SendError<(Position, Vec<u8>)> {
 impl SseEncode for TryRecvError {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner< TryRecvError>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
+        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TryRecvError>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
     }
 }
 
@@ -1753,6 +1853,17 @@ impl SseEncode
 
 impl SseEncode
     for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PositionVecU8Sender>>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        let (ptr, size) = self.sse_encode_raw();
+        <usize>::sse_encode(ptr, serializer);
+        <i32>::sse_encode(size, serializer);
+    }
+}
+
+impl SseEncode
+    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RecvError>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1826,11 +1937,9 @@ impl SseEncode for String {
     }
 }
 
-impl SseEncode for bool {
+impl SseEncode for crate::api::clients::client_adb::AdbClient {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        serializer.cursor.write_u8(self as _).unwrap();
-    }
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {}
 }
 
 impl SseEncode for crate::api::input_handler::CaptureRequest {
@@ -1891,16 +2000,6 @@ impl SseEncode for Vec<u8> {
     }
 }
 
-impl SseEncode for Option<(crate::api::input_handler::Position, Vec<u8>)> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <bool>::sse_encode(self.is_some(), serializer);
-        if let Some(value) = self {
-            <(crate::api::input_handler::Position, Vec<u8>)>::sse_encode(value, serializer);
-        }
-    }
-}
-
 impl SseEncode for crate::api::input_handler::Position {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1957,6 +2056,13 @@ impl SseEncode for usize {
     }
 }
 
+impl SseEncode for bool {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_u8(self as _).unwrap();
+    }
+}
+
 #[cfg(not(target_family = "wasm"))]
 mod io {
     // This file is automatically generated, so please do not edit it.
@@ -1965,8 +2071,8 @@ mod io {
     // Section: imports
 
     use super::*;
-    use crate::api::clients::ble_client::*;
-    use crate::api::clients::usb_client::*;
+    use crate::api::clients::client_ble::*;
+    use crate::api::clients::client_usb::*;
     use crate::api::input_handler::*;
     use crate::api::rx_handlers::*;
     use flutter_rust_bridge::for_generated::byteorder::{
@@ -2036,6 +2142,20 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_uni_control_hub_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RecvError>>::increment_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_uni_control_hub_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRecvError(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RecvError>>::decrement_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_uni_control_hub_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
         ptr: *const std::ffi::c_void,
     ) {
@@ -2057,14 +2177,14 @@ mod io {
     pub extern "C" fn frbgen_uni_control_hub_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError(
         ptr: *const std::ffi::c_void,
     ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner< TryRecvError>>::increment_strong_count(ptr as _);
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TryRecvError>>::increment_strong_count(ptr as _);
     }
 
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_uni_control_hub_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError(
         ptr: *const std::ffi::c_void,
     ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner< TryRecvError>>::decrement_strong_count(ptr as _);
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<TryRecvError>>::decrement_strong_count(ptr as _);
     }
 
     #[unsafe(no_mangle)]
