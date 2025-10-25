@@ -1,3 +1,9 @@
+#[derive(Debug, Clone)]
+pub enum ClientEvent {
+    Added(String),
+    Removed(String),
+}
+
 pub const COMBINED_REPORT: &[u8] = &[
     // Keyboard
     0x05, 0x01, // USAGE_PAGE (Generic Desktop)

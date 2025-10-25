@@ -1465,6 +1465,7 @@ dependencies = [
  "once_cell",
  "rustix 1.1.2",
  "slab",
+ "tokio",
  "windows-sys 0.60.2",
 ]
 

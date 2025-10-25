@@ -3,7 +3,11 @@
 
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
-import 'api/simple.dart';
+import 'api/clients/ble_client.dart';
+import 'api/clients/usb_client.dart';
+import 'api/events.dart';
+import 'api/input_handler.dart';
+import 'api/rx_handlers.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'frb_generated.dart';
@@ -59,7 +63,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
   @override
   Future<void> executeRustInitializers() async {
-    await api.crateApiSimpleInitApp();
+    await api.crateApiUniControlInitApp();
   }
 
   @override
@@ -70,7 +74,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -1918914929;
+  int get rustContentHash => 1570745535;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -81,9 +85,122 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  String crateApiSimpleGreet({required String name});
+  Future<BleClient> crateApiClientsBleClientBleClientNew();
 
-  Future<void> crateApiSimpleInitApp();
+  Stream<ClientEvent> crateApiClientsBleClientBleClientWatchDevices(
+      {required BleClient that});
+
+  Future<(PositionVecU8Sender, PositionVecU8Receiver)>
+      crateApiInputHandlerInputHandlerCreatePositionStream(
+          {required InputHandler that});
+
+  InputHandler crateApiInputHandlerInputHandlerNew();
+
+  Future<void> crateApiInputHandlerInputHandlerRun(
+      {required InputHandler that,
+      required PositionVecU8Sender positionStream});
+
+  Future<void> crateApiInputHandlerInputHandlerSendCaptureRequest(
+      {required InputHandler that, required CaptureRequest request});
+
+  Future<void> crateApiInputHandlerInputHandlerStop(
+      {required InputHandler that});
+
+  Future<void> crateApiRxHandlersPositionVecU8ReceiverClose(
+      {required PositionVecU8Receiver that});
+
+  Future<(Position, Uint8List)?> crateApiRxHandlersPositionVecU8ReceiverRecv(
+      {required PositionVecU8Receiver that});
+
+  Future<(Position, Uint8List)> crateApiRxHandlersPositionVecU8ReceiverTryRecv(
+      {required PositionVecU8Receiver that});
+
+  Future<bool> crateApiRxHandlersPositionVecU8SenderIsClosed(
+      {required PositionVecU8Sender that});
+
+  Future<void> crateApiRxHandlersPositionVecU8SenderSend(
+      {required PositionVecU8Sender that, required (Position, Uint8List) data});
+
+  Future<void> crateApiRxHandlersPositionVecU8SenderTrySend(
+      {required PositionVecU8Sender that, required (Position, Uint8List) data});
+
+  Future<UsbClient> crateApiClientsUsbClientUsbClientNew();
+
+  Future<void> crateApiClientsUsbClientUsbClientSendHidEvent(
+      {required UsbClient that, required List<int> event, required String uid});
+
+  Stream<ClientEvent> crateApiClientsUsbClientUsbClientWatchDevices(
+      {required UsbClient that});
+
+  Future<void> crateApiUniControlInitApp();
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_BleClient;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_BleClient;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_BleClientPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_InputHandler;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_InputHandler;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_InputHandlerPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_PositionVecU8Receiver;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_PositionVecU8Receiver;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_PositionVecU8ReceiverPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_PositionVecU8Sender;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_PositionVecU8Sender;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_PositionVecU8SenderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_SendErrorPositionVecU8;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_SendErrorPositionVecU8;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_SendErrorPositionVecU8Ptr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_TryRecvError;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_TryRecvError;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_TryRecvErrorPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_TrySendErrorPositionVecU8;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_TrySendErrorPositionVecU8;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_TrySendErrorPositionVecU8Ptr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_UsbClient;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_UsbClient;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_UsbClientPtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -95,33 +212,40 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  String crateApiSimpleGreet({required String name}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
+  Future<BleClient> crateApiClientsBleClientBleClientNew() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(name, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 1, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleGreetConstMeta,
-      argValues: [name],
+      constMeta: kCrateApiClientsBleClientBleClientNewConstMeta,
+      argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleGreetConstMeta => const TaskConstMeta(
-        debugName: "greet",
-        argNames: ["name"],
+  TaskConstMeta get kCrateApiClientsBleClientBleClientNewConstMeta =>
+      const TaskConstMeta(
+        debugName: "BleClient_new",
+        argNames: [],
       );
 
   @override
-  Future<void> crateApiSimpleInitApp() {
-    return handler.executeNormal(NormalTask(
+  Stream<ClientEvent> crateApiClientsBleClientBleClientWatchDevices(
+      {required BleClient that}) {
+    final senderTx = RustStreamSink<ClientEvent>();
+    unawaited(handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+            that, serializer);
+        sse_encode_StreamSink_client_event_Sse(senderTx, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
             funcId: 2, port: port_);
       },
@@ -129,16 +253,696 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiSimpleInitAppConstMeta,
+      constMeta: kCrateApiClientsBleClientBleClientWatchDevicesConstMeta,
+      argValues: [that, senderTx],
+      apiImpl: this,
+    )));
+    return senderTx.stream;
+  }
+
+  TaskConstMeta get kCrateApiClientsBleClientBleClientWatchDevicesConstMeta =>
+      const TaskConstMeta(
+        debugName: "BleClient_watch_devices",
+        argNames: ["that", "senderTx"],
+      );
+
+  @override
+  Future<(PositionVecU8Sender, PositionVecU8Receiver)>
+      crateApiInputHandlerInputHandlerCreatePositionStream(
+          {required InputHandler that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+            that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 3, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_position_vec_u_8_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_position_vec_u_8_receiver,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiInputHandlerInputHandlerCreatePositionStreamConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiInputHandlerInputHandlerCreatePositionStreamConstMeta =>
+          const TaskConstMeta(
+            debugName: "InputHandler_create_position_stream",
+            argNames: ["that"],
+          );
+
+  @override
+  InputHandler crateApiInputHandlerInputHandlerNew() {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiInputHandlerInputHandlerNewConstMeta,
       argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiSimpleInitAppConstMeta => const TaskConstMeta(
+  TaskConstMeta get kCrateApiInputHandlerInputHandlerNewConstMeta =>
+      const TaskConstMeta(
+        debugName: "InputHandler_new",
+        argNames: [],
+      );
+
+  @override
+  Future<void> crateApiInputHandlerInputHandlerRun(
+      {required InputHandler that,
+      required PositionVecU8Sender positionStream}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+            that, serializer);
+        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+            positionStream, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 5, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiInputHandlerInputHandlerRunConstMeta,
+      argValues: [that, positionStream],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiInputHandlerInputHandlerRunConstMeta =>
+      const TaskConstMeta(
+        debugName: "InputHandler_run",
+        argNames: ["that", "positionStream"],
+      );
+
+  @override
+  Future<void> crateApiInputHandlerInputHandlerSendCaptureRequest(
+      {required InputHandler that, required CaptureRequest request}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+            that, serializer);
+        sse_encode_box_autoadd_capture_request(request, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 6, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiInputHandlerInputHandlerSendCaptureRequestConstMeta,
+      argValues: [that, request],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiInputHandlerInputHandlerSendCaptureRequestConstMeta =>
+          const TaskConstMeta(
+            debugName: "InputHandler_send_capture_request",
+            argNames: ["that", "request"],
+          );
+
+  @override
+  Future<void> crateApiInputHandlerInputHandlerStop(
+      {required InputHandler that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+            that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 7, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiInputHandlerInputHandlerStopConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiInputHandlerInputHandlerStopConstMeta =>
+      const TaskConstMeta(
+        debugName: "InputHandler_stop",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<void> crateApiRxHandlersPositionVecU8ReceiverClose(
+      {required PositionVecU8Receiver that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+            that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 8, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiRxHandlersPositionVecU8ReceiverCloseConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRxHandlersPositionVecU8ReceiverCloseConstMeta =>
+      const TaskConstMeta(
+        debugName: "PositionVecU8Receiver_close",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<(Position, Uint8List)?> crateApiRxHandlersPositionVecU8ReceiverRecv(
+      {required PositionVecU8Receiver that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+            that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 9, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_opt_box_autoadd_record_position_list_prim_u_8_strict,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiRxHandlersPositionVecU8ReceiverRecvConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRxHandlersPositionVecU8ReceiverRecvConstMeta =>
+      const TaskConstMeta(
+        debugName: "PositionVecU8Receiver_recv",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<(Position, Uint8List)> crateApiRxHandlersPositionVecU8ReceiverTryRecv(
+      {required PositionVecU8Receiver that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+            that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 10, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_record_position_list_prim_u_8_strict,
+        decodeErrorData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError,
+      ),
+      constMeta: kCrateApiRxHandlersPositionVecU8ReceiverTryRecvConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRxHandlersPositionVecU8ReceiverTryRecvConstMeta =>
+      const TaskConstMeta(
+        debugName: "PositionVecU8Receiver_try_recv",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<bool> crateApiRxHandlersPositionVecU8SenderIsClosed(
+      {required PositionVecU8Sender that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+            that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 11, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_bool,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiRxHandlersPositionVecU8SenderIsClosedConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRxHandlersPositionVecU8SenderIsClosedConstMeta =>
+      const TaskConstMeta(
+        debugName: "PositionVecU8Sender_is_closed",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<void> crateApiRxHandlersPositionVecU8SenderSend(
+      {required PositionVecU8Sender that,
+      required (Position, Uint8List) data}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+            that, serializer);
+        sse_encode_box_autoadd_record_position_list_prim_u_8_strict(
+            data, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 12, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8,
+      ),
+      constMeta: kCrateApiRxHandlersPositionVecU8SenderSendConstMeta,
+      argValues: [that, data],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRxHandlersPositionVecU8SenderSendConstMeta =>
+      const TaskConstMeta(
+        debugName: "PositionVecU8Sender_send",
+        argNames: ["that", "data"],
+      );
+
+  @override
+  Future<void> crateApiRxHandlersPositionVecU8SenderTrySend(
+      {required PositionVecU8Sender that,
+      required (Position, Uint8List) data}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+            that, serializer);
+        sse_encode_box_autoadd_record_position_list_prim_u_8_strict(
+            data, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 13, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTrySendErrorPositionVecu8,
+      ),
+      constMeta: kCrateApiRxHandlersPositionVecU8SenderTrySendConstMeta,
+      argValues: [that, data],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRxHandlersPositionVecU8SenderTrySendConstMeta =>
+      const TaskConstMeta(
+        debugName: "PositionVecU8Sender_try_send",
+        argNames: ["that", "data"],
+      );
+
+  @override
+  Future<UsbClient> crateApiClientsUsbClientUsbClientNew() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 14, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiClientsUsbClientUsbClientNewConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiClientsUsbClientUsbClientNewConstMeta =>
+      const TaskConstMeta(
+        debugName: "UsbClient_new",
+        argNames: [],
+      );
+
+  @override
+  Future<void> crateApiClientsUsbClientUsbClientSendHidEvent(
+      {required UsbClient that,
+      required List<int> event,
+      required String uid}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+            that, serializer);
+        sse_encode_list_prim_u_8_loose(event, serializer);
+        sse_encode_String(uid, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 15, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiClientsUsbClientUsbClientSendHidEventConstMeta,
+      argValues: [that, event, uid],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiClientsUsbClientUsbClientSendHidEventConstMeta =>
+      const TaskConstMeta(
+        debugName: "UsbClient_send_hid_event",
+        argNames: ["that", "event", "uid"],
+      );
+
+  @override
+  Stream<ClientEvent> crateApiClientsUsbClientUsbClientWatchDevices(
+      {required UsbClient that}) {
+    final clientsTx = RustStreamSink<ClientEvent>();
+    unawaited(handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+            that, serializer);
+        sse_encode_StreamSink_client_event_Sse(clientsTx, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 16, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiClientsUsbClientUsbClientWatchDevicesConstMeta,
+      argValues: [that, clientsTx],
+      apiImpl: this,
+    )));
+    return clientsTx.stream;
+  }
+
+  TaskConstMeta get kCrateApiClientsUsbClientUsbClientWatchDevicesConstMeta =>
+      const TaskConstMeta(
+        debugName: "UsbClient_watch_devices",
+        argNames: ["that", "clientsTx"],
+      );
+
+  @override
+  Future<void> crateApiUniControlInitApp() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 17, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiUniControlInitAppConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiUniControlInitAppConstMeta => const TaskConstMeta(
         debugName: "init_app",
         argNames: [],
       );
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_BleClient => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_BleClient => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_InputHandler => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_InputHandler => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_PositionVecU8Receiver => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_PositionVecU8Receiver => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_PositionVecU8Sender => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_PositionVecU8Sender => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_SendErrorPositionVecU8 => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_SendErrorPositionVecU8 => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_TryRecvError => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_TryRecvError => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_TrySendErrorPositionVecU8 => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTrySendErrorPositionVecu8;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_TrySendErrorPositionVecU8 => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTrySendErrorPositionVecu8;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_UsbClient => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_UsbClient => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient;
+
+  @protected
+  AnyhowException dco_decode_AnyhowException(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return AnyhowException(raw as String);
+  }
+
+  @protected
+  BleClient
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return BleClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  InputHandler
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return InputHandlerImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  PositionVecU8Receiver
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return PositionVecU8ReceiverImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  PositionVecU8Sender
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return PositionVecU8SenderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  SendErrorPositionVecU8
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SendErrorPositionVecU8Impl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  TryRecvError
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return TryRecvErrorImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  TrySendErrorPositionVecU8
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTrySendErrorPositionVecu8(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return TrySendErrorPositionVecU8Impl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  UsbClient
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return UsbClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  BleClient
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return BleClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  InputHandler
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return InputHandlerImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  PositionVecU8Receiver
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return PositionVecU8ReceiverImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  UsbClient
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return UsbClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  InputHandler
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return InputHandlerImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  PositionVecU8Sender
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return PositionVecU8SenderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  BleClient
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return BleClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  InputHandler
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return InputHandlerImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  PositionVecU8Receiver
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return PositionVecU8ReceiverImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  PositionVecU8Sender
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return PositionVecU8SenderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  SendErrorPositionVecU8
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SendErrorPositionVecU8Impl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  TryRecvError
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return TryRecvErrorImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  TrySendErrorPositionVecU8
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTrySendErrorPositionVecu8(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return TrySendErrorPositionVecU8Impl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  UsbClient
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return UsbClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RustStreamSink<ClientEvent> dco_decode_StreamSink_client_event_Sse(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
+  }
 
   @protected
   String dco_decode_String(dynamic raw) {
@@ -147,9 +951,125 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  bool dco_decode_bool(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as bool;
+  }
+
+  @protected
+  CaptureRequest dco_decode_box_autoadd_capture_request(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_capture_request(raw);
+  }
+
+  @protected
+  (Position, Uint8List)
+      dco_decode_box_autoadd_record_position_list_prim_u_8_strict(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as (Position, Uint8List);
+  }
+
+  @protected
+  CaptureRequest dco_decode_capture_request(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return CaptureRequest_Release();
+      case 1:
+        return CaptureRequest_Create(
+          dco_decode_position(raw[1]),
+        );
+      case 2:
+        return CaptureRequest_Destroy(
+          dco_decode_position(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
+  ClientEvent dco_decode_client_event(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return ClientEvent_Added(
+          dco_decode_String(raw[1]),
+        );
+      case 1:
+        return ClientEvent_Removed(
+          dco_decode_String(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
+  int dco_decode_i_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
+  }
+
+  @protected
+  List<int> dco_decode_list_prim_u_8_loose(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as List<int>;
+  }
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
+  }
+
+  @protected
+  (Position, Uint8List)?
+      dco_decode_opt_box_autoadd_record_position_list_prim_u_8_strict(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_record_position_list_prim_u_8_strict(raw);
+  }
+
+  @protected
+  Position dco_decode_position(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return Position.values[raw as int];
+  }
+
+  @protected
+  (
+    PositionVecU8Sender,
+    PositionVecU8Receiver
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_position_vec_u_8_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_position_vec_u_8_receiver(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          arr[0]),
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+          arr[1]),
+    );
+  }
+
+  @protected
+  (Position, Uint8List) dco_decode_record_position_list_prim_u_8_strict(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_position(arr[0]),
+      dco_decode_list_prim_u_8_strict(arr[1]),
+    );
   }
 
   @protected
@@ -165,6 +1085,224 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt dco_decode_usize(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeU64(raw);
+  }
+
+  @protected
+  AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_String(deserializer);
+    return AnyhowException(inner);
+  }
+
+  @protected
+  BleClient
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return BleClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  InputHandler
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return InputHandlerImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  PositionVecU8Receiver
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return PositionVecU8ReceiverImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  PositionVecU8Sender
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return PositionVecU8SenderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  SendErrorPositionVecU8
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SendErrorPositionVecU8Impl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  TryRecvError
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return TryRecvErrorImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  TrySendErrorPositionVecU8
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTrySendErrorPositionVecu8(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return TrySendErrorPositionVecU8Impl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  UsbClient
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return UsbClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  BleClient
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return BleClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  InputHandler
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return InputHandlerImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  PositionVecU8Receiver
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return PositionVecU8ReceiverImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  UsbClient
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return UsbClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  InputHandler
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return InputHandlerImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  PositionVecU8Sender
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return PositionVecU8SenderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  BleClient
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return BleClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  InputHandler
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return InputHandlerImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  PositionVecU8Receiver
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return PositionVecU8ReceiverImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  PositionVecU8Sender
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return PositionVecU8SenderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  SendErrorPositionVecU8
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SendErrorPositionVecU8Impl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  TryRecvError
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return TryRecvErrorImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  TrySendErrorPositionVecU8
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTrySendErrorPositionVecu8(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return TrySendErrorPositionVecU8Impl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  UsbClient
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return UsbClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  RustStreamSink<ClientEvent> sse_decode_StreamSink_client_event_Sse(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
+  }
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_list_prim_u_8_strict(deserializer);
@@ -172,10 +1310,126 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  bool sse_decode_bool(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint8() != 0;
+  }
+
+  @protected
+  CaptureRequest sse_decode_box_autoadd_capture_request(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_capture_request(deserializer));
+  }
+
+  @protected
+  (Position, Uint8List)
+      sse_decode_box_autoadd_record_position_list_prim_u_8_strict(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_record_position_list_prim_u_8_strict(deserializer));
+  }
+
+  @protected
+  CaptureRequest sse_decode_capture_request(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        return CaptureRequest_Release();
+      case 1:
+        var var_field0 = sse_decode_position(deserializer);
+        return CaptureRequest_Create(var_field0);
+      case 2:
+        var var_field0 = sse_decode_position(deserializer);
+        return CaptureRequest_Destroy(var_field0);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
+  ClientEvent sse_decode_client_event(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_field0 = sse_decode_String(deserializer);
+        return ClientEvent_Added(var_field0);
+      case 1:
+        var var_field0 = sse_decode_String(deserializer);
+        return ClientEvent_Removed(var_field0);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
+  int sse_decode_i_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getInt32();
+  }
+
+  @protected
+  List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var len_ = sse_decode_i_32(deserializer);
+    return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  (Position, Uint8List)?
+      sse_decode_opt_box_autoadd_record_position_list_prim_u_8_strict(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_record_position_list_prim_u_8_strict(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  Position sse_decode_position(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_i_32(deserializer);
+    return Position.values[inner];
+  }
+
+  @protected
+  (
+    PositionVecU8Sender,
+    PositionVecU8Receiver
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_position_vec_u_8_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_position_vec_u_8_receiver(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+            deserializer);
+    var var_field1 =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+            deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
+  (Position, Uint8List) sse_decode_record_position_list_prim_u_8_strict(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 = sse_decode_position(deserializer);
+    var var_field1 = sse_decode_list_prim_u_8_strict(deserializer);
+    return (var_field0, var_field1);
   }
 
   @protected
@@ -190,15 +1444,245 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  int sse_decode_i_32(SseDeserializer deserializer) {
+  BigInt sse_decode_usize(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getInt32();
+    return deserializer.buffer.getBigUint64();
   }
 
   @protected
-  bool sse_decode_bool(SseDeserializer deserializer) {
+  void sse_encode_AnyhowException(
+      AnyhowException self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getUint8() != 0;
+    sse_encode_String(self.message, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+          BleClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as BleClientImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          InputHandler self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as InputHandlerImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+          PositionVecU8Receiver self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as PositionVecU8ReceiverImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          PositionVecU8Sender self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as PositionVecU8SenderImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
+          SendErrorPositionVecU8 self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SendErrorPositionVecU8Impl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError(
+          TryRecvError self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as TryRecvErrorImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTrySendErrorPositionVecu8(
+          TrySendErrorPositionVecU8 self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as TrySendErrorPositionVecU8Impl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+          UsbClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as UsbClientImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+          BleClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as BleClientImpl).frbInternalSseEncode(move: false), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          InputHandler self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as InputHandlerImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+          PositionVecU8Receiver self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as PositionVecU8ReceiverImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+          UsbClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as UsbClientImpl).frbInternalSseEncode(move: false), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          InputHandler self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as InputHandlerImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          PositionVecU8Sender self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as PositionVecU8SenderImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBleClient(
+          BleClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as BleClientImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerInputHandler(
+          InputHandler self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as InputHandlerImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+          PositionVecU8Receiver self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as PositionVecU8ReceiverImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+          PositionVecU8Sender self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as PositionVecU8SenderImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSendErrorPositionVecu8(
+          SendErrorPositionVecU8 self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SendErrorPositionVecU8Impl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTryRecvError(
+          TryRecvError self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as TryRecvErrorImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerTrySendErrorPositionVecu8(
+          TrySendErrorPositionVecU8 self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as TrySendErrorPositionVecU8Impl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerUsbClient(
+          UsbClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as UsbClientImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void sse_encode_StreamSink_client_event_Sse(
+      RustStreamSink<ClientEvent> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+        self.setupAndSerialize(
+            codec: SseCodec(
+          decodeSuccessData: sse_decode_client_event,
+          decodeErrorData: sse_decode_AnyhowException,
+        )),
+        serializer);
   }
 
   @protected
@@ -208,11 +1692,113 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_bool(bool self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint8(self ? 1 : 0);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_capture_request(
+      CaptureRequest self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_capture_request(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_record_position_list_prim_u_8_strict(
+      (Position, Uint8List) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_record_position_list_prim_u_8_strict(self, serializer);
+  }
+
+  @protected
+  void sse_encode_capture_request(
+      CaptureRequest self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case CaptureRequest_Release():
+        sse_encode_i_32(0, serializer);
+      case CaptureRequest_Create(field0: final field0):
+        sse_encode_i_32(1, serializer);
+        sse_encode_position(field0, serializer);
+      case CaptureRequest_Destroy(field0: final field0):
+        sse_encode_i_32(2, serializer);
+        sse_encode_position(field0, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_client_event(ClientEvent self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case ClientEvent_Added(field0: final field0):
+        sse_encode_i_32(0, serializer);
+        sse_encode_String(field0, serializer);
+      case ClientEvent_Removed(field0: final field0):
+        sse_encode_i_32(1, serializer);
+        sse_encode_String(field0, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_i_32(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putInt32(self);
+  }
+
+  @protected
+  void sse_encode_list_prim_u_8_loose(
+      List<int> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    serializer.buffer
+        .putUint8List(self is Uint8List ? self : Uint8List.fromList(self));
+  }
+
+  @protected
   void sse_encode_list_prim_u_8_strict(
       Uint8List self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_record_position_list_prim_u_8_strict(
+      (Position, Uint8List)? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_record_position_list_prim_u_8_strict(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_position(Position self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_position_vec_u_8_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_position_vec_u_8_receiver(
+          (PositionVecU8Sender, PositionVecU8Receiver) self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Sender(
+        self.$1, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPositionVecU8Receiver(
+        self.$2, serializer);
+  }
+
+  @protected
+  void sse_encode_record_position_list_prim_u_8_strict(
+      (Position, Uint8List) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_position(self.$1, serializer);
+    sse_encode_list_prim_u_8_strict(self.$2, serializer);
   }
 
   @protected
@@ -227,14 +1813,236 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_i_32(int self, SseSerializer serializer) {
+  void sse_encode_usize(BigInt self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putInt32(self);
+    serializer.buffer.putBigUint64(self);
   }
+}
 
-  @protected
-  void sse_encode_bool(bool self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putUint8(self ? 1 : 0);
-  }
+@sealed
+class BleClientImpl extends RustOpaque implements BleClient {
+  // Not to be used by end users
+  BleClientImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  BleClientImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_BleClient,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_BleClient,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_BleClientPtr,
+  );
+
+  Stream<ClientEvent> watchDevices() =>
+      RustLib.instance.api.crateApiClientsBleClientBleClientWatchDevices(
+        that: this,
+      );
+}
+
+@sealed
+class InputHandlerImpl extends RustOpaque implements InputHandler {
+  // Not to be used by end users
+  InputHandlerImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  InputHandlerImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_InputHandler,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_InputHandler,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_InputHandlerPtr,
+  );
+
+  Future<(PositionVecU8Sender, PositionVecU8Receiver)> createPositionStream() =>
+      RustLib.instance.api.crateApiInputHandlerInputHandlerCreatePositionStream(
+        that: this,
+      );
+
+  Future<void> run({required PositionVecU8Sender positionStream}) =>
+      RustLib.instance.api.crateApiInputHandlerInputHandlerRun(
+          that: this, positionStream: positionStream);
+
+  Future<void> sendCaptureRequest({required CaptureRequest request}) =>
+      RustLib.instance.api.crateApiInputHandlerInputHandlerSendCaptureRequest(
+          that: this, request: request);
+
+  Future<void> stop() =>
+      RustLib.instance.api.crateApiInputHandlerInputHandlerStop(
+        that: this,
+      );
+}
+
+@sealed
+class PositionVecU8ReceiverImpl extends RustOpaque
+    implements PositionVecU8Receiver {
+  // Not to be used by end users
+  PositionVecU8ReceiverImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  PositionVecU8ReceiverImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance.api.rust_arc_increment_strong_count_PositionVecU8Receiver,
+    rustArcDecrementStrongCount: RustLib
+        .instance.api.rust_arc_decrement_strong_count_PositionVecU8Receiver,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_PositionVecU8ReceiverPtr,
+  );
+
+  Future<void> close() =>
+      RustLib.instance.api.crateApiRxHandlersPositionVecU8ReceiverClose(
+        that: this,
+      );
+
+  Future<(Position, Uint8List)?> recv() =>
+      RustLib.instance.api.crateApiRxHandlersPositionVecU8ReceiverRecv(
+        that: this,
+      );
+
+  Future<(Position, Uint8List)> tryRecv() =>
+      RustLib.instance.api.crateApiRxHandlersPositionVecU8ReceiverTryRecv(
+        that: this,
+      );
+}
+
+@sealed
+class PositionVecU8SenderImpl extends RustOpaque
+    implements PositionVecU8Sender {
+  // Not to be used by end users
+  PositionVecU8SenderImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  PositionVecU8SenderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance.api.rust_arc_increment_strong_count_PositionVecU8Sender,
+    rustArcDecrementStrongCount: RustLib
+        .instance.api.rust_arc_decrement_strong_count_PositionVecU8Sender,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_PositionVecU8SenderPtr,
+  );
+
+  Future<bool> isClosed() =>
+      RustLib.instance.api.crateApiRxHandlersPositionVecU8SenderIsClosed(
+        that: this,
+      );
+
+  Future<void> send({required (Position, Uint8List) data}) =>
+      RustLib.instance.api
+          .crateApiRxHandlersPositionVecU8SenderSend(that: this, data: data);
+
+  Future<void> trySend({required (Position, Uint8List) data}) =>
+      RustLib.instance.api
+          .crateApiRxHandlersPositionVecU8SenderTrySend(that: this, data: data);
+}
+
+@sealed
+class SendErrorPositionVecU8Impl extends RustOpaque
+    implements SendErrorPositionVecU8 {
+  // Not to be used by end users
+  SendErrorPositionVecU8Impl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  SendErrorPositionVecU8Impl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance.api.rust_arc_increment_strong_count_SendErrorPositionVecU8,
+    rustArcDecrementStrongCount: RustLib
+        .instance.api.rust_arc_decrement_strong_count_SendErrorPositionVecU8,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_SendErrorPositionVecU8Ptr,
+  );
+}
+
+@sealed
+class TryRecvErrorImpl extends RustOpaque implements TryRecvError {
+  // Not to be used by end users
+  TryRecvErrorImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  TryRecvErrorImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_TryRecvError,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_TryRecvError,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_TryRecvErrorPtr,
+  );
+}
+
+@sealed
+class TrySendErrorPositionVecU8Impl extends RustOpaque
+    implements TrySendErrorPositionVecU8 {
+  // Not to be used by end users
+  TrySendErrorPositionVecU8Impl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  TrySendErrorPositionVecU8Impl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance.api.rust_arc_increment_strong_count_TrySendErrorPositionVecU8,
+    rustArcDecrementStrongCount: RustLib
+        .instance.api.rust_arc_decrement_strong_count_TrySendErrorPositionVecU8,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_TrySendErrorPositionVecU8Ptr,
+  );
+}
+
+@sealed
+class UsbClientImpl extends RustOpaque implements UsbClient {
+  // Not to be used by end users
+  UsbClientImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  UsbClientImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_UsbClient,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_UsbClient,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_UsbClientPtr,
+  );
+
+  Future<void> sendHidEvent({required List<int> event, required String uid}) =>
+      RustLib.instance.api.crateApiClientsUsbClientUsbClientSendHidEvent(
+          that: this, event: event, uid: uid);
+
+  Stream<ClientEvent> watchDevices() =>
+      RustLib.instance.api.crateApiClientsUsbClientUsbClientWatchDevices(
+        that: this,
+      );
 }

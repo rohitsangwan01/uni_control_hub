@@ -1,5 +1,7 @@
-use std::sync::Arc;
-
+use crate::{
+    api::events::{ClientEvent, COMBINED_REPORT},
+    frb_generated::StreamSink,
+};
 use ble_peripheral_rust::{
     gatt::{
         characteristic::Characteristic,
@@ -13,16 +15,11 @@ use ble_peripheral_rust::{
     uuid::ShortUuid,
     Peripheral, PeripheralImpl,
 };
-use tokio::sync::{
-    mpsc::{channel, Sender},
-    Mutex,
-};
+use std::sync::Arc;
+use tokio::sync::{mpsc::channel, Mutex};
 use uuid::Uuid;
 
-use crate::api::{clients::uni_client::ClientType, hid_report::COMBINED_REPORT};
-
-use super::uni_client::ClientEvent;
-
+#[flutter_rust_bridge::frb(opaque)]
 pub struct BleClient {
     peripheral: Peripheral,
     hid_service: Service,
@@ -31,7 +28,7 @@ pub struct BleClient {
     characteristic_report: Uuid,
     service_ble_hid: Uuid,
     device_name: String,
-    sender_tx_arc: Arc<Mutex<Option<Sender<ClientEvent>>>>,
+    sender_tx_arc: Arc<Mutex<Option<StreamSink<ClientEvent>>>>,
 }
 
 impl BleClient {
@@ -158,7 +155,7 @@ impl BleClient {
             }],
         };
 
-        let sender_tx_arc: Arc<Mutex<Option<Sender<ClientEvent>>>> = Arc::new(Mutex::new(None));
+        let sender_tx_arc: Arc<Mutex<Option<StreamSink<ClientEvent>>>> = Arc::new(Mutex::new(None));
         let sender_tx_arc_clone = sender_tx_arc.clone();
         tokio::spawn(async move {
             // Manage Subscribed clients cache
@@ -187,11 +184,8 @@ impl BleClient {
                                     sender_tx_arc_clone.lock().await.clone()
                                 {
                                     tokio::spawn(async move {
-                                        let _ = client_tx_clone
-                                            .send(ClientEvent::Added(ClientType::Ble(
-                                                client.clone(),
-                                            )))
-                                            .await;
+                                        let _ =
+                                            client_tx_clone.add(ClientEvent::Added(client.clone()));
                                     });
                                 }
                             };
@@ -204,10 +198,7 @@ impl BleClient {
                                 {
                                     tokio::spawn(async move {
                                         let _ = client_tx_clone
-                                            .send(ClientEvent::Removed(ClientType::Ble(
-                                                client.clone(),
-                                            )))
-                                            .await;
+                                            .add(ClientEvent::Removed(client.clone()));
                                     });
                                 }
                             };
@@ -291,7 +282,7 @@ impl BleClient {
         }
     }
 
-    pub async fn watch_devices(&mut self, sender_tx: Sender<ClientEvent>) {
+    pub async fn watch_devices(&mut self, sender_tx: StreamSink<ClientEvent>) {
         self.sender_tx_arc.lock().await.replace(sender_tx);
 
         log::info!("Checking if powered on");

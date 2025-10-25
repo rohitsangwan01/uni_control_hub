@@ -1,7 +1,5 @@
-use std::sync::Arc;
-use std::thread;
-use std::time::Duration;
-
+use crate::api::events::{ClientEvent, COMBINED_REPORT};
+use crate::frb_generated::StreamSink;
 use anyhow::anyhow;
 use anyhow::Error;
 use futures::StreamExt;
@@ -10,15 +8,14 @@ use nusb::{
     transfer::{ControlOut, ControlType, Recipient},
     Device, DeviceInfo,
 };
+use std::sync::Arc;
+use std::thread;
+use std::time::Duration;
 use tokio::runtime;
-use tokio::sync::mpsc::Sender;
 use tokio::sync::Mutex;
 
-use crate::api::clients::uni_client::ClientType;
-use crate::api::hid_report::COMBINED_REPORT;
-
-use super::uni_client::ClientEvent;
-
+#[derive(Clone)]
+#[flutter_rust_bridge::frb(opaque)]
 pub struct UsbClient {
     usb_devices: Arc<Mutex<Vec<UsbDevice>>>,
 }
@@ -30,51 +27,33 @@ impl UsbClient {
         }
     }
 
-    pub async fn watch_devices(&mut self, clients_tx: Sender<ClientEvent>) {
+    pub async fn watch_devices(&mut self, clients_tx: StreamSink<ClientEvent>) {
         let usb_devices: Arc<Mutex<Vec<UsbDevice>>> = Arc::clone(&self.usb_devices);
-        async fn on_device_connected(
-            event: DeviceInfo,
-            usb_devices: Arc<Mutex<Vec<UsbDevice>>>,
-            clients_tx: Sender<ClientEvent>,
-        ) {
-            if let Some(usb_device) = get_usb_device(event).await {
-                println!("UsbConnected: {:?}", usb_device.manufacturer);
-                let id = usb_device.device_id;
-                usb_devices.lock().await.push(usb_device);
-
-                let _ = clients_tx
-                    .send(ClientEvent::Added(ClientType::Usb(id)))
-                    .await;
-            }
-        }
-
-        async fn on_device_disconnected(
-            event: DeviceId,
-            usb_devices: Arc<Mutex<Vec<UsbDevice>>>,
-            clients_tx: Sender<ClientEvent>,
-        ) {
-            println!("UsbDisconnected {event:?}");
-            let mut devices = usb_devices.lock().await;
-            devices.retain(|device| device.device_id != event);
-            let _ = clients_tx
-                .send(ClientEvent::Removed(ClientType::Usb(event)))
-                .await;
-        }
-
         async fn get_usb_device(device: DeviceInfo) -> Option<UsbDevice> {
             let usb_device = UsbDevice::new(device).await;
             if usb_device.is_none() {
                 return None;
             }
-
             let usb_device = usb_device.unwrap();
-
             let report: Vec<u8> = COMBINED_REPORT.to_vec();
             if let Err(_) = usb_device.register_hid(report).await {
                 //log::error!("Error: {:?}", err);
                 return None;
             }
             return Some(usb_device);
+        }
+
+        async fn on_device_connected(
+            event: DeviceInfo,
+            usb_devices: Arc<Mutex<Vec<UsbDevice>>>,
+            clients_tx: StreamSink<ClientEvent>,
+        ) {
+            if let Some(usb_device) = get_usb_device(event).await {
+                println!("UsbConnected: {:?}", usb_device.manufacturer);
+                let id = usb_device.uid.clone();
+                usb_devices.lock().await.push(usb_device);
+                let _ = clients_tx.add(ClientEvent::Added(id));
+            }
         }
 
         let clients_tx = clients_tx.clone();
@@ -116,12 +95,21 @@ impl UsbClient {
                                 .await;
                         }
                         nusb::hotplug::HotplugEvent::Disconnected(device) => {
-                            on_device_disconnected(
-                                device,
-                                usb_devices.clone(),
-                                clients_tx_2.clone(),
-                            )
-                            .await;
+                            println!("UsbDisconnected {event:?}");
+                            let mut devices = usb_devices.lock().await;
+                            // Get uid from device
+                            let mut device_uid = None;
+                            for d in devices.iter() {
+                                if d.device_id == device {
+                                    device_uid = Some(d.uid.clone());
+                                    break;
+                                }
+                            }
+                            // remove device from devices
+                            devices.retain(|d| d.device_id != device);
+                            if let Some(uid) = device_uid {
+                                let _ = clients_tx.add(ClientEvent::Removed(uid));
+                            }
                         }
                     }
                 }
@@ -129,9 +117,9 @@ impl UsbClient {
         });
     }
 
-    pub async fn send_hid_event(&mut self, event: Vec<u8>, device_id: DeviceId) {
+    pub async fn send_hid_event(&mut self, event: Vec<u8>, uid: String) {
         for usb_device in self.usb_devices.lock().await.iter() {
-            if usb_device.device_id != device_id {
+            if usb_device.uid != uid {
                 continue;
             }
             let _ = usb_device.send_hid_event(event.clone()).await;
@@ -139,7 +127,9 @@ impl UsbClient {
     }
 }
 
+#[flutter_rust_bridge::frb(ignore)]
 struct UsbDevice {
+    pub uid: String,
     pub device_id: DeviceId,
     pub device: Device,
     pub manufacturer: String,
@@ -148,7 +138,7 @@ struct UsbDevice {
 }
 
 impl UsbDevice {
-    pub async fn new(device_info: DeviceInfo) -> Option<Self> {
+    async fn new(device_info: DeviceInfo) -> Option<Self> {
         let device = match device_info.open().await {
             Ok(dev) => dev,
             Err(e) => {
@@ -203,7 +193,14 @@ impl UsbDevice {
             }
         }
 
+        let uid = format!(
+            "{:04X}:{:04X}",
+            device_info.vendor_id(),
+            device_info.product_id()
+        );
+
         Some(Self {
+            uid,
             device_id: device_info.id(),
             device,
             manufacturer: manufacturer.unwrap().to_string(),
@@ -212,7 +209,7 @@ impl UsbDevice {
         })
     }
 
-    pub async fn register_hid(&self, descriptor: Vec<u8>) -> Result<(), Error> {
+    async fn register_hid(&self, descriptor: Vec<u8>) -> Result<(), Error> {
         let result = self
             .control_out(
                 ControlType::Vendor,
@@ -250,25 +247,29 @@ impl UsbDevice {
         return Ok(());
     }
 
-    // pub async fn unregister_hid(&self) -> Result<(), Error> {
-    //     let result = self
-    //         .device
-    //         .control_out(ControlOut {
-    //             control_type: ControlType::Vendor,
-    //             recipient: Recipient::Endpoint,
-    //             request: 55,
-    //             value: 0,
-    //             index: 0,
-    //             data: &mut vec![0; 0],
-    //         })
-    //         .await;
-    //     if let Err(err) = result.status {
-    //         return Err(anyhow!(format!("TransferError: {:?}", err)));
-    //     }
-    //     return Ok(());
-    // }
+    #[allow(unused)]
+    async fn unregister_hid(&self) -> Result<(), Error> {
+        let result = self
+            .device
+            .control_out(
+                ControlOut {
+                    control_type: ControlType::Vendor,
+                    recipient: Recipient::Endpoint,
+                    request: 55,
+                    value: 0,
+                    index: 0,
+                    data: &mut vec![0; 0],
+                },
+                Duration::from_secs(2),
+            )
+            .await;
+        if let Err(err) = result {
+            return Err(anyhow!(format!("TransferError: {:?}", err)));
+        }
+        return Ok(());
+    }
 
-    pub async fn send_hid_event(&self, event: Vec<u8>) -> Result<(), Error> {
+    async fn send_hid_event(&self, event: Vec<u8>) -> Result<(), Error> {
         let result = self
             .control_out(ControlType::Vendor, Recipient::Device, 57, 0, 0, event)
             .await;

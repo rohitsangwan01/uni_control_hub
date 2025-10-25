@@ -1,27 +1,39 @@
-#![allow(unused)]
-
+use crate::api::rx_handlers::{PositionVecU8Receiver, PositionVecU8Sender};
 use anyhow::Ok;
 use futures::StreamExt;
-use input_capture::{self, CaptureEvent, CaptureHandle, InputCapture, Position};
+pub use input_capture::Position;
+use input_capture::{self, CaptureEvent, CaptureHandle, InputCapture};
 use input_event::{Event, KeyboardEvent, PointerEvent};
-use std::collections::{HashMap, HashSet};
-use tokio::sync::mpsc::{self, Receiver, Sender};
+use std::collections::HashMap;
+pub use tokio::sync::mpsc::{self, Receiver, Sender};
+use tokio::{runtime::Builder, task::LocalSet};
 use tokio_util::sync::CancellationToken;
 
+// Mirror of position
+#[flutter_rust_bridge::frb(mirror(Position))]
+pub enum _Position {
+    Left,
+    Right,
+    Top,
+    Bottom,
+}
+
 #[derive(Clone, Copy, Debug)]
-pub(crate) enum CaptureRequest {
+pub enum CaptureRequest {
     Release,
     Create(Position),
     Destroy(Position),
 }
 
 #[derive(Clone)]
+#[flutter_rust_bridge::frb(opaque)]
 pub struct InputHandler {
     capture_tx: Option<Sender<CaptureRequest>>,
     cancel: Option<CancellationToken>,
 }
 
 impl InputHandler {
+    #[flutter_rust_bridge::frb(sync)]
     pub fn new() -> Self {
         Self {
             capture_tx: None,
@@ -29,21 +41,40 @@ impl InputHandler {
         }
     }
 
-    pub async fn run(
-        &mut self,
-        stream: Sender<(Position, Vec<u8>)>,
-    ) -> anyhow::Result<Sender<CaptureRequest>> {
-        let (capture_tx, mut capture_rx) = mpsc::channel::<CaptureRequest>(100);
+    pub async fn send_capture_request(&self, request: CaptureRequest) {
+        if let Some(capture_tx) = self.capture_tx.clone() {
+            let _ = capture_tx.send(request).await;
+        }
+    }
+
+    pub async fn create_position_stream(&self) -> (PositionVecU8Sender, PositionVecU8Receiver) {
+        let (sender, receiver) = mpsc::channel::<(Position, Vec<u8>)>(100);
+        (PositionVecU8Sender(sender), PositionVecU8Receiver(receiver))
+    }
+
+    pub async fn run(&mut self, position_stream: PositionVecU8Sender) {
+        println!("Running Capture Task print");
+        let (capture_tx, capture_rx) = mpsc::channel::<CaptureRequest>(100);
         let cancel = CancellationToken::new();
         self.cancel = Some(cancel.clone());
-        tokio::task::spawn_local(capture_task(cancel, stream, capture_rx));
-        return Ok(capture_tx);
+        self.capture_tx = Some(capture_tx);
+        let runtime = Builder::new_current_thread().enable_all().build().unwrap();
+        std::thread::spawn(move || {
+            let local = LocalSet::new();
+            local.spawn_local(async move {
+                if let Err(err) = capture_task(cancel, position_stream.clone(), capture_rx).await {
+                    println!("Error {err}");
+                }
+            });
+            runtime.block_on(local);
+        });
     }
 
     pub fn stop(&mut self) {
         if let Some(token) = self.cancel.clone() {
             token.cancel();
         }
+        self.capture_tx = None;
         self.cancel = None;
     }
 }
@@ -51,7 +82,7 @@ impl InputHandler {
 /// Start capture task and all communication with Input
 async fn capture_task(
     cancel: CancellationToken,
-    stream: Sender<(Position, Vec<u8>)>,
+    position_stream: PositionVecU8Sender,
     mut notify_rx: Receiver<CaptureRequest>,
 ) -> anyhow::Result<()> {
     let mut capture = InputCapture::new(None).await?;
@@ -98,7 +129,7 @@ async fn capture_task(
                             };
 
                             if should_release {
-                                log::info!("Release Mouse");
+                                println!("Release Mouse");
                                 capture.release().await?;
                                 client_dx = 0.0;
                                 client_dy = 0.0;
@@ -164,7 +195,7 @@ async fn capture_task(
                                 continue;
                             }
 
-                            if let Err(err) = stream.send((position.clone(), input_bytes.unwrap())).await {
+                            if let Err(err) = position_stream.send((position.clone(), input_bytes.unwrap())).await {
                                 log::error!("Error {err}");
                             }
                         },
@@ -173,7 +204,7 @@ async fn capture_task(
                 None => return Ok(()),
             },
             request = notify_rx.recv() => {
-                log::info!("Input capture notify rx: {request:?}");
+                println!("Input capture notify rx: {request:?}");
                 match request {
                     Some(e) => match e {
                         CaptureRequest::Release => {
@@ -184,14 +215,14 @@ async fn capture_task(
                         CaptureRequest::Create(p) => {
                             if !clients_map.values().any(|e| e == &p) {
                                 let h = (clients_map.keys().len() as u64) + 1;
-                                log::info!("Creating Client {h} {p}");
+                                println!("Creating Client {h} {p}");
                                 clients_map.insert(h, p);
                                 capture.create(h, p).await?
                             }
                         },
                         CaptureRequest::Destroy(p) => {
                             if let Some(h) = clients_map.iter().filter(|(_, pos)| **pos == p).map(|(handle, _)| *handle).next() {
-                                log::info!("Destroying Client {h} {p}");
+                                println!("Destroying Client {h} {p}");
                                 clients_map.remove(&h);
                                 capture.destroy(h).await?;
                             }
