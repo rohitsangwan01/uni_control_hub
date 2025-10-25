@@ -10,8 +10,8 @@ This file is bundled within the app, and will be pushed to Android automatically
 
 #### Aattach android.jar first and Build Dex File and generate jar file
 
-`javac -source 1.7 -target 1.7 -cp "$ANDROID_HOME"/platforms/android-27/android.jar UniHubServer.java &&
-javac -source 1.7 -target 1.7 UniHubServer.java
+`javac -source 1.8 -target 1.8 -cp "$ANDROID_HOME"/platforms/android-33/android.jar UniHubServer.java &&
+javac -source 1.8 -target 1.8 UniHubServer.java
 "$ANDROID_HOME"/build-tools/30.0.3/dx \
  --dex --output classes.dex UniHubServer.class && jar cvf UniHubServer.jar classes.dex && rm UniHubServer.class && rm classes.dex`
 

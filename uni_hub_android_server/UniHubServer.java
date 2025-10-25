@@ -20,6 +20,7 @@ public class UniHubServer extends Thread {
     private final static byte CMD_WRITE = 2;
     private final static byte CMD_CLOSE = 3;
     private final static byte CMD_CLOSE_ALL = 4;
+    private final static String VERSION = "0.0.1";
 
     // Args
     private static String deviceId;
@@ -28,6 +29,11 @@ public class UniHubServer extends Thread {
     private static int port;
 
     public static void main(String... args) {
+        if (args.length > 0 && args[0].equals("-v") || args[0].equals("--version")) {
+            System.out.println(VERSION);
+            System.exit(0);
+            return;
+        }
         System.out.println("Starting server... " + Arrays.toString(args));
         if (args.length == 0 || args[0].equals("-h") || args[0].equals("--help")) {
             showHelp();

@@ -29,8 +29,8 @@
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
 		456EB2693D2E4BB2B40F227C /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BFFD649F3A4482F65DFF2E1 /* Pods_Runner.framework */; };
-		F725BAF82C26C81900E10A9B /* synergy_ x64 in Resources */ = {isa = PBXBuildFile; fileRef = F725BAF62C26C81900E10A9B /* synergy_ x64 */; };
-		F725BAF92C26C81900E10A9B /* synergy_arm64 in Resources */ = {isa = PBXBuildFile; fileRef = F725BAF72C26C81900E10A9B /* synergy_arm64 */; };
+		F73259A12EAC735700EEAA31 /* synergy_x64 in Resources */ = {isa = PBXBuildFile; fileRef = F73259A02EAC735700EEAA31 /* synergy_x64 */; };
+		F73259A32EAC739700EEAA31 /* synergy_arm64 in Resources */ = {isa = PBXBuildFile; fileRef = F73259A22EAC739700EEAA31 /* synergy_arm64 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,8 +89,8 @@
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B5BAE9345BED412796DFA77F /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		E121D4DC69E35A5055407C50 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F725BAF62C26C81900E10A9B /* synergy_ x64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "synergy_ x64"; path = "synergy/synergy_ x64"; sourceTree = "<group>"; };
-		F725BAF72C26C81900E10A9B /* synergy_arm64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = synergy_arm64; path = synergy/synergy_arm64; sourceTree = "<group>"; };
+		F73259A02EAC735700EEAA31 /* synergy_x64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = synergy_x64; sourceTree = "<group>"; };
+		F73259A22EAC739700EEAA31 /* synergy_arm64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = synergy_arm64; sourceTree = "<group>"; };
 		FC7655751B99316A519C4B4D /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,8 +136,8 @@
 		33CC10E42044A3C60003C045 = {
 			isa = PBXGroup;
 			children = (
-				F725BAF62C26C81900E10A9B /* synergy_ x64 */,
-				F725BAF72C26C81900E10A9B /* synergy_arm64 */,
+				F73259A22EAC739700EEAA31 /* synergy_arm64 */,
+				F73259A02EAC735700EEAA31 /* synergy_x64 */,
 				33FAB671232836740065AC1E /* Runner */,
 				33CEB47122A05771004F2AC0 /* Flutter */,
 				331C80D6294CF71000263BE5 /* RunnerTests */,
@@ -321,9 +321,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */,
+				F73259A12EAC735700EEAA31 /* synergy_x64 in Resources */,
 				33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */,
-				F725BAF82C26C81900E10A9B /* synergy_ x64 in Resources */,
-				F725BAF92C26C81900E10A9B /* synergy_arm64 in Resources */,
+				F73259A32EAC739700EEAA31 /* synergy_arm64 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,7 +564,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -647,7 +647,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -697,7 +697,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;

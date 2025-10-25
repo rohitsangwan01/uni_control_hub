@@ -182,8 +182,6 @@ class ClientScreen extends ScreenInterface {
       case Direction.down:
         _moveMouseMultipleEvents(y: -4);
         break;
-      default:
-        break;
     }
     return true;
   }

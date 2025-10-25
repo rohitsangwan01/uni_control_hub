@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path/path.dart';
+import 'package:uni_control_hub/app/data/logger.dart';
 import 'package:uni_control_hub/app/synergy/synergy_config.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -29,12 +30,14 @@ class FileService {
         _ => null,
       };
 
-  String? get libUsbBinaryPath => switch (defaultTargetPlatform) {
-        TargetPlatform.macOS => "libusb.dylib",
-        TargetPlatform.windows => "libusb.dll",
-        TargetPlatform.linux => "$_executablePath/lib/libusb.so",
-        _ => null,
-      };
+  String? get libUsbBinaryPath {
+    return switch (defaultTargetPlatform) {
+      TargetPlatform.windows => "libusb.dll",
+      TargetPlatform.linux => "$_executablePath/lib/libusb.so",
+      TargetPlatform.macOS => _macOSLibUsbBinaryPath,
+      _ => null,
+    };
+  }
 
   String get dbDirectory => _getDirectory('db');
 
@@ -49,6 +52,23 @@ class FileService {
       to: join(_cachePath, uniHubAndroidServerFile),
       fromAsset: 'assets/$uniHubAndroidServerFile',
     );
+  }
+
+  String get _macOSLibUsbBinaryPath {
+    if (File('/opt/homebrew/lib/libusb-1.0.0.dylib').existsSync()) {
+      return '/opt/homebrew/lib/libusb-1.0.0.dylib';
+    }
+    if (File('/usr/local/lib/libusb-1.0.0.dylib').existsSync()) {
+      return '/usr/local/lib/libusb-1.0.0.dylib';
+    }
+    if (File('/opt/homebrew/lib/libusb.dylib').existsSync()) {
+      return '/opt/homebrew/lib/libusb.dylib';
+    }
+    if (File('/usr/local/lib/libusb.dylib').existsSync()) {
+      return '/usr/local/lib/libusb.dylib';
+    }
+    logError('LibUsb not found at expected macOS locations.');
+    return "libusb.dylib";
   }
 
   Future<String> configPath(SynergyConfig config) async {

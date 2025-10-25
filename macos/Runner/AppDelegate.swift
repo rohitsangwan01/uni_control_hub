@@ -14,6 +14,10 @@ class AppDelegate: FlutterAppDelegate {
     private var removedDevicesTimer: Timer?
     private var removedDevicesIterator: io_iterator_t = IO_OBJECT_NULL
     private var messageConnector: FlutterBasicMessageChannel?
+
+    override func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        return true
+    }
     
     override func applicationDidFinishLaunching(_: Notification) {
         let controller: FlutterViewController = mainFlutterWindow?.contentViewController as! FlutterViewController

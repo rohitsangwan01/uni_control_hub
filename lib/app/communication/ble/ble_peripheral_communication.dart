@@ -76,6 +76,7 @@ class BlePeripheralCommunication {
     String deviceId,
     String characteristicId,
     bool isSubscribed,
+    String? name,
   ) {
     if (characteristicId.toUpperCase() ==
         BlePeripheralUtils.characteristicReport) {

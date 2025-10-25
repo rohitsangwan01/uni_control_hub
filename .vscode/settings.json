@@ -25,6 +25,7 @@
     "mikefarah",
     "nullptr",
     "oneplus",
+    "sillicon",
     "softprops",
     "sublist",
     "subosito",
@@ -40,5 +41,5 @@
     "**/lib/generated/": true,
     "**/uni_hub_android_server/": true,
     "**/windows/": true
-  },
+  }
 }
